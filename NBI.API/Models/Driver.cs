@@ -24,6 +24,7 @@ namespace NBI.API.Models
         public string BranchVisited { get; set; }
         public DateTime Created { get; set; }
         public DateTime PrintTime { get; set; }
+        public int Validity { get; set; }
         public string OneDayDoc {get;set;}
         public string Document { get; set; }
         public string Photo { get; set; }

@@ -22,5 +22,6 @@ namespace NBI.API.Dtos
         public string BranchVisited { get; set; }
         public DateTime Created { get; set; }
         public DateTime PrintTime { get; set; }
+        public int Validity { get; set; }
     }
 }

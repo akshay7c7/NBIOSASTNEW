@@ -30,38 +30,38 @@ namespace NBI.API.Controllers
         [HttpPost("AddDriver")]
         public async Task<IActionResult> AddDriver([FromForm]DriverCreationDto driverDto)
         {
-            
+            var driverIdList = await _context.Drivers.Select(x=>x.Id).ToListAsync();
+            var filename =  driverIdList.Max();
                 DriverReturnFiles driverFilesDto = new DriverReturnFiles();
                 
                 if(driverDto.Document!=null)
                 {
-                     using(var ms = new MemoryStream())
+                    string filepath = "../nbiosast-spa/src/assets/Documents"+ (filename+1).ToString();
+                    using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
-                        driverDto.Document.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        driverFilesDto.Document = Convert.ToBase64String(fileBytes);
+                    await driverDto.Document.CopyToAsync(fileStream);
                     }
+                    driverFilesDto.Document=filepath;
                 }
                 
                 if(driverDto.OneDayDoc!=null)
                 {
-                    using (var ms1 = new MemoryStream())
+                    string filepath = "../nbiosast-spa/src/assets/OneDayDoc"+ (filename+1).ToString();
+                    using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
-                        driverDto.OneDayDoc.CopyTo(ms1);
-                        var fileBytes = ms1.ToArray();
-                        driverFilesDto.OneDayDoc = Convert.ToBase64String(fileBytes);
-
-                    }
+                    await driverDto.OneDayDoc.CopyToAsync(fileStream);
+                    }   
+                    driverFilesDto.OneDayDoc=filepath;
                 }
 
                 if(driverDto.Photo!=null)
                 {
-                    using(var ms2 = new MemoryStream())
+                    string filepath = "../nbiosast-spa/src/assets/"+ (filename+1).ToString();
+                    using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
-                        driverDto.Photo.CopyTo(ms2);
-                        var fileBytes = ms2.ToArray();
-                        driverFilesDto.Photo = Convert.ToBase64String(fileBytes);
-                    }                    
+                    await driverDto.Photo.CopyToAsync(fileStream);      
+                    }
+                    driverFilesDto.Photo=(filename+1).ToString();
                 }
 
                 var drivertoSave = _mapper.Map<DriverReturnData>(driverDto);
