@@ -8,7 +8,6 @@ namespace NBI.API.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Document { get; set; }
         public string CertificateNo { get; set; }
         public string LicenseNo { get; set; }
         public string TransPortName { get; set; }
@@ -21,11 +20,12 @@ namespace NBI.API.Models
         public DateTime TrainingStartDate { get; set; }
         public DateTime TrainingEndDate { get; set; }
         public int TrainingPeriod { get; set; }
-        public string Photo { get; set; }
-        public string OneDayDoc {get;set;}
         public string Status { get; set; }
         public string BranchVisited { get; set; }
         public DateTime Created { get; set; }
         public DateTime PrintTime { get; set; }
+        public string OneDayDoc {get;set;}
+        public string Document { get; set; }
+        public string Photo { get; set; }
     }
 }
