@@ -5,8 +5,8 @@ namespace NBI.API.Helper
     public class DriverParams
     {
         private const int MaxPageSize = 50;
-        public int PageNumber { get; set; } =1;
-        private int pageSize = 10;
+        public int PageNumber { get; set; } = 1;
+        private int pageSize = 5;
         public int PageSize
         {
             get {return pageSize;}

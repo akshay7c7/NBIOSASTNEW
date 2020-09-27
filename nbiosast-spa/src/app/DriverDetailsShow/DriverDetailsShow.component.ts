@@ -30,7 +30,7 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
   searchKey;
   
 
-  paginateData : Pagination
+  paginateData : Pagination ={} as Pagination;
 
   constructor(private userService : UserService,
               private snacker : MatSnackBar, 
@@ -50,19 +50,22 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
     this.loadUsers();
   }
 
-
+  
   MatAny:any;
   loadUsers()
   {
-    this.driverService.getDrivers(2,6)
+    this.driverService.getDrivers(this.paginateData.currentPage,this.paginateData.itemsPerPage)
     .subscribe
     (
       data=>{
-        console.log(data.result);
+        //console.log(data.pagination);
+        this.length = data.pagination.totalItems;
+        this.pageIndex = data.pagination.currentPage -1;
+        //console.log(data.result);
         this.MatAny =  data.result;
         this.Driver = new MatTableDataSource<any>(this.MatAny);
         this.showLoading = false;
-        this.Driver.paginator = this.paginator;
+        //this.Driver.paginator = this.paginator;
         if(data.result==[]){
           this.EmptyData=true;
         }
@@ -71,9 +74,12 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
 
   }
 
-  length = 100;
-  pageSize = 10;
+  length = 0;
+  pageIndex=0;
+  pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 20];
+  pageNumber : any;
+  size : any;
 
   // MatPaginator Output
   pageEvent: PageEvent;
@@ -86,7 +92,12 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
 
   pageChanged(event: number):void
   {
-    console.log(event);
+    //console.log(event);
+    this.paginateData.currentPage = event['pageIndex']+1;
+    this.paginateData.itemsPerPage = event['pageSize'];
+    console.log(this.paginateData.currentPage);
+    console.log(this.paginateData.itemsPerPage);
+    this.loadUsers();
   }
 
 
