@@ -13,7 +13,7 @@
             <div style="position:absolute;top:3.90in;left:5.96in;width:0.52in;line-height:0.24in;"><span style="font-style:normal;font-weight:bold;font-size:12pt;font-family:Times New Roman;color:#000000">{{driver['trainingPeriod']+" days"}}</span><span style="font-style:normal;font-weight:bold;font-size:11pt;font-family:Times New Roman;color:#000000"> </span><br/></div>
             <div style="position:absolute;top:4.23in;left:1.90in;width:0.80in;line-height:0.24in;"><span style="font-style:normal;font-weight:bold;font-size:12pt;font-family:Times New Roman;color:#000000">{{driver['certificateNo']}}</span><span style="font-style:normal;font-weight:bold;font-size:11pt;font-family:Times New Roman;color:#000000"> </span><br/></div>
             <div style="position:absolute;top:4.22in;left:4.00in;width:0.52in;line-height:0.24in;"><span style="font-style:normal;font-weight:bold;font-size:12pt;font-family:Times New Roman;color:#000000">{{"NA"}}</span><span style="font-style:normal;font-weight:bold;font-size:11pt;font-family:Times New Roman;color:#000000"> </span><br/></div>
-            <img *ngIf="isloading" style="position:absolute;top:2.27in;left:7.43in;width:0.97in;height:0.97in" id="image" [src]="'data:image/jpeg;base64,' + driver['photo']" >
+            <img *ngIf="isloading" style="position:absolute;top:2.27in;left:7.43in;width:0.97in;height:0.97in" id="image" src = "{{'../../../../assets/'+driver['photo']}}" >
     </div>
     
 

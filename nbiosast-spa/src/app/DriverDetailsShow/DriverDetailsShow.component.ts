@@ -5,12 +5,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { UserService } from '../_services/user.service';
 import { Driver } from '../_models/Driver';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { DialogService } from '../_services/dialog.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { LicenseComponentComponent } from '../LicenseComponent/LicenseComponent.component';
 import { AuthService } from '../_services/auth.service';
 import { DriverService } from '../_services/driver.service';
+import { Pagination } from '../_models/Pagination';
 
 @Component({
   selector: 'app-DriverDetailsShow',
@@ -28,6 +29,9 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
   imageSrc;
   searchKey;
   
+
+  paginateData : Pagination
+
   constructor(private userService : UserService,
               private snacker : MatSnackBar, 
               public authService : AuthService,
@@ -40,36 +44,49 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
               ) { }
   
   ngOnInit() {
-    console.log("inside ngoninit");
   }
 
   ngAfterViewInit(): void {
-    console.log("inside ngafter");
     this.loadUsers();
   }
 
-  
 
-  fff:any;
-  branch: string = "ALL";
+  MatAny:any;
   loadUsers()
   {
-    console.log("inside loadusers");
-    this.driverService.getDrivers(this.branch)
+    this.driverService.getDrivers(2,6)
     .subscribe
     (
       data=>{
-        console.log(data);
-        this.fff =  data;
-        this.Driver = new MatTableDataSource<any>(this.fff);
+        console.log(data.result);
+        this.MatAny =  data.result;
+        this.Driver = new MatTableDataSource<any>(this.MatAny);
         this.showLoading = false;
         this.Driver.paginator = this.paginator;
-        if(data==""){
+        if(data.result==[]){
           this.EmptyData=true;
         }
       }
     )
 
+  }
+
+  length = 100;
+  pageSize = 10;
+  pageSizeOptions: number[] = [5, 10, 20];
+
+  // MatPaginator Output
+  pageEvent: PageEvent;
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    if (setPageSizeOptionsInput) {
+      this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+    }
+  }
+
+  pageChanged(event: number):void
+  {
+    console.log(event);
   }
 
 

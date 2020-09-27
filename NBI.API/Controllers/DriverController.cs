@@ -81,21 +81,27 @@ namespace NBI.API.Controllers
               return Ok(driverFromRepo);
         }
 
-        [HttpGet("getAlldrivers/{branchName}")]
-        public async Task<IActionResult> GetAllDrivers(string branchName)
+        [HttpGet("getAlldrivers")]
+        public async Task<IActionResult> GetAllDrivers([FromQuery] DriverParams driverParams)
         {   
-            if(branchName=="ALL")
+            var drivers  =  _context.Drivers.OrderByDescending(s=>s.Status=="Pending").ThenByDescending(x=>x.Id).AsQueryable();
+            if(!string.IsNullOrEmpty(driverParams.BranchCity))
             {
-            System.Console.WriteLine("inside"+branchName);
-            var driver  = await _context.Drivers.OrderByDescending(s=>s.Status=="Pending").ThenByDescending(x=>x.Id).ToListAsync();
-            var driverListToReturn = _mapper.Map<List<DriverReturnDto>>(driver);
-            return Ok(driverListToReturn); 
+                drivers = drivers.Where(x=>x.BranchVisited == driverParams.BranchCity);
             }
-
-            System.Console.WriteLine("outside"+branchName);
-            var driverF  = await _context.Drivers.Where(s=>s.Status=="Approved" && s.BranchVisited==branchName).OrderByDescending(x=>x.Id).ToListAsync();
-            var driverListToReturnF = _mapper.Map<List<DriverReturnDto>>(driverF);
-            return Ok(driverListToReturnF);
+            if(!string.IsNullOrEmpty(driverParams.Status))
+            {
+                drivers = drivers.Where(x=>x.Status == driverParams.Status);
+            }
+            if(driverParams.ExpiredCard=="YES")
+            {
+                drivers = drivers.Where(x=>x.TrainingEndDate <= System.DateTime.Today);
+            }
+            var pLDrivers =  await PagedList<Driver>.CreateAsync(drivers, driverParams.PageNumber, driverParams.PageSize);
+            var driverListToReturn = _mapper.Map<IEnumerable<DriverReturnDto>>(pLDrivers);
+            Response.AddPagination(pLDrivers.CurrentPage, pLDrivers.PageSize, pLDrivers.TotalCount, pLDrivers.TotalPages);
+            return Ok(driverListToReturn); 
+  
         }
         [HttpDelete("DeleteDriver/{id}")]
         public async Task<IActionResult> DeleteDriver(int id)

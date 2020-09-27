@@ -1,7 +1,9 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Driver } from '../_models/Driver';
+import { PaginatedResult } from '../_models/Pagination';
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +29,38 @@ baseUrl = environment.apiUrl + 'driver/'; //http://localhost:5000/api/driver/
     return this.http.get(this.baseUrl + 'getdriver/'+id);
   }
 
-  getDrivers(branchName:string)
+  getDrivers(page? , itemsPerPage?, driverParams?, expire?)
   {
-    return this.http.get(this.baseUrl + 'getAlldrivers/'+branchName);
+    const paginatedResult : PaginatedResult<Driver[]> = new PaginatedResult<Driver[]>();
+    let params= new HttpParams();
+
+    if(page!=null && itemsPerPage!=null)
+    {
+      params = params.append('pageNumber',page);
+      params = params.append('pageSize',itemsPerPage);
+    }
+
+    if(driverParams !=null)
+    {
+      params = params.append('status', driverParams.status);
+      params = params.append('branchCity', driverParams.branchCity);
+    }
+
+    if(expire!=null)
+    {
+      params = params.append('expiredCard', driverParams.expireCard);
+    }
+    return this.http.get<Driver[]>(this.baseUrl + 'getAlldrivers', {observe:'response',params})
+  .pipe(
+    map( response =>{
+        paginatedResult.result=response.body;
+        if(response.headers.get('Pagination')!=null)
+        {
+          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'))
+        }
+        return paginatedResult;
+      })  
+  );
   }
 
   ApproveDriver(id : any)
