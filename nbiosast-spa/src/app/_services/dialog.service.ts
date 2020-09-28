@@ -15,7 +15,7 @@ constructor(private matDialog : MatDialog) { }
     return this.matDialog.open(ConfirmDialogueComponent,{
       width : '390px',
       panelClass : 'confirm-dialog-container',
-      disableClose : true,
+      disableClose : false,
       data : {
         message : msg
       }

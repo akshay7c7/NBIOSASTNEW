@@ -3,7 +3,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { City } from 'src/assets/cities';
+import { City } from 'src/app/_services/cities';
+import { DialogService } from '../_services/dialog.service';
 import { UserService } from '../_services/user.service';
 
 @Component({
@@ -25,7 +26,8 @@ searchKey;
               private route : ActivatedRoute, 
               private router : Router,
               private ngZone : NgZone,
-              private cityService : City
+              private cityService : City,
+              private dialog : DialogService
               ) { }
 
   ngOnInit() {
@@ -37,7 +39,7 @@ searchKey;
         this.showLoading = false;
       },
       error=>{
-        this.snacker.open(error.error.title,'',{duration:1000})
+        this.snacker.open(error.error,'',{duration:1000})
       }
     )
     
@@ -67,5 +69,32 @@ searchKey;
   applyFilter()
   {
     this.branchAdmin.filter = this.searchKey.trim().toLowerCase();
+  }
+
+  DeleteUser(element)
+  {
+    this.dialog.openConfirmDialog("Do you want to delete this Branch details?").afterClosed().subscribe(
+      res=>{
+        if(res)
+        { this.userService.DeleteUser(element.id)
+          .subscribe(
+            next=>{
+
+              this.branchAdmin.data = this.branchAdmin.data
+          .filter((value,key)=>{
+            return value.id != element.id;
+          });
+          this.snacker.open('Branch Deleted successfully','',{duration: 1000})
+
+            },
+            error=>{
+              console.log(error);
+              this.snacker.open(error.error,'',{duration: 1000})
+            }
+          )
+        }
+      }
+    )
+  
   }
 }

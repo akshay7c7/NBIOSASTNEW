@@ -12,6 +12,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { LicenseComponentComponent } from '../LicenseComponent/LicenseComponent.component';
 import { AuthService } from '../_services/auth.service';
 import { DriverService } from '../_services/driver.service';
+import { Pagination } from '../_models/Pagination';
+import { User } from '../_models/user';
 
 @Component({
   selector: 'app-Reports',
@@ -20,15 +22,30 @@ import { DriverService } from '../_services/driver.service';
 })
 export class ReportsComponent implements OnInit  , AfterViewInit {
 
-  @ViewChild(MatPaginator) paginator : MatPaginator;
-  
   EmptyData = false;
-  DisplayedColumns : string[]= ['id','name','address','photo','status','actions'];
+  DisplayedColumns : string[]= ['id','name','address','photo','status','branchVisited'];
   showLoading = true;
   Driver: MatTableDataSource<any>
   imageSrc;
   searchKey;
+  MatAny:any;
+
+  length = 0;
+  pageIndex=0;
+  pageSize = 5;
+  pageSizeOptions: number[] = [5, 10, 20];
+
+  addDriverMode = false;
+
+  user : User[];
+
+  driverParams : any ={};
+
   
+  
+
+  paginateData : Pagination ={} as Pagination;
+
   constructor(private userService : UserService,
               private snacker : MatSnackBar, 
               public authService : AuthService,
@@ -40,33 +57,60 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
               private driverService : DriverService
               ) { }
   
+  fff:any
   ngOnInit() {
-    
+    this.userService.GetBranchAdminsDetails()
+    .subscribe(
+      data=>
+      { this.fff = data
+        console.log(data);
+        this.user = this.fff;
+      }
+    )
+    this.EmptyData=false;
+    this.driverParams.status="BOTH";
+    this.driverParams.branch="ALL";
   }
 
   ngAfterViewInit(): void {
+    this.EmptyData=false;
     this.loadUsers();
   }
 
-  fff:any;
-  branch: string = "Mumbai";
   loadUsers()
   {
-    this.driverService.getDrivers(this.branch)
+    this.driverService.getDrivers(this.paginateData.currentPage,this.paginateData.itemsPerPage, this.driverParams)
     .subscribe
     (
       data=>{
-        console.log(data);
-        this.fff =  data;
-        this.Driver = new MatTableDataSource<any>(this.fff);
-        this.showLoading = false;
-        this.Driver.paginator = this.paginator;
-        if(data==""){
+        this.length = data.pagination.totalItems;
+        if(this.length==0){
           this.EmptyData=true;
         }
+        else
+        {
+          this.EmptyData=false;
+        }
+        this.pageIndex = data.pagination.currentPage -1;
+        this.MatAny =  data.result;
+        this.Driver = new MatTableDataSource<any>(this.MatAny);
+        this.showLoading = false;
+      },
+      error=>
+      {
+        this.EmptyData=true;
       }
     )
 
+  }
+
+
+  pageChanged(event: number):void
+  {
+    //console.log(event);
+    this.paginateData.currentPage = event['pageIndex']+1;
+    this.paginateData.itemsPerPage = event['pageSize'];
+    this.loadUsers();
   }
 
   ClearIt()

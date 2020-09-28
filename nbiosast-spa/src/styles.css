@@ -228,3 +228,11 @@ mat-footer-row, mat-footer-cell{
   .spinner-message {
     text-align: center;
   }
+
+
+
+  .mat-column-branchVisited, .mat-column-trainingEndDate{
+   
+    justify-content: center;
+  
+  }

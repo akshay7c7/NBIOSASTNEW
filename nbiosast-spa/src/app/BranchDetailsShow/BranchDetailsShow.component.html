@@ -31,8 +31,8 @@
       </ng-container>
       <ng-container matColumnDef="action">
         <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          <button mat-icon-button color="warn"><mat-icon>delete_outline</mat-icon></button>
+        <mat-cell *matCellDef="let element">
+          <button mat-icon-button color="warn" (click)="DeleteUser(element)"><mat-icon>delete_outline</mat-icon></button>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="loading">

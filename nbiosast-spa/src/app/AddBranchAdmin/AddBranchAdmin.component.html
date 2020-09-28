@@ -16,10 +16,8 @@
 
           <div class="form-group col-md-5 ml-3" style="margin-right: -20px;">
             <label for="inputPassword4">City</label>
-            <div>
-              <mat-form-field class="example-full-width">
-                <input formControlName="city" type="text" [ngClass]="{'is-invalid': createBranchAdminForm.get('city').errors && createBranchAdminForm.get('city').touched}"
-                       placeholder="Select City"
+            <input type="text" class="form-control" formControlName="city" [(ngModel)]="fromCity"
+                       placeholder="Search city"
                        matInput
                        [formControl]="myControl"
                        [matAutocomplete]="auto">
@@ -28,8 +26,6 @@
                     {{option}}
                   </mat-option>
                 </mat-autocomplete>
-              </mat-form-field>
-            </div>
             <div class="invalid-feedback" *ngIf="createBranchAdminForm.get('city').touched && createBranchAdminForm.get('city').hasError('required')">City is required</div>
           </div>
 

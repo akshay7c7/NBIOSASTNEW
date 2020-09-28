@@ -26,6 +26,11 @@ baseUrl = environment.apiUrl + 'users';
       return this.http.put(this.baseUrl+"/"+id,user);
     }
 
+    DeleteUser(id:number)
+    {
+      return this.http.delete(this.baseUrl+"/DeleteUser/"+id);
+    }
+
     
 
 

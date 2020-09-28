@@ -88,6 +88,13 @@ namespace DatingApp.API.Controllers
             {
                 return BadRequest("Email already exists");
             }
+
+            var checkuserphone = await _userManager.FindByEmailAsync(userForCreateAdminDto.PhoneNumber);
+            if(checkuserphone!=null)
+            {
+                return BadRequest("Phone number already exists");
+            }
+            
             var userToCreate = _mapper.Map<User>(userForCreateAdminDto);
             var result = await _userManager.CreateAsync(userToCreate, userForCreateAdminDto.Password);
             var userToReturn = _mapper.Map<UserForDisplayDetailDto>(userToCreate);
@@ -110,6 +117,12 @@ namespace DatingApp.API.Controllers
         [HttpPost("CreateBranchAdmin")]
         public async Task<IActionResult> CreateBranchAdmin(UserForCreateAdminDto userForCreateAdminDto)
         {
+            System.Console.WriteLine(userForCreateAdminDto.Name);
+            System.Console.WriteLine(userForCreateAdminDto.Password);
+            System.Console.WriteLine(userForCreateAdminDto.UserName);
+            System.Console.WriteLine(userForCreateAdminDto.City);
+            System.Console.WriteLine(userForCreateAdminDto.Email);
+            System.Console.WriteLine(userForCreateAdminDto.PhoneNumber);
             var checkuser = await _userManager.FindByNameAsync(userForCreateAdminDto.UserName);
             if(checkuser!=null)
             {
@@ -119,6 +132,17 @@ namespace DatingApp.API.Controllers
             if(checkuseremail!=null)
             {
                 return BadRequest("Email already exists");
+            }
+            var checkuserphone = await _userManager.FindByEmailAsync(userForCreateAdminDto.PhoneNumber);
+            if(checkuserphone!=null)
+            {
+                return BadRequest("Phone number already exists");
+            }
+
+            var checkusercity = await _userManager.FindByEmailAsync(userForCreateAdminDto.City);
+            if(checkusercity!=null)
+            {
+                return BadRequest("Branch already exists");
             }
             var userToCreate = _mapper.Map<User>(userForCreateAdminDto);
             var result = await _userManager.CreateAsync(userToCreate, userForCreateAdminDto.Password);

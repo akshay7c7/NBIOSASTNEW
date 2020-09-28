@@ -94,5 +94,21 @@ namespace NBI.API.Controllers
             var users = await _repo.GetUserWithRole(id);
             return Ok(users);
         }
+
+        [Authorize(Roles="AccountAdminCreater")]
+        [HttpDelete("DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            System.Console.WriteLine(id);
+            var userFromRepo = await _repo.GetUser(id);
+            System.Console.WriteLine(userFromRepo);
+            if(userFromRepo!=null)
+            {
+            var users = await _userManager.DeleteAsync(userFromRepo);
+            return Ok();
+            }
+            return BadRequest("User Not found");
+            
+        }
     }
 }

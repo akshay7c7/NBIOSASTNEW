@@ -84,18 +84,32 @@ namespace NBI.API.Controllers
         [HttpGet("getAlldrivers")]
         public async Task<IActionResult> GetAllDrivers([FromQuery] DriverParams driverParams)
         {   
-            var drivers  =  _context.Drivers.OrderByDescending(s=>s.Status=="Pending").ThenByDescending(x=>x.Id).AsQueryable();
+            var drivers  =  _context.Drivers.OrderByDescending(x=>x.Id).AsQueryable();
             if(!string.IsNullOrEmpty(driverParams.BranchCity))
             {
-                drivers = drivers.Where(x=>x.BranchVisited == driverParams.BranchCity);
+                if(driverParams.BranchCity=="ALL")
+                {
+                    drivers = drivers.OrderByDescending(x=>x.Id).AsQueryable();
+                }
+                else{
+                    drivers = drivers.Where(x=>x.BranchVisited == driverParams.BranchCity);
+                }
+                
             }
             if(!string.IsNullOrEmpty(driverParams.Status))
             {
-                drivers = drivers.Where(x=>x.Status == driverParams.Status);
+                if(driverParams.Status=="BOTH")
+                {
+                    drivers = drivers.OrderByDescending(x=>x.Id).AsQueryable();
+                }
+                else{
+                    drivers = drivers.Where(x=>x.Status == driverParams.Status);
+                }
+                
             }
             if(driverParams.ExpiredCard=="YES")
             {
-                drivers = drivers.Where(x=>x.TrainingEndDate <= System.DateTime.Today);
+                drivers = drivers.Where(x=>x.TrainingEndDate >= System.DateTime.Today);
             }
             var pLDrivers =  await PagedList<Driver>.CreateAsync(drivers, driverParams.PageNumber, driverParams.PageSize);
             var driverListToReturn = _mapper.Map<IEnumerable<DriverReturnDto>>(pLDrivers);

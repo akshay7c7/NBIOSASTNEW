@@ -3,9 +3,9 @@ import { User } from '../_models/user';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { AuthService } from '../_services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { City } from 'src/assets/cities';
 import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { City } from '../_services/cities';
 
 @Component({
   selector: 'app-AddBranchAdmin',
@@ -18,7 +18,7 @@ export class AddBranchAdminComponent implements OnInit {
 
   myControl = new FormControl();
   city = this.cityService.cities;
-  cityNames=[];
+  options : string[] =[];
   filteredOptions: Observable<string[]>;
 
   @Output() cancelBranchCreation = new EventEmitter();
@@ -31,20 +31,16 @@ export class AddBranchAdminComponent implements OnInit {
 
 ngOnInit() {
 
+  for (var product of this.city) {
+    this.options.push(product.name);
+    }
+
   this.CreateAddBranchAdmin();
   this.filteredOptions = this.myControl.valueChanges.pipe(
     startWith(''),
     map(value => this._filter(value))
   );
   
-  //console.log(this.city);
-  
-  for (var product of this.city) {
-    //console.log(product.name);
-    this.cityNames.push(product.name);
-    }
-
-  //console.log(this.cityNames);  
   
 }
 
@@ -56,14 +52,18 @@ ngOnInit() {
  
  private _filter(value: string)
   { 
-    const filterValue = value.toLowerCase();
-    return this.cityNames.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+    if(value!==null)
+    {
+      const filterValue = value.toLowerCase();
+      return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+    }
+    
 }
 
   
   
 
-
+fromCity:string="";
   CreateAddBranchAdmin()
   {
         this.createBranchAdminForm = this.fb.group
@@ -73,7 +73,7 @@ ngOnInit() {
               username : ['',Validators.required],
               email : ['',Validators.required],
               phoneNumber :['',Validators.required],
-              city : ['',Validators.required],
+              city : [this.fromCity, Validators.required],
               password : ['', [Validators.required, Validators.minLength(4),Validators.maxLength(10)]],
               cpassword : ['',Validators.required]
             },
@@ -91,8 +91,9 @@ ngOnInit() {
 
   RegisterBranchAdmin()
   {
+    
     if(this.createBranchAdminForm.valid)
-      {
+      {console.log("inside")
         this.user = Object.assign({},this.createBranchAdminForm.value);
 
         this.authService.registerBranchAdmin(this.user)
@@ -102,9 +103,14 @@ ngOnInit() {
             this.createBranchAdminForm.reset();
               },
               
-          error =>{this.snackbar.open(error.error.title,'',{duration : 1000});}
+          error =>{
+            console.log(error)
+            this.snackbar.open(error.error,'',{duration : 1000});}
                   )
-      } 
+      }
+    else{
+      this.snackbar.open('Validation Error','',{duration : 1000});
+    } 
 
   }
 

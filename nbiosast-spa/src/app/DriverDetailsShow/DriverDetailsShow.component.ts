@@ -28,6 +28,14 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
   Driver: MatTableDataSource<any>
   imageSrc;
   searchKey;
+  MatAny:any;
+
+  length = 0;
+  pageIndex=0;
+  pageSize = 5;
+  pageSizeOptions: number[] = [5, 10, 20];
+
+  addDriverMode = false;
   
 
   paginateData : Pagination ={} as Pagination;
@@ -51,7 +59,6 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
   }
 
   
-  MatAny:any;
   loadUsers()
   {
     this.driverService.getDrivers(this.paginateData.currentPage,this.paginateData.itemsPerPage)
@@ -60,49 +67,36 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
       data=>{
         //console.log(data.pagination);
         this.length = data.pagination.totalItems;
+        if(this.length==0){
+          this.EmptyData=true;
+        }
+        else
+        {
+          this.EmptyData=false;
+        }
         this.pageIndex = data.pagination.currentPage -1;
         //console.log(data.result);
         this.MatAny =  data.result;
         this.Driver = new MatTableDataSource<any>(this.MatAny);
         this.showLoading = false;
         //this.Driver.paginator = this.paginator;
-        if(data.result==[]){
-          this.EmptyData=true;
-        }
       }
     )
 
   }
 
-  length = 0;
-  pageIndex=0;
-  pageSize = 5;
-  pageSizeOptions: number[] = [5, 10, 20];
-  pageNumber : any;
-  size : any;
-
-  // MatPaginator Output
-  pageEvent: PageEvent;
-
-  setPageSizeOptions(setPageSizeOptionsInput: string) {
-    if (setPageSizeOptionsInput) {
-      this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
-    }
-  }
 
   pageChanged(event: number):void
   {
     //console.log(event);
     this.paginateData.currentPage = event['pageIndex']+1;
     this.paginateData.itemsPerPage = event['pageSize'];
-    console.log(this.paginateData.currentPage);
-    console.log(this.paginateData.itemsPerPage);
     this.loadUsers();
   }
 
 
 
-  addDriverMode = false;
+
 
   AddDriver()
   {
@@ -152,8 +146,9 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
 
     }
     
-    
   }
+
+
   ApproveDriver(id: any)
   {
       this.driverService.ApproveDriver(id)
@@ -168,6 +163,8 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
         }
       )
   }
+
+
 
   PutOnPending(id: any)
   {
@@ -184,6 +181,8 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
         
       )
   }
+
+
 
   AddPrintDriverCount(id: any)
   {
@@ -249,6 +248,4 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
   }
 
  
-
-
 }
