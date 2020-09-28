@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { City } from '../_services/cities';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-AddBranchAdmin',
@@ -21,10 +22,9 @@ export class AddBranchAdminComponent implements OnInit {
   options : string[] =[];
   filteredOptions: Observable<string[]>;
 
-  @Output() cancelBranchCreation = new EventEmitter();
-  
 
   constructor(private fb : FormBuilder, 
+    private route : Router,
     private authService : AuthService,
     private snackbar : MatSnackBar,
     private cityService: City ) { }
@@ -117,7 +117,7 @@ fromCity:string="";
   Cancel()
   {
     this.createBranchAdminForm.reset();
-    this.cancelBranchCreation.emit(false);
+    this.route.navigate(['/branchdetails'])
   }
 
  

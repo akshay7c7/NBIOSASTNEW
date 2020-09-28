@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="mat-elevation-z8">
     <div>
-      <a class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" (click)="AddBranchAdmin()"><i class="fas fa-download fa-sm text-white-50"></i> Add Branch</a>
+      <a class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" (click)="AddAccountAdmin()"><i class="fas fa-download fa-sm text-white-50"></i> Add Account Admin</a>
       <mat-form-field class="d-none d-sm-inline-block search-form-field ml-5" floatLabel="never">
         <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
         <button mat-button matSuffix mat-icon-button area-label="Clear">
@@ -13,10 +13,6 @@
         <mat-header-cell *matHeaderCellDef>Full Name</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
       </ng-container>
-      <ng-container matColumnDef="count">
-        <mat-header-cell *matHeaderCellDef>Total Drivers</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{element.count}}</mat-cell>
-      </ng-container>
       <ng-container matColumnDef="email">
         <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
@@ -25,12 +21,8 @@
         <mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.userName}}</mat-cell>
       </ng-container>
-      <ng-container matColumnDef="city">
-        <mat-header-cell *matHeaderCellDef>Branch</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{element.city}}</mat-cell>
-      </ng-container>
       <ng-container matColumnDef="action">
-        <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
         <mat-cell *matCellDef="let element">
           <button mat-icon-button color="warn" (click)="DeleteUser(element)"><mat-icon>delete_outline</mat-icon></button>
         </mat-cell>

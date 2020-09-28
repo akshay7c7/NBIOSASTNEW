@@ -1,3 +1,4 @@
+<div  class="container-fluid">
 <div class="mat-elevation-z8">
   <div>
   <div class="form-row">
@@ -68,4 +69,5 @@
     <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':EmptyData==false}"></mat-footer-row>
   </mat-table>
   <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSizeOptions] ="pageSizeOptions" [pageSize]="pageSize" showFirstLastButtons  (page)="pageChanged($event)"></mat-paginator>
+</div>
 </div>

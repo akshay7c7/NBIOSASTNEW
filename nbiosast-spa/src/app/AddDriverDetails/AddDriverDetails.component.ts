@@ -17,7 +17,6 @@ import {map} from 'rxjs/operators';
 })
 export class AddDriverDetailsComponent implements OnInit {
 
-  @Output() cancelDriverCreation = new EventEmitter();
 
   createDriverForm : FormGroup;
   public user: User = {} as User;
@@ -140,7 +139,6 @@ export class AddDriverDetailsComponent implements OnInit {
   Cancel()
   {
     this.createDriverForm.reset();
-    this.cancelDriverCreation.emit(false);
     this.router.navigate['/driverdetails'];
   }
 

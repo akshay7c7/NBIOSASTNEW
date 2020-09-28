@@ -55,6 +55,7 @@ searchKey;
 
   AddBranchAdmin()
   {
+    this.router.navigate(['/addbranchdetails'])
     this.addBranchAdminMode=true;
   }
   cancelBranchCreation(creation : boolean)

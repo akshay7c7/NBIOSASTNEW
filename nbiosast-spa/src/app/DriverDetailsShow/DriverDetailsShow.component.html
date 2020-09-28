@@ -1,5 +1,4 @@
-
-<div  class="card-body" *ngIf="!addDriverMode">
+<div  class="container-fluid">
   <div class="mat-elevation-z8">
     <div>
       <a class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" (click)="AddDriver()"><i class="fas fa-download fa-sm text-white-50"></i> Add Driver</a>
@@ -7,7 +6,7 @@
         <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
         <button mat-button matSuffix mat-icon-button area-label="Clear">
         <mat-icon *ngIf="searchKey" (click)="ClearIt()">close</mat-icon></button>
-    </mat-form-field>
+      </mat-form-field>
     </div>
     <mat-table [dataSource] = "Driver" >
       <ng-container matColumnDef="id">
@@ -57,8 +56,4 @@
     </mat-table>
     <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSizeOptions] ="pageSizeOptions" [pageSize]="pageSize" showFirstLastButtons  (page)="pageChanged($event)"></mat-paginator>
   </div>
-</div>
-
-<div *ngIf="addDriverMode" class="container">
-  <app-AddDriverDetails (cancelDriverCreation)="cancelDriverCreation($event)"></app-AddDriverDetails>
 </div>

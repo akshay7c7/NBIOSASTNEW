@@ -17,6 +17,7 @@ import { DriverDetailsResolver } from 'src/app/_resolvers/DriverDetailsResolver'
 import { LicenseComponentComponent } from 'src/app/LicenseComponent/LicenseComponent.component';
 import { DriverDetailsEditComponent } from 'src/app/DriverDetailsShow/DriverDetailsEdit/DriverDetailsEdit.component';
 import { ReportsComponent } from 'src/app/Reports/Reports.component';
+import { ShowAccountAdminComponent } from 'src/app/ShowAccountAdmin/ShowAccountAdmin.component';
 
 export const appRoutes : Routes = [
 
@@ -38,7 +39,9 @@ export const appRoutes : Routes = [
             {path : 'editprofile' , component : EditProfileComponent, resolve:{editResolve:EditResolver}},
             {path : 'editpassword' , component : EditPasswordComponent},
             {path : 'editdriver' , component : DriverDetailsEditComponent},
-            {path : 'reports', component: ReportsComponent}
+            {path : 'reports', component: ReportsComponent},
+            {path : 'showaccountadmin', component: ShowAccountAdminComponent},
+
         ]
     },
     {path : '**' , component : LoginComponent}

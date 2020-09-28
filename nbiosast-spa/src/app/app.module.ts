@@ -37,6 +37,7 @@ import { DriverDetailsEditComponent } from './DriverDetailsShow/DriverDetailsEdi
 import { SpinnerComponent } from './Spinner/Spinner.component';
 import { SpinnerOverlayComponent } from './SpinnerOverlay/SpinnerOverlay.component';
 import { ReportsComponent } from './Reports/Reports.component';
+import { ShowAccountAdminComponent } from './ShowAccountAdmin/ShowAccountAdmin.component';
 
 
 export function tokenGetter() {
@@ -44,7 +45,7 @@ export function tokenGetter() {
 }
 
 @NgModule({
-  declarations: [																				
+  declarations: [																					
     AppComponent,
       DashboardComponent,
       SidebarComponent,
@@ -66,7 +67,8 @@ export function tokenGetter() {
       DriverDetailsEditComponent,
       SpinnerComponent,
       SpinnerOverlayComponent,
-      ReportsComponent
+      ReportsComponent,
+      ShowAccountAdminComponent
    ],
   imports: [
     BrowserModule,

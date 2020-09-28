@@ -66,7 +66,7 @@ export class AddAccountAdminComponent implements OnInit {
   Cancel()
   {
     this.createAccountAdminForm.reset();
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/showaccountadmin']);
   }
 
 
