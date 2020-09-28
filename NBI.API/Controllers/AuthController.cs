@@ -75,8 +75,8 @@ namespace DatingApp.API.Controllers
             return Unauthorized("Incorrect Password !");
         }
 
-        [HttpPost("CreateAccountAdmin")]
-        public async Task<IActionResult> CreateAccountAdmin(UserForCreateAdminDto userForCreateAdminDto)
+        [HttpPost("CreateBranchAdmin")]
+        public async Task<IActionResult> CreateBranchAdmin(UserForCreateAdminDto userForCreateAdminDto)
         {
             var checkuser = await _userManager.FindByNameAsync(userForCreateAdminDto.UserName);
             if(checkuser!=null)
@@ -114,8 +114,8 @@ namespace DatingApp.API.Controllers
             
         }
 
-        [HttpPost("CreateBranchAdmin")]
-        public async Task<IActionResult> CreateBranchAdmin(UserForCreateAdminDto userForCreateAdminDto)
+        [HttpPost("CreateDriverAdmin")]
+        public async Task<IActionResult> CreateDriverAdmin(UserForCreateAdminDto userForCreateAdminDto)
         {
             System.Console.WriteLine(userForCreateAdminDto.Name);
             System.Console.WriteLine(userForCreateAdminDto.Password);

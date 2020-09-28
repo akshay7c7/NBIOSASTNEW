@@ -1,14 +1,31 @@
 <div class="container-fluid">
   <div class="mat-elevation-z8">
     <div>
-      <a class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" (click)="AddAccountAdmin()"><i class="fas fa-download fa-sm text-white-50"></i> Add Account Admin</a>
-      <mat-form-field class="d-none d-sm-inline-block search-form-field ml-5" floatLabel="never">
-        <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
-        <button mat-button matSuffix mat-icon-button area-label="Clear">
-        <mat-icon *ngIf="searchKey" (click)="ClearIt()">close</mat-icon></button>
-    </mat-form-field>
+      <div class="form-row">
+        <div><a class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mt-3 ml-1" (click)="AddAccountAdmin()"><i class="fas fa-download fa-sm text-white-50"></i>Add Account Admin</a></div>
+        <div class="form-group col-md-3">
+          <mat-form-field class="d-none d-sm-inline-block search-form-field ml-5" floatLabel="never">
+            <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
+            <button mat-button matSuffix mat-icon-button area-label="Clear">
+            <mat-icon *ngIf="searchKey" (click)="ClearIt()">close</mat-icon></button>
+          </mat-form-field>
+        </div>
+        <div class="form-group col-md-3 ml-5 mt-1">
+          <label for="inputState">Select Admin Type</label>
+          <select id="inputState" name= "status" [(ngModel)]="userParams.userType" (change)="loadUsers()" class="form-control">
+            <option selected value="BOTH" ></option>
+            <option value="Account">Account Admin</option>
+            <option value="Branch">Branch Admin</option>
+            <option value="Driver">Driver Admin</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <mat-table [dataSource] = "branchAdmin">
+    <mat-table [dataSource] = "UserAdmin">
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+      </ng-container>
       <ng-container matColumnDef="nameAdmin">
         <mat-header-cell *matHeaderCellDef>Full Name</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
@@ -40,7 +57,7 @@
       <mat-header-row *matHeaderRowDef="DisplayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns:DisplayedColumns;"></mat-row>
       <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':showLoading==false}"></mat-footer-row>
-      <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':branchAdmin!=null}"></mat-footer-row>
+      <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':EmptyData==false}"></mat-footer-row>
     </mat-table>
     <mat-paginator [pageSizeOptions] ="[5, 10, 15, 20]" [pageSize]="5" showFirstLastButtons></mat-paginator>
   </div>

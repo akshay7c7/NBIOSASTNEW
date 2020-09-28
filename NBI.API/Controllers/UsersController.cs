@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,8 +8,10 @@ using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NBI.API.Data;
 using NBI.API.Dtos;
+using NBI.API.Helper;
 using NBI.API.Interfaces;
 using NBI.API.Models;
 using NBI.API.Repository;
@@ -21,13 +24,15 @@ namespace NBI.API.Controllers
     {
         private readonly IAdminMaintainRepository _repo;
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
 
-        public UsersController(IAdminMaintainRepository repo, IMapper mapper, UserManager<User> userManager)
+        public UsersController(IAdminMaintainRepository repo, DataContext context, IMapper mapper, UserManager<User> userManager)
         {
             _userManager = userManager;
             _mapper = mapper;
             _repo = repo;
+            _context = context;
 
         }
 
@@ -47,17 +52,78 @@ namespace NBI.API.Controllers
         }
 
         [Authorize(Roles="BranchAdminCreater,AccountAdminCreater")]
-        [HttpGet(Name = "GetUsers")]    
+        [HttpGet("branchDetails",Name = "GetUsers")]    
         public async Task<IActionResult> GetUsers()
         {
-            var userDetailsFromRepo = await _repo.GetUsers();
-            if (userDetailsFromRepo == null)
-            {
-                return NotFound("User not Found");
-            }
-            //var userDetailsToShow = _mapper.Map<List<UserForDisplayDetailDto>>(userDetailsFromRepo);
-            return Ok(userDetailsFromRepo);
+            var userList = await (from user in _context.Users
+                                  orderby user.UserName
+                                  select new  
+                                  {
+                                      Id = user.Id,
+                                      UserName = user.UserName,
+                                      Email = user.Email,
+                                      Name = user.Name,
+                                      City = user.City,
+                                      Count = _context.Drivers.Where(x=>x.BranchVisited==user.City).Count(),
+                                      Roles = (from userRole in user.UserRoles
+                                               join role in _context.Roles
+                                               on userRole.RoleId
+                                               equals role.Id
+                                               select role.Name).Count()
+                                  }).ToListAsync();
 
+            if(userList!=null)
+            {
+                 var users = userList.Where(x=>x.Roles==1).ToList(); 
+                return Ok(users);
+            }
+
+            return BadRequest("No users or Error");
+          
+                
+          
+        }
+
+        [Authorize(Roles="DriverCreater,BranchAdminCreater,AccountAdminCreater")]
+        [HttpGet("getAllUsers")]
+        public async Task<IActionResult> GetAllUsers([FromQuery] UserParams userParams)
+        {
+            
+         var userList = await (from user in _context.Users
+                                  orderby user.UserName
+                                  select new  
+                                  {
+                                      Id = user.Id,
+                                      UserName = user.UserName,
+                                      Email = user.Email,
+                                      Name = user.Name,
+                                      Roles = (from userRole in user.UserRoles
+                                               join role in _context.Roles
+                                               on userRole.RoleId
+                                               equals role.Id
+                                               select role.Name).Count()
+                                  }).ToListAsync();
+
+                                  
+        if(userParams.UserType=="Account")
+        {
+            var users = userList.Where(x=>x.Roles==3).ToList(); 
+            return Ok(users);
+        }
+        
+        if(userParams.UserType=="Branch")
+        {
+            var users = userList.Where(x=>x.Roles==2).ToList(); 
+            return Ok(users);
+        }
+
+        if(userParams.UserType=="Driver")
+        {
+            var users = userList.Where(x=>x.Roles==1).ToList(); 
+            return Ok(users);
+        }
+        
+         return BadRequest("Error Occurred");
         }
 
         [Authorize(Roles="DriverCreater,BranchAdminCreater,AccountAdminCreater")]

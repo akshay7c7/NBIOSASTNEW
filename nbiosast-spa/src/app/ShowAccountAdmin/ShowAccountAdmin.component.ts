@@ -17,10 +17,13 @@ export class ShowAccountAdminComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator : MatPaginator;
   
-  DisplayedColumns =["nameAdmin", "userName", "email", "action"];
+  DisplayedColumns =["id","nameAdmin", "userName", "email", "action"];
   showLoading = true;
-  branchAdmin : MatTableDataSource<any>
+  UserAdmin : MatTableDataSource<any>
   searchKey;
+  userParams : any ={}
+
+  EmptyData=false;
   
     constructor(private userService : UserService,
                 private snacker : MatSnackBar, 
@@ -32,37 +35,52 @@ export class ShowAccountAdminComponent implements OnInit, AfterViewInit {
                 ) { }
   
     ngOnInit() {
-      this.route.data
-      .subscribe(
-        data=>{
-          let array = data['branchDetails'];
-          this.branchAdmin = new MatTableDataSource(array);
-          this.showLoading = false;
-        },
-        error=>{
-          this.snacker.open(error.error,'',{duration:1000})
-        }
-      )
-      
+      this.userParams.userType = "Branch";
+      this.loadUsers();
     }
   
     
   
     ngAfterViewInit(): void {
-      this.branchAdmin.paginator = this.paginator;
+      //this.UserAdmin.paginator = this.paginator;
+      
+    }
+ 
+    loadUsers()
+    {
+      this.userService.GetAllUsers(this.userParams.userType)
+      .subscribe(
+        data =>{
+              if(data.body.length == 0)
+              {
+                this.EmptyData=true;
+              }
+              else
+              {
+                this.EmptyData=false;
+              }
+                console.log(data.body);
+                this.UserAdmin = new MatTableDataSource<any>(data.body);
+                this.UserAdmin.paginator = this.paginator;
+                this.showLoading = false;
+        },
+
+        error=>
+        {
+          console.log(error.error.title);
+          this.EmptyData=true;
+          this.showLoading = false;
+        }
+      )
     }
     
-    addBranchAdminMode = false;
+
   
     AddAccountAdmin()
     {
       this.router.navigate(['/addaccount'])
-      this.addBranchAdminMode=true;
     }
-    cancelBranchCreation(creation : boolean)
-    {
-      this.addBranchAdminMode = creation;
-    }
+
   
     ClearIt()
     {
@@ -70,19 +88,19 @@ export class ShowAccountAdminComponent implements OnInit, AfterViewInit {
     }
     applyFilter()
     {
-      this.branchAdmin.filter = this.searchKey.trim().toLowerCase();
+      this.UserAdmin.filter = this.searchKey.trim().toLowerCase();
     }
   
     DeleteUser(element)
     {
-      this.dialog.openConfirmDialog("Do you want to delete this Branch details?").afterClosed().subscribe(
+      this.dialog.openConfirmDialog("Do you want to delete this Admin?").afterClosed().subscribe(
         res=>{
           if(res)
           { this.userService.DeleteUser(element.id)
             .subscribe(
               next=>{
   
-                this.branchAdmin.data = this.branchAdmin.data
+                this.UserAdmin.data = this.UserAdmin.data
             .filter((value,key)=>{
               return value.id != element.id;
             });

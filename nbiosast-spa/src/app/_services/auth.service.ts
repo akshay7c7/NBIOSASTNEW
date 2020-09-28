@@ -41,11 +41,11 @@ export class AuthService {
 
   registerAccountAdmin(user : User)
   {
-    return (this.http.post(this.baseUrl + 'createAccountAdmin',user));
+    return (this.http.post(this.baseUrl + 'createBranchAdmin',user));
   }
   registerBranchAdmin(user : User)
   {
-    return (this.http.post(this.baseUrl + 'createBranchAdmin',user));
+    return (this.http.post(this.baseUrl + 'createDriverAdmin',user));
   }
 
   loggedIn()

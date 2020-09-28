@@ -88,7 +88,6 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
 
   pageChanged(event: number):void
   {
-    //console.log(event);
     this.paginateData.currentPage = event['pageIndex']+1;
     this.paginateData.itemsPerPage = event['pageSize'];
     this.loadUsers();
@@ -100,7 +99,7 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
 
   AddDriver()
   {
-    this.addDriverMode=true;
+    this.router.navigate(['/adddriverdetails']);
   }
   cancelDriverCreation(creation : boolean)
   {
