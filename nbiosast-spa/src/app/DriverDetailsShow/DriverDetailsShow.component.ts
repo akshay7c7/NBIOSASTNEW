@@ -65,7 +65,6 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
     .subscribe
     (
       data=>{
-        //console.log(data.pagination);
         this.length = data.pagination.totalItems;
         if(this.length==0){
           this.EmptyData=true;
@@ -121,6 +120,7 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
 
   ChangeStatus(element)
   {
+    this.showLoading = true;
     if(element.status=="Pending")
     {
       this.dialogService.openConfirmDialog("Do you want to APPROVE license for "+element.name).afterClosed().subscribe(
@@ -155,7 +155,7 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
         next=>{
           this.snacker.open('Approved successfully','',{duration: 1000});
           this.loadUsers();
-          //this.ngOnInit();
+          
         },
         error=>{
           this.snacker.open(error.error,'',{duration: 1000});
@@ -172,10 +172,12 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
         next=>{
           this.snacker.open('Changed to Pending successfully','',{duration: 1000});
           this.loadUsers();
+          
         },
         error=>
         {
           this.snacker.open(error.error.title,'',{duration: 1000});
+          
         }
         
       )
@@ -190,10 +192,12 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
         next=>{
           this.snacker.open('Print opened Successfully','',{duration: 1000});
           this.loadUsers();
+         
         },
         error=>
         {
           this.snacker.open(error.error.title,'',{duration: 1000});
+          
         }
         
       )
@@ -205,7 +209,9 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
     this.dialogService.openConfirmDialog("Do you want to delete this Driver details?").afterClosed().subscribe(
       res=>{
         if(res)
-        { this.driverService.DeleteDriver(element.id)
+        { 
+          this.showLoading = true;
+          this.driverService.DeleteDriver(element.id)
           .subscribe(
             next=>{
 
@@ -213,11 +219,14 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
           .filter((value,key)=>{
             return value.id != element.id;
           });
+          this.loadUsers();
           this.snacker.open('Driver Deleted successfully','',{duration: 1000})
 
             },
             error=>{
               this.snacker.open(error.error.title,'',{duration: 1000})
+              this.showLoading = false;
+              
             }
           )
         }

@@ -109,7 +109,9 @@ namespace NBI.API.Controllers
             }
             if(driverParams.ExpiredCard=="YES")
             {
-                drivers = drivers.Where(x=>x.TrainingEndDate >= System.DateTime.Today);
+                
+                drivers = drivers.Where(x=>x.TrainingEndDate<=System.DateTime.Today);
+               
             }
             var pLDrivers =  await PagedList<Driver>.CreateAsync(drivers, driverParams.PageNumber, driverParams.PageSize);
             var driverListToReturn = _mapper.Map<IEnumerable<DriverReturnDto>>(pLDrivers);

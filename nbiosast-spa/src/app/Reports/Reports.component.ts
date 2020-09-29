@@ -63,7 +63,6 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
     .subscribe(
       data=>
       { this.fff = data
-        console.log(data);
         this.user = this.fff;
       }
     )

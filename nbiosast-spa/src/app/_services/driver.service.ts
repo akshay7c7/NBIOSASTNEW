@@ -48,10 +48,10 @@ baseUrl = environment.apiUrl + 'driver/'; //http://localhost:5000/api/driver/
 
     if(expire!=null)
     {
-      params = params.append('expiredCard', driverParams.expireCard);
+      params = params.append('expiredCard', expire);
     }
-    console.log(params);
     
+    console.log(params)
     return this.http.get<Driver[]>(this.baseUrl + 'getAlldrivers', {observe:'response',params})
   .pipe(
     map( response =>{

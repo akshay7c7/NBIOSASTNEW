@@ -53,8 +53,9 @@ namespace NBI.API.Controllers
 
         [Authorize(Roles="BranchAdminCreater,AccountAdminCreater")]
         [HttpGet("branchDetails",Name = "GetUsers")]    
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetBranchDetails()
         {
+            
             var userList = await (from user in _context.Users
                                   orderby user.UserName
                                   select new  
@@ -74,21 +75,18 @@ namespace NBI.API.Controllers
 
             if(userList!=null)
             {
-                 var users = userList.Where(x=>x.Roles==1).ToList(); 
+                var users = userList.Where(x=>x.Roles==1).ToList(); 
                 return Ok(users);
             }
 
             return BadRequest("No users or Error");
-          
-                
-          
         }
 
         [Authorize(Roles="DriverCreater,BranchAdminCreater,AccountAdminCreater")]
         [HttpGet("getAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] UserParams userParams)
         {
-            
+         
          var userList = await (from user in _context.Users
                                   orderby user.UserName
                                   select new  
@@ -130,6 +128,11 @@ namespace NBI.API.Controllers
         [HttpPut("{id}")]    
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateAdminDto userForUpdateAdminDto)
         {
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if(id!=currentUserId)
+            {
+                return Unauthorized();
+            }
             var userFromRepo = await _repo.GetUser(id);
 
             _mapper.Map(userForUpdateAdminDto, userFromRepo);
@@ -161,11 +164,15 @@ namespace NBI.API.Controllers
             return Ok(users);
         }
 
-        [Authorize(Roles="AccountAdminCreater")]
+        [Authorize(Roles="AccountAdminCreater, BranchAdminCreater")]
         [HttpDelete("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            System.Console.WriteLine(id);
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if(id==currentUserId)
+            {
+                return BadRequest("You cannot delete your own profile");
+            }
             var userFromRepo = await _repo.GetUser(id);
             System.Console.WriteLine(userFromRepo);
             if(userFromRepo!=null)

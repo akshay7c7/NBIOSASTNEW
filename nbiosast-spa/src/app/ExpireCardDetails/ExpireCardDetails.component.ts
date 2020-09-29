@@ -22,7 +22,7 @@ import { User } from '../_models/user';
 export class ExpireCardDetailsComponent implements OnInit  , AfterViewInit {
 
   EmptyData = false;
-  DisplayedColumns : string[]= ['id','name','address','photo','trainingEndDate','branchVisited'];
+  DisplayedColumns : string[]= ['id','name','address','photo','branchVisited'];
   showLoading = true;
   Driver: MatTableDataSource<any>
   imageSrc;
@@ -37,6 +37,10 @@ export class ExpireCardDetailsComponent implements OnInit  , AfterViewInit {
   addDriverMode = false;
 
   user : User[];
+
+  driverParams : any ={};
+
+  
   
 
   paginateData : Pagination ={} as Pagination;
@@ -52,21 +56,31 @@ export class ExpireCardDetailsComponent implements OnInit  , AfterViewInit {
               private driverService : DriverService
               ) { }
   
+  fff:any
   ngOnInit() {
+    this.userService.GetBranchAdminsDetails()
+    .subscribe(
+      data=>
+      { this.fff = data
+        this.user = this.fff;
+      }
+    )
+    this.EmptyData=false;
+    
 
   }
 
   ngAfterViewInit(): void {
+    this.EmptyData=false;
     this.loadUsers();
   }
 
   loadUsers()
   {
-    this.driverService.getDrivers(this.paginateData.currentPage,this.paginateData.itemsPerPage,{},"YES")
+    this.driverService.getDrivers(this.paginateData.currentPage,this.paginateData.itemsPerPage, null, "YES")
     .subscribe
     (
       data=>{
-        //console.log(data.pagination);
         this.length = data.pagination.totalItems;
         if(this.length==0){
           this.EmptyData=true;
@@ -76,14 +90,13 @@ export class ExpireCardDetailsComponent implements OnInit  , AfterViewInit {
           this.EmptyData=false;
         }
         this.pageIndex = data.pagination.currentPage -1;
-        //console.log(data.result);
         this.MatAny =  data.result;
         this.Driver = new MatTableDataSource<any>(this.MatAny);
         this.showLoading = false;
-        //this.Driver.paginator = this.paginator;
-        if(this.MatAny = {}){
-          this.EmptyData=true;
-        }
+      },
+      error=>
+      {
+        this.EmptyData=true;
       }
     )
 
@@ -107,7 +120,6 @@ export class ExpireCardDetailsComponent implements OnInit  , AfterViewInit {
   {
     this.Driver.filter = this.searchKey.trim().toLowerCase();
   }
-
 
 }
 
