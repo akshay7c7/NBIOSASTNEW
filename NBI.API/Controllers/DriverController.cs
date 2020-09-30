@@ -31,37 +31,49 @@ namespace NBI.API.Controllers
         public async Task<IActionResult> AddDriver([FromForm]DriverCreationDto driverDto)
         {
             var driverIdList = await _context.Drivers.Select(x=>x.Id).ToListAsync();
-            var filename =  driverIdList.Max();
+            var fileID =  driverIdList.Max();
                 DriverReturnFiles driverFilesDto = new DriverReturnFiles();
                 
                 if(driverDto.Document!=null)
                 {
-                    string filepath = "../nbiosast-spa/src/assets/Documents"+ (filename+1).ToString();
+                    string ext = System.IO.Path.GetExtension(driverDto.Document.FileName);
+                    string filename = (fileID+1).ToString() + ext;
+                    filename = "doc"+filename;
+                    System.Console.WriteLine(filename);
+                    string filepath = "wwwroot/assets/"+ filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
                     await driverDto.Document.CopyToAsync(fileStream);
                     }
-                    driverFilesDto.Document=filepath;
+                    driverFilesDto.Document=filename;
                 }
                 
                 if(driverDto.OneDayDoc!=null)
                 {
-                    string filepath = "../nbiosast-spa/src/assets/OneDayDoc"+ (filename+1).ToString();
+                    string ext = System.IO.Path.GetExtension(driverDto.OneDayDoc.FileName);
+                    string filename = (fileID+1).ToString() + ext;
+                    filename = "cer"+filename;
+                    System.Console.WriteLine(filename);
+                    string filepath = "wwwroot/assets/"+ filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
                     await driverDto.OneDayDoc.CopyToAsync(fileStream);
                     }   
-                    driverFilesDto.OneDayDoc=filepath;
+                    driverFilesDto.OneDayDoc=filename;
                 }
 
                 if(driverDto.Photo!=null)
                 {
-                    string filepath = "../nbiosast-spa/src/assets/"+ (filename+1).ToString();
+                    string ext = System.IO.Path.GetExtension(driverDto.Photo.FileName);
+                    string filename = (fileID+1).ToString() + ext;
+                    filename = "img"+filename;
+                    System.Console.WriteLine(filename);
+                    string filepath = "wwwroot/assets/"+filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
                     await driverDto.Photo.CopyToAsync(fileStream);      
                     }
-                    driverFilesDto.Photo=(filename+1).ToString();
+                    driverFilesDto.Photo=filename;
                 }
 
                 var drivertoSave = _mapper.Map<DriverReturnData>(driverDto);

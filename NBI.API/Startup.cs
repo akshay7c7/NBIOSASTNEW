@@ -18,7 +18,6 @@ using Microsoft.AspNetCore.Identity;
 using NBI.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using NBI.API.Helper;
 
 namespace NBI.API
@@ -87,7 +86,6 @@ namespace NBI.API
             services.AddCors();
             services.AddTransient<Seed>();
             services.AddAutoMapper(typeof(Startup));
-            //services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IAdminMaintainRepository, AdminMaintainRepository>();
             services.AddScoped<LogUserActivity>();
             
@@ -115,16 +113,18 @@ namespace NBI.API
                 });
             }
 
-            //app.UseHttpsRedirection();
 
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());//sequence is imp here
-            app.UseAuthentication();
-            app.UseCors();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());//sequence is imp
             app.UseRouting();
+            app.UseAuthentication(); 
             app.UseAuthorization();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index","Fallback");
             });
         }
     }

@@ -35,6 +35,24 @@ export class DriverDetailsEditComponent implements OnInit {
         this.user = data;
       }
     )
+
+    this.loadUser();
+  }
+
+
+  loadUser()
+  {
+    this.driverService.getDriver(2)
+    .subscribe(
+      data =>
+      {
+        console.log(data);
+      },
+      error=>
+      {
+        console.log(error.error);
+      }
+    )
   }
   CreateDriver()
   {
@@ -56,7 +74,8 @@ export class DriverDetailsEditComponent implements OnInit {
         TrainingEndDate :['',Validators.required],
         TrainingPeriod :['',Validators.required],
         Photo :['',Validators.required],             
-        OneDayDoc: [''] 
+        OneDayDoc: [''],
+        Validity: [''] 
 
       }
 
