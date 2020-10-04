@@ -152,7 +152,6 @@ namespace NBI.API.Controllers
         {
             var users = await _repo.GetUsersWithRoles();
             return Ok(users);
-            
         }
 
 
