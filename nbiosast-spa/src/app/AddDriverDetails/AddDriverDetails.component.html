@@ -14,11 +14,11 @@
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Certificate No.</label>
-            <input type="text" formControlName="CertificateNo" class="form-control" placeholder="Enter Certificate No. here">
+            <input type="number" formControlName="CertificateNo" class="form-control" placeholder="Enter Certificate No. here">
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">License No.</label>
-            <input type="text" formControlName="LicenseNo" class="form-control" placeholder="Enter License No. here">
+            <input type="number" formControlName="LicenseNo" class="form-control" placeholder="Enter License No. here">
           </div>
         </div>
 
@@ -33,18 +33,23 @@
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Transport phoneNo.</label>
-            <input type="text" formControlName="TransPortPhoneNo" class="form-control"  placeholder="Enter Transport phoneNo. here">
+            <input type="number" formControlName="TransPortPhoneNo" class="form-control"  placeholder="Enter Transport phoneNo. here">
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group col-md-4">
             <label for="inputEmail4"> Date of Birth </label>
-            <input type="date" formControlName="DOB" class="form-control"  placeholder="Enter Transport Name here">
+            <mat-form-field color="accent" appearance="fill">
+              <mat-label>Date Of Birth</mat-label>
+              <input matInput [matDatepicker]="picker2">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Training Period</label> <br>
-            <div class="form-check form-check-inline">
+            <div class="form-check form-check-inline mt-2">
               <input formControlName="TrainingPeriod" class="form-check-input" type="radio" name="TrainingPeriod" (click) ="hideDoc(true)"  value="1">
               <label class="form-check-label" for="inlineRadio1">1 days</label> 
               &nbsp; &nbsp; &nbsp;
@@ -54,18 +59,37 @@
           </div>
           <div *ngIf="doc"class="form-group col-md-4">
             <label for="inputPassword4">One Day Certificate</label>
-            <input formControlName="OneDayDoc" (change)="onFileChangeOneDayDoc($event)" type="file" class="form-control"  >
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+              </div>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="onFileChangeOneDayDoc($event)"
+                  aria-describedby="inputGroupFileAddon01">
+                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group col-md-4">
             <label for="inputEmail4"> Training start date </label>
-            <input type="date" formControlName="TrainingStartDate" class="form-control" id="inputEmail4" placeholder="Enter start date here">
+            <mat-form-field color="accent" appearance="fill">
+              <mat-label>Training Start</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="TrainingStartDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Training Expiry date</label>
-            <input type="date" (change)="GetValidity()" formControlName="TrainingEndDate" class="form-control"  placeholder="Enter expiry date here">
+            <mat-form-field color="accent" appearance="fill">
+              <mat-label>Training End</mat-label>
+              <input matInput [matDatepicker]="picker1" (change)="GetValidity()" formControlName="TrainingEndDate">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Validity</label>
@@ -79,7 +103,7 @@
           <div class="form-row">
             <div class="form-group col-md-4">
             <label for="inputEmail4"> Payment amount </label>
-            <input type="text" formControlName="Amount" class="form-control" id="inputEmail4" placeholder="Enter amount here">
+            <input type="number" formControlName="Amount" class="form-control" id="inputEmail4" placeholder="Enter amount here">
           </div>
           <div class="form-group col-md-4">
             <label for="inputState">Select payment option</label>
@@ -92,13 +116,31 @@
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Documents</label>
-            <input formControlName="Document" type="file" (change)="onFileChangeDocument($event)"  class="form-control" >
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+              </div>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputGroupFile03" (change)="onFileChangeDocument($event)"
+                  aria-describedby="inputGroupFileAddon03">
+                <label class="custom-file-label" for="inputGroupFile03">Choose file</label>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="form-group col-md-4">
           <label  for="inputPassword4">Photo</label>
-          <input type="file" formControlName="Photo" (change)="onFileChangePhoto($event)"  class="form-control"  >
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+            </div>
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="inputGroupFile04" (change)="onFileChangePhoto($event)" 
+                aria-describedby="inputGroupFileAddon04">
+              <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+            </div>
+          </div>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
         <button type="reset" class="btn btn-primary ml-2" (click)="Cancel()">Cancel</button>

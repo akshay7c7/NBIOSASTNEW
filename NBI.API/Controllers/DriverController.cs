@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,11 +30,17 @@ namespace NBI.API.Controllers
 
         [HttpPost("AddDriver")]
         public async Task<IActionResult> AddDriver([FromForm]DriverCreationDto driverDto)
-        {
+        {   var fileID=1000;
             var driverIdList = await _context.Drivers.Select(x=>x.Id).ToListAsync();
-            var fileID =  driverIdList.Max();
+                if(driverIdList.Count==0)
+                {
+                     fileID = fileID+1;
+                }
+                else{
+                    fileID =  driverIdList.Max();
+                }
+
                 DriverReturnFiles driverFilesDto = new DriverReturnFiles();
-                
                 if(driverDto.Document!=null)
                 {
                     string ext = System.IO.Path.GetExtension(driverDto.Document.FileName);

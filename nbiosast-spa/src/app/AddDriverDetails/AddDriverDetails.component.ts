@@ -121,18 +121,20 @@ export class AddDriverDetailsComponent implements OnInit {
       formData.append('TrainingEndDate', this.createDriverForm.get('TrainingEndDate').value);
       formData.append('TrainingPeriod', this.createDriverForm.get('TrainingPeriod').value);
       formData.append('BranchVisited', this.user.city);
+
+      console.log(formData);
       
 
-      this.driverService.SaveDriver(formData)
-      .subscribe(
-        ()=>{
-          this.snackbar.open('Driver details added Successfully','',{duration : 1000});
-          //this.createDriverForm.reset();
-            },
+      // this.driverService.SaveDriver(formData)
+      // .subscribe(
+      //   ()=>{
+      //     this.snackbar.open('Driver details added Successfully','',{duration : 1000});
+      //     //this.createDriverForm.reset();
+      //       },
             
-        error =>{
-          this.snackbar.open(error.error.title,'',{duration : 1000});}
-                )
+      //   error =>{
+      //     this.snackbar.open(error.error.title,'',{duration : 1000});}
+      //           )
 
   }
 

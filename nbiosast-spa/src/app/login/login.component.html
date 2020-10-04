@@ -1,3 +1,4 @@
+
 <div *ngIf="!loggedIn()">
 <body >
 
@@ -34,6 +35,9 @@
                     <button [disabled]="!loginForm.valid" class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
                     <hr>
                   </form>
+                </div>
+                <div *ngIf="loading">
+                  <app-Spinner></app-Spinner>
                 </div>
               </div>
             </div>

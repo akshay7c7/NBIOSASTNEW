@@ -9,7 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['../app.component.css']
 })
 export class LoginComponent implements OnInit {
-
+  loading = false;
   show : any;
   model : any = {};
 
@@ -26,23 +26,34 @@ export class LoginComponent implements OnInit {
 
   login()
   {
+    this.loading = true;
     this.authService.login(this.model)
     .subscribe(
+      
       next => {
-        this.snackbar.open('Logged in successfully','',{duration : 1000}) ;}, 
+        this.loading = true
+        this.snackbar.open('Logged in successfully','',{duration : 1000}) ;
+        this.loading = false
+      }, 
       error => {
-        if(error.statusText==="Unknown Error")
+        this.loading = true
+        console.log(error);
+        if(error.statusText==="Unknown Error" || error.status == "0")
         {
-          this.snackbar.open("Please check your internet connection",'',{duration:1000}) ;
+          this.snackbar.open("Server Failure, Please try again",'',{duration:1000}) ;
         }
-        
+        if(error.statusText==="Unauthorized")
+        {
+          this.snackbar.open("Username or Password is incorrect",'',{duration:1000}) ;
+        }
         else{
-          this.snackbar.open(error.message,'',{duration:1000}) ;
-        }
-        
+          this.snackbar.open("Server Failure, Please try again",'',{duration:1000}) ;
+        } 
+        this.loading = false
       },
         
       ()=> this.router.navigate(['/dashboard']));
+     this.loading = false;
   }
 
   loggedIn()

@@ -6,7 +6,6 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./Spinner.component.scss']
 })
 export class SpinnerComponent implements OnInit {
-  message = 'Loading data...';
   constructor() { }
   ngOnInit() {
   }
