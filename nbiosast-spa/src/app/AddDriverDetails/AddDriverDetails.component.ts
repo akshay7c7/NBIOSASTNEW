@@ -96,7 +96,6 @@ export class AddDriverDetailsComponent implements OnInit {
   onFileChangePhoto(event) {
 
     this.photoname = this.getFileDetails(event)
-    console.log(this.photoname);
     this.selectedPhoto = <File>event.target.files[0];
   }
 
@@ -106,7 +105,6 @@ export class AddDriverDetailsComponent implements OnInit {
   {
     var time = new Date(this.createDriverForm.get('TrainingEndDate').value).getTime() - new Date(this.createDriverForm.get('TrainingStartDate').value).getTime();
     this.diffDays = Math.ceil(time / (365 * 1000 * 3600 * 24)); 
-    console.log(this.diffDays);
   }
 
   
@@ -120,7 +118,6 @@ export class AddDriverDetailsComponent implements OnInit {
   {   
       if(this.createDriverForm.valid)
       {
-        console.log("true");
       var formData = new FormData();
       formData.append('Document', this.selectedDocument);
       formData.append('OnedayDoc', this.selectedOneDayDoc);
