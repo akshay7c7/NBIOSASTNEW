@@ -99,7 +99,20 @@ namespace DatingApp.API.Controllers
             var userToCreate = _mapper.Map<User>(userForCreateAdminDto);
             var result = await _userManager.CreateAsync(userToCreate, userForCreateAdminDto.Password);
             var userToReturn = _mapper.Map<UserForDisplayDetailDto>(userToCreate);
-            string[] rolesArray = {"DriverCreater","BranchAdminCreater"} ;
+            List<string> rolesArray = new List<string>{"DriverAdmin"};
+            if(role_id==4)
+            {
+                rolesArray = new List<string>{"DriverAdmin","AccountAdmin","BranchAdmin","SuperAdmin"};
+            }
+            if(role_id==3)
+            {
+                rolesArray = new List<string>{"DriverAdmin","AccountAdmin","BranchAdmin"};
+            }
+            if(role_id==2)
+            {
+                rolesArray = new List<string>{"DriverAdmin","AccountAdmin"};
+            }
+
             if(result.Succeeded)
             {
                 var userFromRepo = await _userManager.FindByNameAsync(userForCreateAdminDto.UserName);

@@ -8,8 +8,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import { TopbarComponent } from './topbar/topbar.component';
-import { AddAccountAdminComponent } from './AddAccountAdmin/AddAccountAdmin.component';
-import { AddBranchAdminComponent } from './AddBranchAdmin/AddBranchAdmin.component';
 import { AddDriverDetailsComponent } from './AddDriverDetails/AddDriverDetails.component';
 import { ExpireCardDetailsComponent } from './ExpireCardDetails/ExpireCardDetails.component';
 import { BranchDetailsShowComponent } from './BranchDetailsShow/BranchDetailsShow.component';
@@ -40,6 +38,7 @@ import { ReportsComponent } from './Reports/Reports.component';
 import { ShowAccountAdminComponent } from './ShowAccountAdmin/ShowAccountAdmin.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
+import { AddAdminComponent } from './AddAdmin/AddAdmin.component';
 
 
 export function tokenGetter() {
@@ -47,14 +46,12 @@ export function tokenGetter() {
 }
 
 @NgModule({
-  declarations: [																					
+  declarations: [																							
     AppComponent,
       DashboardComponent,
       SidebarComponent,
       FooterComponent,
       TopbarComponent,
-      AddAccountAdminComponent,
-      AddBranchAdminComponent,
       AddDriverDetailsComponent,
       ExpireCardDetailsComponent,
       BranchDetailsShowComponent,
@@ -70,7 +67,8 @@ export function tokenGetter() {
       SpinnerComponent,
       SpinnerOverlayComponent,
       ReportsComponent,
-      ShowAccountAdminComponent
+      ShowAccountAdminComponent,
+      AddAdminComponent
    ],
   imports: [
     BrowserModule,

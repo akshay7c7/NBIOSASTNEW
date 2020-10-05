@@ -32,7 +32,10 @@ export class EditPasswordComponent implements OnInit {
     this.authService.EditPassword(this.authService.decodedToken.nameid,this.user)
     .subscribe(
       (next)=>{
-        this.snackbar.open("Password Updated Successfully",'',{duration: 1000});
+        this.snackbar.open("Password Updated Successfully",'',{duration: 1000}
+        );
+        this.password = ''
+        this.cpassword= ''
       },
       error=>{
         this.snackbar.open(error.message,'',{duration :1000})

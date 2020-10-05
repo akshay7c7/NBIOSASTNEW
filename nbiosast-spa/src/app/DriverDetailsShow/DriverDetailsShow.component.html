@@ -28,7 +28,7 @@
       <ng-container matColumnDef="status">
         <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
         <mat-cell *matCellDef="let element" >
-          <button [disabled]="authService.decodedToken?.role=='DriverCreater'" [ngClass]="element.status=='Pending'? 'btn btn-danger': 'btn btn-success'" type="button" (click)="ChangeStatus(element)">{{element.status}}</button>
+          <button [disabled]="authService.decodedToken?.role=='DriverAdmin'" [ngClass]="element.status=='Pending'? 'btn btn-danger': 'btn btn-success'" type="button" (click)="ChangeStatus(element)">{{element.status}}</button>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="actions">

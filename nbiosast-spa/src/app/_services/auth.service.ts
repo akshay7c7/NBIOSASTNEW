@@ -39,13 +39,9 @@ export class AuthService {
       )
   }
 
-  registerAccountAdmin(user : User)
+  registerAdmin(role_id, user : User)
   {
-    return (this.http.post(this.baseUrl + 'createBranchAdmin',user));
-  }
-  registerBranchAdmin(user : User)
-  {
-    return (this.http.post(this.baseUrl + 'createDriverAdmin',user));
+    return (this.http.post(this.baseUrl + 'createAdmin/'+role_id,user));
   }
 
   loggedIn()

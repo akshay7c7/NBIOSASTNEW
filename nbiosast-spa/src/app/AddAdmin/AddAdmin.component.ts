@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { User } from '../_models/user';
 import { AuthService } from '../_services/auth.service';
@@ -10,14 +10,12 @@ import { map, startWith } from 'rxjs/operators';
 import { UserService } from '../_services/user.service';
 
 @Component({
-  selector: 'app-AddAccountAdmin',
-  templateUrl: './AddAccountAdmin.component.html',
-  styleUrls: ['../app.component.css']
+  selector: 'app-AddAdmin',
+  templateUrl: './AddAdmin.component.html',
+  styleUrls: ['./AddAdmin.component.css']
 })
-export class AddAccountAdminComponent implements OnInit {
+export class AddAdminComponent implements OnInit , AfterViewInit{
 
-  @ViewChild('inputcity') inpElementRef : ElementRef
-  inpElement : HTMLElement;
   myControl = new FormControl();
   city = this.cityService.cities;
   options : string[] =[];
@@ -32,12 +30,29 @@ export class AddAccountAdminComponent implements OnInit {
   
   ngOnInit() {
 
+
+    for (var product of this.city) {
+      this.options.push(product.name);
+      }
+
+    
+
+    this.CreateAdmin();
+
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );    
+  }
+
+  ngAfterViewInit()
+  {
     this.userService.GetUserDetail(this.authService.decodedToken.nameid)
     .subscribe(
       data=>
       {
         console.log(data);
-        if(this.authService.decodedToken?.role.length ==3)
+        if(this.authService.decodedToken?.role.length==4)
         {
           this.currentCity = "";
         }
@@ -48,22 +63,9 @@ export class AddAccountAdminComponent implements OnInit {
         
       }
     )
-
-    for (var product of this.city) {
-      this.options.push(product.name);
-      }
-
-    
-
-    this.CreateAddAccountAdmin();
-
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );    
   }
 
-  createAccountAdminForm : FormGroup; 
+  createAdminForm : FormGroup; 
   currentCity
   currentBranch
   
@@ -79,9 +81,16 @@ export class AddAccountAdminComponent implements OnInit {
     
   }
 
-  CreateAddAccountAdmin()
+  AdminValue=2;
+  SelectAdmin(event)
   {
-    this.createAccountAdminForm = this.fb.group(
+    this.AdminValue = event.target.value;
+    console.log(this.AdminValue)
+  }
+
+  CreateAdmin()
+  {
+    this.createAdminForm = this.fb.group(
       {
         name : ['',Validators.required],
         username : ['',Validators.required],
@@ -89,7 +98,8 @@ export class AddAccountAdminComponent implements OnInit {
         phoneNumber :['',Validators.required],
         city : [this.fromCity, Validators.required],
         password : ['', [Validators.required, Validators.minLength(4),Validators.maxLength(10)]],
-        cpassword : ['',Validators.required]
+        cpassword : ['',Validators.required],
+        admin :['Select Admin']
       },
       {
         validator : this.passwordMatchValidator
@@ -105,13 +115,14 @@ export class AddAccountAdminComponent implements OnInit {
   fromCity:string="";
   RegisterAccountAdmin()
   {
-    if(this.createAccountAdminForm.valid)
+    if(this.createAdminForm.valid)
     {
-        this.user = Object.assign({},this.createAccountAdminForm.value)
-        this.authService.registerAccountAdmin(this.user)
+        this.user = Object.assign({},this.createAdminForm.value)
+        this.authService.registerAdmin(this.AdminValue,this.user)
         .subscribe(
           ()=>{this.snackbar.open('Account Admin Created Successfully','',{duration : 1000});
-                this.createAccountAdminForm.reset();},
+                this.createAdminForm.reset();
+              this.ngAfterViewInit()},
           error =>{
             console.log(error)
             this.snackbar.open(error.error,'',{duration : 1000})}
@@ -126,13 +137,9 @@ export class AddAccountAdminComponent implements OnInit {
 
   Cancel()
   {
-    this.createAccountAdminForm.reset();
+    this.createAdminForm.reset();
     this.router.navigate(['/showaccountadmin']);
   }
 
-
-
-
-
-
 }
+

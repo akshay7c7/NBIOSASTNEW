@@ -20,17 +20,10 @@
   <hr class="sidebar-divider">
 
 
- <li *appHasRole = "['AccountAdminCreater','BranchAdminCreater']" class="nav-item">
-    <a class="nav-link" [routerLink] = "['/showaccountadmin']">
+  <li *appHasRole = "['SuperAdmin','BranchAdmin']" class="nav-item">
+    <a class="nav-link" [routerLink]="['/addadmin']" >
       <i class="fas fa-fw fa-chart-area"></i>
-      <span>Admin Details</span></a>
-  </li>
-
-
-  <li *appHasRole = "['AccountAdminCreater','BranchAdminCreater']" class="nav-item">
-    <a class="nav-link" [routerLink]="['/branchdetails']" >
-      <i class="fas fa-fw fa-chart-area"></i>
-      <span>Branch Details</span></a>
+      <span>Create Admin</span></a>
   </li>
 
   <li  class="nav-item">

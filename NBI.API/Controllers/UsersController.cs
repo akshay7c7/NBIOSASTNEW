@@ -36,7 +36,7 @@ namespace NBI.API.Controllers
 
         }
 
-        [Authorize(Roles="DriverCreater,BranchAdminCreater,AccountAdminCreater")]
+        [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
         [HttpGet("{id}", Name = "GetUser")]    
         public async Task<IActionResult> GetUser(int id)
         {
@@ -51,7 +51,7 @@ namespace NBI.API.Controllers
 
         }
 
-        [Authorize(Roles="BranchAdminCreater,AccountAdminCreater")]
+        [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
         [HttpGet("branchDetails",Name = "GetUsers")]    
         public async Task<IActionResult> GetBranchDetails()
         {
@@ -82,7 +82,7 @@ namespace NBI.API.Controllers
             return BadRequest("No users or Error");
         }
 
-        [Authorize(Roles="DriverCreater,BranchAdminCreater,AccountAdminCreater")]
+        [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
         [HttpGet("getAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] UserParams userParams)
         {
@@ -124,7 +124,7 @@ namespace NBI.API.Controllers
          return BadRequest("Error Occurred");
         }
 
-        [Authorize(Roles="DriverCreater,BranchAdminCreater,AccountAdminCreater")]
+        [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
         [HttpPut("{id}")]    
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateAdminDto userForUpdateAdminDto)
         {
@@ -146,7 +146,7 @@ namespace NBI.API.Controllers
             return BadRequest($"Changes not made for {id} ");
         }
 
-        [Authorize(Roles="DriverCreater,BranchAdminCreater,AccountAdminCreater")]
+       [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
         [HttpGet("usersWithRoles", Name = "GetUsersWithRoles")]
         public async Task<IActionResult> GetUsersWithRolesHttp()
         {
@@ -155,7 +155,7 @@ namespace NBI.API.Controllers
         }
 
 
-        [Authorize(Roles="DriverCreater,BranchAdminCreater,AccountAdminCreater")]
+       [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
         [HttpGet("userWithRole/{id}", Name = "GetUserWithRole")]
         public async Task<IActionResult> GetUserWithRoleHttp(int id)
         {
@@ -163,7 +163,7 @@ namespace NBI.API.Controllers
             return Ok(users);
         }
 
-        [Authorize(Roles="AccountAdminCreater, BranchAdminCreater")]
+       [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
         [HttpDelete("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
