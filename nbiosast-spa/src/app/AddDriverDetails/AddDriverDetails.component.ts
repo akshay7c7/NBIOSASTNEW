@@ -9,6 +9,7 @@ import { AuthService } from '../_services/auth.service';
 import { DriverService } from '../_services/driver.service';
 import { UserService } from '../_services/user.service';
 import {map} from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-AddDriverDetails',
@@ -28,7 +29,8 @@ export class AddDriverDetailsComponent implements OnInit {
     private snackbar : MatSnackBar,
     private driverService : DriverService,
     private route : ActivatedRoute,
-    private userService : UserService) { }
+    private userService : UserService,
+    public datepipe: DatePipe) { }
 
   ngOnInit() {
     this.CreateDriver();
@@ -49,12 +51,10 @@ export class AddDriverDetailsComponent implements OnInit {
       {
         
         Name :['',Validators.required],
-        Document : ['',Validators.required],      
         CertificateNo : ['',Validators.required],
         LicenseNo :['',Validators.required],
         TransPortName :['',Validators.required],
         TransPortAddress :['',Validators.required],
-        TransPortPhoneNo :['',Validators.required],
         Address :['',Validators.required],
         Amount :['',Validators.required],
         PaymentType :['',Validators.required],
@@ -62,9 +62,11 @@ export class AddDriverDetailsComponent implements OnInit {
         TrainingStartDate :['',Validators.required],
         TrainingEndDate :['',Validators.required],
         TrainingPeriod :['',Validators.required],
-        Photo :['',Validators.required],             
+        Document : ['', Validators.required],    
+        Photo :['', Validators.required],             
         OneDayDoc: [''],
-        Validity: [''] 
+        Validity: [''],
+        TransPortPhoneNo :[''] 
 
       }
 
@@ -72,24 +74,29 @@ export class AddDriverDetailsComponent implements OnInit {
   }
 
 
-  
-  
-
   selectedDocument:File;
   selectedOneDayDoc: File;
   selectedPhoto: File;
+
+  Docname = "Upload Document"
   onFileChangeDocument(event) {
   
+    this.Docname = this.getFileDetails(event)
     this.selectedDocument = <File>event.target.files[0];
   }
 
+  onedaydocname = "Upload 1 day doc"
   onFileChangeOneDayDoc(event) {
-  
+
+    this.onedaydocname= this.getFileDetails(event)
     this.selectedOneDayDoc = <File>event.target.files[0];
   }
 
+  photoname = "Upload Photo"
   onFileChangePhoto(event) {
-  
+
+    this.photoname = this.getFileDetails(event)
+    console.log(this.photoname);
     this.selectedPhoto = <File>event.target.files[0];
   }
 
@@ -99,11 +106,22 @@ export class AddDriverDetailsComponent implements OnInit {
   {
     var time = new Date(this.createDriverForm.get('TrainingEndDate').value).getTime() - new Date(this.createDriverForm.get('TrainingStartDate').value).getTime();
     this.diffDays = Math.ceil(time / (365 * 1000 * 3600 * 24)); 
+    console.log(this.diffDays);
+  }
+
+  
+  getFileDetails(event)
+  {
+    var filename = event.target.files[0].name
+    return filename;
   }
 
   SaveDriver()
-  {
-      const formData = new FormData();
+  {   
+      if(this.createDriverForm.valid)
+      {
+        console.log("true");
+      var formData = new FormData();
       formData.append('Document', this.selectedDocument);
       formData.append('OnedayDoc', this.selectedOneDayDoc);
       formData.append('Photo', this.selectedPhoto);
@@ -116,25 +134,32 @@ export class AddDriverDetailsComponent implements OnInit {
       formData.append('TransPortPhoneNo', this.createDriverForm.get('TransPortPhoneNo').value);
       formData.append('Amount', this.createDriverForm.get('Amount').value);
       formData.append('PaymentType', this.createDriverForm.get('PaymentType').value);
-      formData.append('DOB', this.createDriverForm.get('DOB').value);
-      formData.append('TrainingStartDate', this.createDriverForm.get('TrainingStartDate').value);
-      formData.append('TrainingEndDate', this.createDriverForm.get('TrainingEndDate').value);
+      formData.append('DOB', this.datepipe.transform(this.createDriverForm.get('DOB').value, 'dd/MM/yyyy'));
+      formData.append('TrainingStartDate', this.datepipe.transform(this.createDriverForm.get('TrainingStartDate').value, 'dd/MM/yyyy'));
+      formData.append('TrainingEndDate', this.datepipe.transform(this.createDriverForm.get('TrainingEndDate').value, 'dd/MM/yyyy'));
       formData.append('TrainingPeriod', this.createDriverForm.get('TrainingPeriod').value);
       formData.append('BranchVisited', this.user.city);
 
-      console.log(formData);
-      
 
-      // this.driverService.SaveDriver(formData)
-      // .subscribe(
-      //   ()=>{
-      //     this.snackbar.open('Driver details added Successfully','',{duration : 1000});
-      //     //this.createDriverForm.reset();
-      //       },
+      this.driverService.SaveDriver(formData)
+      .subscribe(
+        ()=>{
+          this.snackbar.open('Driver details added Successfully','',{duration : 1000});
+          //this.createDriverForm.reset();
+            },
             
-      //   error =>{
-      //     this.snackbar.open(error.error.title,'',{duration : 1000});}
-      //           )
+        error =>{
+          console.log(error)
+          this.snackbar.open(error.error.title,'',{duration : 1000});}
+                )
+      }
+
+      else
+      {
+        this.snackbar.open('Please fill the required fields','',{duration : 1000});
+      }
+
+      
 
   }
 

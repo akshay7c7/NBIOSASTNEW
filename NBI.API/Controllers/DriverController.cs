@@ -30,7 +30,9 @@ namespace NBI.API.Controllers
 
         [HttpPost("AddDriver")]
         public async Task<IActionResult> AddDriver([FromForm]DriverCreationDto driverDto)
-        {   var fileID=1000;
+        {   
+            
+            var fileID=1000;
             var driverIdList = await _context.Drivers.Select(x=>x.Id).ToListAsync();
                 if(driverIdList.Count==0)
                 {
