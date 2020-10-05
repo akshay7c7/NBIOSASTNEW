@@ -26,6 +26,7 @@
         "getdriver",
         "isloading",
         "paginator",
+        "showaccountadmin",
         "snacker",
         "tabindex",
         "topbar"

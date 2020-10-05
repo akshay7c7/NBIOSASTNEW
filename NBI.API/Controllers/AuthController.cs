@@ -75,8 +75,9 @@ namespace DatingApp.API.Controllers
             return Unauthorized("Incorrect Password !");
         }
 
-        [HttpPost("CreateBranchAdmin")]
-        public async Task<IActionResult> CreateBranchAdmin(UserForCreateAdminDto userForCreateAdminDto)
+
+        [HttpPost("createAdmin/{role_id}")]
+        public async Task<IActionResult> CreateBranchAdmin(int role_id, UserForCreateAdminDto userForCreateAdminDto)
         {
             var checkuser = await _userManager.FindByNameAsync(userForCreateAdminDto.UserName);
             if(checkuser!=null)
@@ -114,56 +115,7 @@ namespace DatingApp.API.Controllers
             
         }
 
-        [HttpPost("CreateDriverAdmin")]
-        public async Task<IActionResult> CreateDriverAdmin(UserForCreateAdminDto userForCreateAdminDto)
-        {
-            System.Console.WriteLine(userForCreateAdminDto.Name);
-            System.Console.WriteLine(userForCreateAdminDto.Password);
-            System.Console.WriteLine(userForCreateAdminDto.UserName);
-            System.Console.WriteLine(userForCreateAdminDto.City);
-            System.Console.WriteLine(userForCreateAdminDto.Email);
-            System.Console.WriteLine(userForCreateAdminDto.PhoneNumber);
-            var checkuser = await _userManager.FindByNameAsync(userForCreateAdminDto.UserName);
-            if(checkuser!=null)
-            {
-                return BadRequest("Username already exists");
-            }
-            var checkuseremail = await _userManager.FindByEmailAsync(userForCreateAdminDto.Email);
-            if(checkuseremail!=null)
-            {
-                return BadRequest("Email already exists");
-            }
-            var checkuserphone = await _userManager.FindByEmailAsync(userForCreateAdminDto.PhoneNumber);
-            if(checkuserphone!=null)
-            {
-                return BadRequest("Phone number already exists");
-            }
-
-            var checkusercity = await _userManager.FindByEmailAsync(userForCreateAdminDto.City);
-            if(checkusercity!=null)
-            {
-                return BadRequest("Branch already exists");
-            }
-            var userToCreate = _mapper.Map<User>(userForCreateAdminDto);
-            var result = await _userManager.CreateAsync(userToCreate, userForCreateAdminDto.Password);
-            var userToReturn = _mapper.Map<UserForDisplayDetailDto>(userToCreate);
-            string[] rolesArray = {"DriverCreater"} ;
-            if(result.Succeeded)
-            {
-                var userFromRepo = await _userManager.FindByNameAsync(userForCreateAdminDto.UserName);
-                result = await _userManager.AddToRolesAsync(userFromRepo,rolesArray);
-                if(!result.Succeeded)
-                {
-                    await _userManager.DeleteAsync(userFromRepo);
-                    return BadRequest(result.Errors);
-                }
-                //_userManager.SendMailAsync("akshaychauhan227@gmail.com","akshay7c7@gmail.com","Welcome");
-                return CreatedAtRoute("GetUser", new { Controller = "Users", id = userToCreate.Id }, userToReturn);
-            }
-            return BadRequest(result.Errors);
-            
-        }
-
+        
 
         private async Task<string> GenerateJwtToken(User user)
         {

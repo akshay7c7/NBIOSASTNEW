@@ -30,7 +30,7 @@ export const appRoutes : Routes = [
         canActivate : [AuthGuard],
         children : [
             {path : 'dashboard' , component : DashboardComponent},
-            {path : 'addaccount' , component : AddAccountAdminComponent , data: {roles: ['AccountAdminCreater']}},
+            {path : 'addaccount' , component : AddAccountAdminComponent , data: {roles: ['AccountAdminCreater','BranchAdminCreater']}},
             {path : 'branchdetails' , component : BranchDetailsShowComponent , data: {roles: ['AccountAdminCreater','BranchAdminCreater']}, resolve:{branchDetails:BranchDetailsResolver}} ,
             {path : 'addbranchdetails' , component : AddBranchAdminComponent ,data: {roles: ['AccountAdminCreater','BranchAdminCreater']}},
             {path : 'driverdetails' , component : DriverDetailsShowComponent , data: {roles: ['AccountAdminCreater','BranchAdminCreater','DriverCreater']}} ,

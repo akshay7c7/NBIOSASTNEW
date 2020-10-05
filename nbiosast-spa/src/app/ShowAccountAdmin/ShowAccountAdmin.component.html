@@ -2,7 +2,7 @@
   <div class="mat-elevation-z8">
     <div>
       <div class="form-row">
-        <div><a class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mt-3 ml-1" (click)="AddAccountAdmin()"><i class="fas fa-download fa-sm text-white-50"></i>Add Account Admin</a></div>
+        <div><a class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mt-3 ml-1" (click)="AddAccountAdmin()"><i class="fas fa-download fa-sm text-white-50"></i>Assign a Branch</a></div>
         <div class="form-group col-md-3">
           <mat-form-field class="d-none d-sm-inline-block search-form-field ml-5" floatLabel="never">
             <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
@@ -13,7 +13,7 @@
         <div class="form-group col-md-3 ml-5 mt-1">
           <label for="inputState">Select Admin Type</label>
           <select id="inputState" name= "status" [(ngModel)]="userParams.userType" (change)="loadUsers()" class="form-control">
-            <option selected value="BOTH" ></option>
+            <option selected value="BOTH" >ALL</option>
             <option value="Account">Account Admin</option>
             <option value="Branch">Branch Admin</option>
             <option value="Driver">Driver Admin</option>
