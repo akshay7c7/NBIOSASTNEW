@@ -203,6 +203,7 @@ namespace NBI.API.Controllers
                 
                 
                 var driverNormalData = _mapper.Map<DriverDataWithoutFiles>(driverDto);
+                
                 _mapper.Map(driverToUpdate, driverFromRepo);
                 var a = _mapper.Map(driverNormalData, driverFromRepo);
                 if(await _context.SaveChangesAsync()>0)
