@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Driver } from 'src/app/_models/Driver';
 import { User } from 'src/app/_models/user';
 import { AuthService } from 'src/app/_services/auth.service';
 import { DriverService } from 'src/app/_services/driver.service';
@@ -16,6 +18,9 @@ export class DriverDetailsEditComponent implements OnInit {
 
   createDriverForm : FormGroup;
   public user: User = {} as User;
+ 
+
+
   constructor(
     private fb : FormBuilder, 
     private authService : AuthService,
@@ -25,13 +30,27 @@ export class DriverDetailsEditComponent implements OnInit {
     private route : ActivatedRoute,
     private userService : UserService) { }
 
+    public driver: Driver;
+
   ngOnInit() {
     this.CreateDriver();
+    this.route.data
+    .subscribe(
+      data=>
+      {
+        this.driver = data['driverEditResolve']
+        console.log(this.driver);
+        console.log(this.driver.name);
+      },
+      error=>
+      {
+        console.log(error)
+      }
+    )
     this.userService.GetUserDetail(this.authService.decodedToken.nameid)
     .subscribe(
       data=>
       {
-        console.log(data);
         this.user = data;
       }
     )
@@ -39,14 +58,47 @@ export class DriverDetailsEditComponent implements OnInit {
     this.loadUser();
   }
 
+  selectedDocument:File;
+  selectedOneDayDoc: File;
+  selectedPhoto: File;
+
+
+
+  Docname = "Document"
+  onFileChangeDocument(event) {
+  
+    this.Docname = this.getFileDetails(event)
+    this.selectedDocument = <File>event.target.files[0];
+  }
+
+  onedaydocname = "Certificate"
+  onFileChangeOneDayDoc(event) {
+
+    this.onedaydocname= this.getFileDetails(event)
+    this.selectedOneDayDoc = <File>event.target.files[0];
+  }
+
+  photoname = "Photo"
+  onFileChangePhoto(event) {
+
+    this.photoname = this.getFileDetails(event)
+    this.selectedPhoto = <File>event.target.files[0];
+  }
+
+  
+  getFileDetails(event)
+  {
+    var filename = event.target.files[0].name
+    return filename;
+  }
 
   loadUser()
   {
-    this.driverService.getDriver(2)
+    this.driverService.getDriver(1)
     .subscribe(
       data =>
       {
-        console.log(data);
+        //console.log(data);
       },
       error=>
       {
@@ -82,23 +134,7 @@ export class DriverDetailsEditComponent implements OnInit {
     )
   }
 
-  selectedDocument:File;
-  selectedOneDayDoc: File;
-  selectedPhoto: File;
-  onFileChangeDocument(event) {
-  
-    this.selectedDocument = <File>event.target.files[0];
-  }
 
-  onFileChangeOneDayDoc(event) {
-  
-    this.selectedOneDayDoc = <File>event.target.files[0];
-  }
-
-  onFileChangePhoto(event) {
-  
-    this.selectedPhoto = <File>event.target.files[0];
-  }
 
 
 

@@ -78,21 +78,21 @@ export class AddDriverDetailsComponent implements OnInit {
   selectedOneDayDoc: File;
   selectedPhoto: File;
 
-  Docname = "Upload Document"
+  Docname = "Document"
   onFileChangeDocument(event) {
   
     this.Docname = this.getFileDetails(event)
     this.selectedDocument = <File>event.target.files[0];
   }
 
-  onedaydocname = "Upload 1 day doc"
+  onedaydocname = "Certificate"
   onFileChangeOneDayDoc(event) {
 
     this.onedaydocname= this.getFileDetails(event)
     this.selectedOneDayDoc = <File>event.target.files[0];
   }
 
-  photoname = "Upload Photo"
+  photoname = "Photo"
   onFileChangePhoto(event) {
 
     this.photoname = this.getFileDetails(event)

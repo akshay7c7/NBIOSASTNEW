@@ -31,6 +31,7 @@ export class EditProfileComponent implements OnInit {
       data=>
       {
         this.user = data['editResolve'];
+        
       }
     )
   }

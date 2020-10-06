@@ -144,6 +144,7 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
       )
 
     }
+    this.showLoading = false;
     
   }
 
@@ -239,7 +240,7 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
     res=>{
       if(res)
       { 
-        this.router.navigate(['/editdriver'])
+        this.router.navigate(['/editdriver',element.id])
       }
   })
 }

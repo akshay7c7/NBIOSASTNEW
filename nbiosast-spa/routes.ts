@@ -13,6 +13,7 @@ import { DriverDetailsEditComponent } from 'src/app/DriverDetailsShow/DriverDeta
 import { ReportsComponent } from 'src/app/Reports/Reports.component';
 import { ShowAccountAdminComponent } from 'src/app/ShowAccountAdmin/ShowAccountAdmin.component';
 import { AddAdminComponent } from 'src/app/AddAdmin/AddAdmin.component';
+import { EditDriverResolver } from 'src/app/_resolvers/EditDriverResolver';
 
 export const appRoutes : Routes = [
 
@@ -34,7 +35,7 @@ export const appRoutes : Routes = [
             {path : 'expirecards' , component : ExpireCardDetailsComponent},
             {path : 'editprofile' , component : EditProfileComponent, resolve:{editResolve:EditResolver}},
             {path : 'editpassword' , component : EditPasswordComponent},
-            {path : 'editdriver' , component : DriverDetailsEditComponent},
+            {path : 'editdriver/:id' , component : DriverDetailsEditComponent, resolve:{driverEditResolve : EditDriverResolver }},
             {path : 'reports', component: ReportsComponent},
 
         ]

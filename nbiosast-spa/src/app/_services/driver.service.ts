@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Driver } from '../_models/Driver';
@@ -24,9 +25,9 @@ baseUrl = environment.apiUrl + 'driver/'; //http://localhost:5000/api/driver/
       return this.http.post(this.baseUrl +'UpdateDriver', driver);
   }
 
-  getDriver(id: number)
+  getDriver(id: number) : Observable<Driver>
   {
-    return this.http.get(this.baseUrl + 'getdriver/'+id);
+    return this.http.get<Driver>(this.baseUrl + 'getdriver/'+id)
   }
 
   getDrivers(page? , itemsPerPage?, driverParams?, expire?)

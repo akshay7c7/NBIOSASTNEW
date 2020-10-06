@@ -39,6 +39,7 @@ import { ShowAccountAdminComponent } from './ShowAccountAdmin/ShowAccountAdmin.c
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { AddAdminComponent } from './AddAdmin/AddAdmin.component';
+import { EditDriverResolver } from './_resolvers/EditDriverResolver';
 
 
 export function tokenGetter() {
@@ -87,7 +88,7 @@ export function tokenGetter() {
       }
     })
   ],
-  providers: [AuthGuard,EditResolver,UserService,AuthService,BranchDetailsResolver,DriverDetailsResolver,
+  providers: [AuthGuard,EditResolver,UserService,AuthService,BranchDetailsResolver,DriverDetailsResolver, EditDriverResolver,
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, DatePipe],
   bootstrap: [AppComponent],
   entryComponents : [ConfirmDialogueComponent, LicenseComponentComponent]
