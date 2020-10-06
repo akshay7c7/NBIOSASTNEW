@@ -20,9 +20,9 @@ baseUrl = environment.apiUrl + 'driver/'; //http://localhost:5000/api/driver/
       return this.http.post(this.baseUrl +'AddDriver', driver);
   }
 
-  UpdateDriver(driver : FormData)
+  UpdateDriver(driver : FormData, id:any)
   {
-      return this.http.post(this.baseUrl +'UpdateDriver', driver);
+      return this.http.put(this.baseUrl +'UpdateDriver/'+id, driver);
   }
 
   getDriver(id: number) : Observable<Driver>

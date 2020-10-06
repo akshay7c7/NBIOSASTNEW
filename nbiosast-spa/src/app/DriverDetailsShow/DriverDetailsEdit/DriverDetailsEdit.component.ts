@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,10 +17,9 @@ import { UserService } from 'src/app/_services/user.service';
 })
 export class DriverDetailsEditComponent implements OnInit {
 
-  createDriverForm : FormGroup;
-  public user: User = {} as User;
  
-
+  one:any =""
+  three:any=""
 
   constructor(
     private fb : FormBuilder, 
@@ -28,34 +28,35 @@ export class DriverDetailsEditComponent implements OnInit {
     private snackbar : MatSnackBar,
     private driverService : DriverService,
     private route : ActivatedRoute,
-    private userService : UserService) { }
+    private userService : UserService,
+    private datepipe : DatePipe) { }
 
-    public driver: Driver;
+    public driver: Driver = {} as Driver;
 
   ngOnInit() {
-    this.CreateDriver();
+
     this.route.data
     .subscribe(
       data=>
       {
         this.driver = data['driverEditResolve']
-        console.log(this.driver);
-        console.log(this.driver.name);
+        if(this.driver.trainingPeriod==3)
+        {
+          this.three=true
+          this.doc = false
+        }
+        else{
+          this.one=true
+          this.doc = true
+        }
+        this.GetValidity()
       },
       error=>
       {
         console.log(error)
       }
     )
-    this.userService.GetUserDetail(this.authService.decodedToken.nameid)
-    .subscribe(
-      data=>
-      {
-        this.user = data;
-      }
-    )
-
-    this.loadUser();
+   
   }
 
   selectedDocument:File;
@@ -85,6 +86,12 @@ export class DriverDetailsEditComponent implements OnInit {
     this.selectedPhoto = <File>event.target.files[0];
   }
 
+
+  getTraining(event)
+  {
+    console.log(event.target.value)
+  }
+
   
   getFileDetails(event)
   {
@@ -92,106 +99,75 @@ export class DriverDetailsEditComponent implements OnInit {
     return filename;
   }
 
-  loadUser()
-  {
-    this.driverService.getDriver(1)
-    .subscribe(
-      data =>
-      {
-        //console.log(data);
-      },
-      error=>
-      {
-        console.log(error.error);
-      }
-    )
-  }
-  CreateDriver()
-  {
-    this.createDriverForm = this.fb.group
-    (
-      {
-        Name :['',Validators.required],
-        Document : ['',Validators.required],      
-        CertificateNo : ['',Validators.required],
-        LicenseNo :['',Validators.required],
-        TransPortName :['',Validators.required],
-        TransPortAddress :['',Validators.required],
-        TransPortPhoneNo :['',Validators.required],
-        Address :['',Validators.required],
-        Amount :['',Validators.required],
-        PaymentType :['',Validators.required],
-        DOB :['',Validators.required],
-        TrainingStartDate :['',Validators.required],
-        TrainingEndDate :['',Validators.required],
-        TrainingPeriod :['',Validators.required],
-        Photo :['',Validators.required],             
-        OneDayDoc: [''],
-        Validity: [''] 
-
-      }
-
-    )
-  }
-
-
-
-
+ 
 
   SaveDriver()
   {
-      const formData = new FormData();
-      formData.append('Document', this.selectedDocument);
-      formData.append('OnedayDoc', this.selectedOneDayDoc);
-      formData.append('Photo', this.selectedPhoto);
-      formData.append('Name', this.createDriverForm.get('Name').value);
-      formData.append('Address', this.createDriverForm.get('Address').value);
-      formData.append('CertificateNo', this.createDriverForm.get('CertificateNo').value);
-      formData.append('LicenseNo', this.createDriverForm.get('LicenseNo').value);
-      formData.append('TransPortName', this.createDriverForm.get('TransPortName').value);
-      formData.append('TransPortAddress', this.createDriverForm.get('TransPortAddress').value);
-      formData.append('TransPortPhoneNo', this.createDriverForm.get('TransPortPhoneNo').value);
-      formData.append('Amount', this.createDriverForm.get('Amount').value);
-      formData.append('PaymentType', this.createDriverForm.get('PaymentType').value);
-      formData.append('DOB', this.createDriverForm.get('DOB').value);
-      formData.append('TrainingStartDate', this.createDriverForm.get('TrainingStartDate').value);
-      formData.append('TrainingEndDate', this.createDriverForm.get('TrainingEndDate').value);
-      formData.append('TrainingPeriod', this.createDriverForm.get('TrainingPeriod').value);
-      formData.append('BranchVisited', this.user.city);
-      
+    this.driver.validity = this.diffDays
+    // this.driver.oneDayDoc = null
+    // this.driver.photo = null
+    // this.driver.document = null
 
-      this.driverService.UpdateDriver(formData)
+    console.log(this.driver)
+
+    var formData = new FormData();
+    formData.append('Document', this.selectedDocument);
+    formData.append('OnedayDoc', this.selectedOneDayDoc);
+    formData.append('Photo', this.selectedPhoto);
+    formData.append('Name', this.driver.name);
+    formData.append('Address', this.driver.address);
+    formData.append('CertificateNo', this.driver.certificateNo);
+    formData.append('LicenseNo', this.driver.licenseNo);
+    formData.append('TransPortName', this.driver.transPortName);
+    formData.append('TransPortAddress', this.driver.transPortAddress);
+    formData.append('TransPortPhoneNo', this.driver.transPortPhoneNo);
+    formData.append('Amount', this.driver.amount);
+    formData.append('PaymentType', this.driver.paymentType);
+    formData.append('DOB', this.datepipe.transform(this.driver.dob, 'dd/MM/yyyy'));
+    formData.append('TrainingStartDate', this.datepipe.transform(this.driver.trainingStartDate, 'dd/MM/yyyy'));
+    formData.append('TrainingEndDate', this.datepipe.transform(this.driver.trainingEndDate, 'dd/MM/yyyy'));
+    formData.append('TrainingPeriod', this.driver.trainingPeriod.toString());
+    formData.append('Validity', this.driver.validity.toString());
+    //formData.append('BranchVisited', this.user.city);
+
+    console.log(...formData)
+      this.driverService.UpdateDriver(formData, this.driver.id)
       .subscribe(
         ()=>{
           this.snackbar.open('Driver details updated Successfully','',{duration : 1000});
-          this.createDriverForm.reset();
+          this.ngOnInit();
             },
             
         error =>{
           console.log(error);
-          this.snackbar.open(error.message,'',{duration : 1000});}
+          this.snackbar.open(error.error,'',{duration : 1000});}
                 )
 
   }
 
   Cancel()
   {
-    this.createDriverForm.reset();
-    //this.cancelDriverCreation.emit(false);
-    console.log("Cancel");
     this.router.navigate(['/driverdetails']);
   }
 
   doc=true;
-  hideDoc(data)
+  hideDoc(event)
   {
-    this.doc = data;
+    console.log(event.target.value)
+    this.driver.trainingPeriod = event.target.value
+    if(event.target.value==3)
+    {
+      this.doc=false;
+    }
+    else{
+      this.doc=true;
+    }
   }
 
   diffDays
   GetValidity()
   {
-    var time = new Date(this.createDriverForm.get('TrainingEndDate').value).getTime() - new Date(this.createDriverForm.get('TrainingStartDate').value).getTime();
+    var time = new Date(this.driver.trainingEndDate).getTime() - new Date(this.driver.trainingStartDate).getTime();
     this.diffDays = Math.ceil(time / (365 * 1000 * 3600 * 24)); 
   }
 

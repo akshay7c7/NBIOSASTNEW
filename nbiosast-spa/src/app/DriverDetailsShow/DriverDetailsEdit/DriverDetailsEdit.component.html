@@ -5,35 +5,35 @@
     </div>
 
     <div class="card-body">
-      <form [formGroup] = "createDriverForm" (ngSubmit)="SaveDriver()">
+      <form #editForm="ngForm" id="editForm" (ngSubmit)="SaveDriver()">
 
         <div class="form-row">
           <div class="form-group col-md-4">
             <label for="inputEmail4"> Name </label>
-            <input type="text" formControlName="Name" [ngModel]="driver.name" class="form-control" placeholder="Enter Name here" maxlength="50">
+            <input type="text" [(ngModel)]="driver.name" name="name"  class="form-control" placeholder="Enter Name here" maxlength="50">
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Certificate No.</label>
-            <input type="text" pattern="\d*" [ngModel]="driver.certificateNo" formControlName="CertificateNo" class="form-control" placeholder="Enter Certificate No. here" maxlength="20">
+            <input type="text" pattern="\d*" [(ngModel)]="driver.certificateNo" name="certificateNo" class="form-control" placeholder="Enter Certificate No. here" maxlength="20">
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">License No.</label>
-            <input type="text" pattern="\d*" [ngModel]="driver.licenseNo" formControlName="LicenseNo" class="form-control" placeholder="Enter License No. here" maxlength="20">
+            <input type="text" pattern="\d*" [(ngModel)]="driver.licenseNo" name="licenseNo"  class="form-control" placeholder="Enter License No. here" maxlength="20">
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group col-md-4">
             <label for="inputEmail4"> Transport Name </label>
-            <input type="text" formControlName="TransPortName" [ngModel]="driver.transPortName" class="form-control" placeholder="Enter Transport Name here" maxlength="50">
+            <input type="text"  [(ngModel)]="driver.transPortName" name="transPortName" class="form-control" placeholder="Enter Transport Name here" maxlength="50">
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Transport Address</label>
-            <input type="text" formControlName="TransPortAddress" [ngModel]="driver.transPortAddress" class="form-control"  placeholder="Enter Transport Address here" maxlength="300">
+            <input type="text"  [(ngModel)]="driver.transPortAddress" class="form-control" name="transPortAddress"  placeholder="Enter Transport Address here" maxlength="300">
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Transport Phone No.</label>
-            <input type="text" pattern="\d*" formControlName="TransPortPhoneNo" [ngModel]="driver.transPortPhoneNo" class="form-control"  placeholder="Enter Transport phoneNo. here" maxlength="12">
+            <input type="text" pattern="\d*"  [(ngModel)]="driver.transPortPhoneNo" name="transPortPhoneNo" class="form-control"  placeholder="Enter Transport phoneNo. here" maxlength="12">
           </div>
         </div>
 
@@ -42,7 +42,7 @@
             <label for="inputEmail4"> Date of Birth </label>
             <mat-form-field color="accent" appearance="fill">
               <mat-label>Date Of Birth</mat-label>
-              <input matInput [matDatepicker]="picker2" formControlName="DOB" [ngModel]="driver.dob">
+              <input matInput [matDatepicker]="picker2" name="dob"  [(ngModel)]="driver.dob">
               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
@@ -50,10 +50,10 @@
           <div class="form-group col-md-4">
             <label for="inputPassword4">Training Period</label> <br>
             <div class="form-check form-check-inline mt-2">
-              <input formControlName="TrainingPeriod" checked="checked" class="form-check-input" type="radio" name="TrainingPeriod1" (click) ="hideDoc(true)"  value="1">
+              <input  class="form-check-input"  name="one" type="radio"  (click) ="hideDoc($event)"  value="1" [checked]="one">
               <label class="form-check-label" for="inlineRadio1">1 days</label> 
               &nbsp; &nbsp; &nbsp;
-              <input formControlName="TrainingPeriod" checked="checked" class="form-check-input" type="radio" name="TrainingPeriod3" (click) ="hideDoc(false)"  value="3">
+              <input class="form-check-input" name="one" type="radio" (click) ="hideDoc($event)"   value="3" [checked]="three">
               <label class="form-check-label" for="inlineRadio1">3 days</label>
             </div>
           </div>
@@ -61,10 +61,10 @@
             <label for="inputPassword4">One Day Certificate</label>
             <div class="input-group">
               <div class="input-group-prepend">
-                <span class="input-group-text" [ngModel]="driver.oneDayDoc" id="inputGroupFileAddon01">Upload</span>
+                <span class="input-group-text"  id="inputGroupFileAddon01">Upload</span>
               </div>
               <div class="custom-file">
-                <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="onFileChangeOneDayDoc($event)" formControlName="OneDayDoc"
+                <input type="file" class="custom-file-input" [(ngModel)]="driver.oneDayDoc" name="oneDayDoc" id="inputGroupFile01" (change)="onFileChangeOneDayDoc($event)" 
                   aria-describedby="inputGroupFileAddon01">
                 <label class="custom-file-label" for="inputGroupFile01">{{onedaydocname}}</label>
               </div>
@@ -77,7 +77,7 @@
             <label for="inputEmail4"> Training start date </label>
             <mat-form-field color="accent" appearance="fill">
               <mat-label>Training Start</mat-label>
-              <input matInput [matDatepicker]="picker" [ngModel]="driver.trainingStartDate" formControlName="TrainingStartDate">
+              <input matInput [matDatepicker]="picker" [(ngModel)]="driver.trainingStartDate" name="trainingStartDate" >
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -86,28 +86,28 @@
             <label for="inputPassword4">Training Expiry date</label>
             <mat-form-field color="accent" appearance="fill">
               <mat-label>Training End</mat-label>
-              <input matInput [matDatepicker]="picker1" (dateChange)="GetValidity()" [ngModel]="driver.trainingEndDate" formControlName="TrainingEndDate">
+              <input matInput [matDatepicker]="picker1" (dateChange)="GetValidity()" name="trainingEndDate" [(ngModel)]="driver.trainingEndDate" >
               <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Validity</label>
-            <input type="text" readonly formControlName="Validity" [value]="diffDays" class="form-control"  placeholder="Validity will be calculated">
+            <input type="text" readonly  [(ngModel)]="diffDays" class="form-control" name="validity"  placeholder="Validity will be calculated">
           </div>
           <div class="form-group col-md-12">
             <label for="inputPassword4">Address (license)</label>
-            <input type="text" formControlName="Address" class="form-control" [ngModel]="driver.address" placeholder="Enter address here" maxlength="200">
+            <input type="text"  class="form-control" [(ngModel)]="driver.address" name="address" placeholder="Enter address here" maxlength="200">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-4">
             <label for="inputEmail4"> Payment amount </label>
-            <input type="text" pattern="\d*" formControlName="Amount" [ngModel]="driver.amount" class="form-control" id="inputEmail4" placeholder="Enter amount here" maxlength="8">
+            <input type="text" pattern="\d*"  [(ngModel)]="driver.amount" name="amount" class="form-control" id="inputEmail4" placeholder="Enter amount here" maxlength="8">
           </div>
           <div class="form-group col-md-4">
             <label for="inputState">Select payment option</label>
-            <select id="inputState" class="form-control" formControlName="PaymentType" [ngModel]="driver.paymentType">
+            <select id="inputState" class="form-control" name="paymentType" [(ngModel)]="driver.paymentType">
             <option selected value="">Choose...</option>
             <option value="Cash">Cash</option>
             <option value="Check">Check</option>
@@ -121,7 +121,7 @@
                 <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
               </div>
               <div class="custom-file">
-                <input type="file" class="custom-file-input" id="inputGroupFile03" (change)="onFileChangeDocument($event)" formControlName="Document"
+                <input type="file" class="custom-file-input" id="inputGroupFile03" (change)="onFileChangeDocument($event)" 
                   aria-describedby="inputGroupFileAddon03">
                 <label class="custom-file-label" for="inputGroupFile03">{{Docname}}</label>
               </div>
@@ -136,13 +136,13 @@
               <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
             </div>
             <div class="custom-file">
-              <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="onFileChangePhoto($event)" formControlName="Photo"
+              <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="onFileChangePhoto($event)" 
                 aria-describedby="inputGroupFileAddon01">
               <label class="custom-file-label" for="inputGroupFile01">{{photoname}}</label>
             </div>
           </div>
         </div>
-        <button type="submit" [disabled]="createDriverForm.invalid" class="btn btn-primary">Submit</button>
+        <button type="submit" [disabled]="this.editForm.invalid" class="btn btn-primary">Submit</button>
         <button type="reset" class="btn btn-danger ml-2" (click)="Cancel()">Cancel</button>
       </form>
     </div>

@@ -32,8 +32,8 @@ namespace NBI.API.Controllers
         public async Task<IActionResult> AddDriver([FromForm]DriverCreationDto driverDto)
         {   
             
-            var fileID=1000;
-            var driverIdList = await _context.Drivers.Select(x=>x.Id).ToListAsync();
+                var fileID=1;
+                var driverIdList = await _context.Drivers.Select(x=>x.Id).ToListAsync();
                 if(driverIdList.Count==0)
                 {
                      fileID = fileID+1;
@@ -158,50 +158,58 @@ namespace NBI.API.Controllers
                 return BadRequest("You cannot edit an approved License");
             }
 
-            DriverReturnFiles driverFilesInString = new DriverReturnFiles();
-                
+             Driver driverToUpdate = new Driver();
+             driverToUpdate.Id = driverFromRepo.Id;
                 if(driverDto.Document!=null)
                 {
-                     using(var ms = new MemoryStream())
+                    System.Console.WriteLine("doc");
+                    string ext = System.IO.Path.GetExtension(driverDto.Document.FileName);
+                    string filename = "doc"+driverFromRepo.Id.ToString() + ext;
+                    string filepath = "wwwroot/assets/"+ filename;
+                    using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
-                        driverDto.Document.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        driverFilesInString.Document = Convert.ToBase64String(fileBytes);
+                    await driverDto.Document.CopyToAsync(fileStream);
                     }
+                    driverToUpdate.Document=filename;
                 }
                 
                 if(driverDto.OneDayDoc!=null)
                 {
-                    using (var ms1 = new MemoryStream())
+                    System.Console.WriteLine("cer");
+                    string ext = System.IO.Path.GetExtension(driverDto.OneDayDoc.FileName);
+                    string filename = "cer"+driverFromRepo.Id.ToString() + ext;
+                    string filepath = "wwwroot/assets/"+ filename;
+                    using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
-                        driverDto.OneDayDoc.CopyTo(ms1);
-                        var fileBytes = ms1.ToArray();
-                        driverFilesInString.OneDayDoc = Convert.ToBase64String(fileBytes);
-
+                    await driverDto.OneDayDoc.CopyToAsync(fileStream);
                     }
+                    driverToUpdate.OneDayDoc=filename;
                 }
 
                 if(driverDto.Photo!=null)
                 {
-                    using(var ms2 = new MemoryStream())
+                    System.Console.WriteLine("img");
+                    string ext = System.IO.Path.GetExtension(driverDto.Photo.FileName);
+                    string filename = "img"+driverFromRepo.Id.ToString() + ext;
+                    string filepath = "wwwroot/assets/"+ filename;
+                    using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
-                        driverDto.Photo.CopyTo(ms2);
-                        var fileBytes = ms2.ToArray();
-                        driverFilesInString.Photo = Convert.ToBase64String(fileBytes);
-                    }                    
+                    await driverDto.Photo.CopyToAsync(fileStream);
+                    }
+                    driverToUpdate.Photo=filename;
                 }
 
-
-                var driverNormalData = _mapper.Map<DriverReturnData>(driverDto);
-                var driverFilesData  = _mapper.Map<Driver>(driverFilesInString);
-                driverFilesData.Id = driverFromRepo.Id;
-                var driverToUpdate   = _mapper.Map(driverNormalData, driverFilesData);
-                var dataToReturn = _mapper.Map(driverToUpdate, driverFromRepo);
+               
+                
+                
+                var driverNormalData = _mapper.Map<DriverDataWithoutFiles>(driverDto);
+                _mapper.Map(driverToUpdate, driverFromRepo);
+                var a = _mapper.Map(driverNormalData, driverFromRepo);
                 if(await _context.SaveChangesAsync()>0)
                 {
-                    return Ok(dataToReturn);
+                    return Ok(await _context.Drivers.FirstOrDefaultAsync(x=>x.Id==id));
                 }
-                return BadRequest("Update failed");
+                return BadRequest("Changes Not Made");
                 
         }
 
