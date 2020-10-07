@@ -127,6 +127,7 @@ export class DriverDetailsEditComponent implements OnInit {
     formData.append('TrainingStartDate', this.datepipe.transform(this.driver.trainingStartDate, 'dd/MM/yyyy'));
     formData.append('TrainingEndDate', this.datepipe.transform(this.driver.trainingEndDate, 'dd/MM/yyyy'));
     formData.append('TrainingPeriod', this.driver.trainingPeriod.toString());
+    formData.append('BranchVisited', this.driver.branchVisited);
     formData.append('Validity', this.driver.validity.toString());
       this.driverService.UpdateDriver(formData, this.driver.id)
       .subscribe(

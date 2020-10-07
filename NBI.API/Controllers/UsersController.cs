@@ -75,7 +75,7 @@ namespace NBI.API.Controllers
 
             if(userList!=null)
             {
-                var users = userList.Where(x=>x.Roles==1).ToList(); 
+                var users = userList.Where(x=>x.Roles==3).ToList(); 
                 return Ok(users);
             }
 

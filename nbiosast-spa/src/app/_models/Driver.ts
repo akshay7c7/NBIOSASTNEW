@@ -16,5 +16,6 @@ export interface Driver{
     trainingPeriod :number,
     photo :string,             
     oneDayDoc: File,
-    validity:any    
+    validity:any
+    branchVisited:any    
 }
