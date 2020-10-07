@@ -175,12 +175,22 @@ namespace NBI.API.Controllers
         [HttpPut("UpdateDriver/{id}")]
         public async Task<IActionResult> EditDriver(int id, [FromForm]DriverCreationDto driverDto)
         {
-            bool changes = false;
             var driverFromRepo = await _context.Drivers.FirstOrDefaultAsync(x=>x.Id==id);
             if(driverFromRepo.Status=="Approved")
             {
                 return BadRequest("You cannot edit an approved License");
             }
+
+            bool changes = false;
+            if(driverFromRepo.TrainingPeriod==1 && driverDto.TrainingPeriod==3)
+            {
+                if(System.IO.File.Exists("wwwroot/assets/"+ driverFromRepo.OneDayDoc))
+                {
+                    System.IO.File.Delete("wwwroot/assets/"+ driverFromRepo.OneDayDoc);
+                    System.Console.WriteLine("Deleted..");
+                }
+            }
+            
              Driver driverToUpdate = new Driver();
              driverToUpdate.Id = driverFromRepo.Id;
                 if(driverDto.Document!=null)
