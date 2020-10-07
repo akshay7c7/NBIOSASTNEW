@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,23 +30,21 @@ namespace NBI.API.Controllers
         [HttpPost("AddDriver")]
         public async Task<IActionResult> AddDriver([FromForm]DriverCreationDto driverDto)
         {   
-            
-                var fileID=1;
-                var driverIdList = await _context.Drivers.Select(x=>x.Id).ToListAsync();
-                if(driverIdList.Count==0)
+                var dataWithoutFiles = _mapper.Map<DriverReturnData>(driverDto);
+                var dataWithoutFilesAdd = _mapper.Map<Driver>(dataWithoutFiles);
+                await _context.AddAsync(dataWithoutFilesAdd);
+                var result = await _context.SaveChangesAsync()>0;
+                if(result==false)
                 {
-                     fileID = fileID+1;
+                    return BadRequest("Could not add the driver details");
                 }
-                else{
-                    fileID =  driverIdList.Max();
-                }
-
+                var id = dataWithoutFilesAdd.Id;
+                System.Console.WriteLine(id);
                 DriverReturnFiles driverFilesDto = new DriverReturnFiles();
                 if(driverDto.Document!=null)
                 {
                     string ext = System.IO.Path.GetExtension(driverDto.Document.FileName);
-                    string filename = (fileID+1).ToString() + ext;
-                    filename = "doc"+filename;
+                    string filename = "doc"+ id.ToString() + ext;
                     System.Console.WriteLine(filename);
                     string filepath = "wwwroot/assets/"+ filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
@@ -57,11 +54,10 @@ namespace NBI.API.Controllers
                     driverFilesDto.Document=filename;
                 }
                 
-                if(driverDto.OneDayDoc!=null)
+                if(driverDto.OneDayDoc!=null && driverDto.TrainingPeriod==1)
                 {
                     string ext = System.IO.Path.GetExtension(driverDto.OneDayDoc.FileName);
-                    string filename = (fileID+1).ToString() + ext;
-                    filename = "cer"+filename;
+                    string filename = "cer"+ id.ToString() + ext;
                     System.Console.WriteLine(filename);
                     string filepath = "wwwroot/assets/"+ filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
@@ -74,8 +70,7 @@ namespace NBI.API.Controllers
                 if(driverDto.Photo!=null)
                 {
                     string ext = System.IO.Path.GetExtension(driverDto.Photo.FileName);
-                    string filename = (fileID+1).ToString() + ext;
-                    filename = "img"+filename;
+                    string filename = "img"+ id.ToString() + ext;
                     System.Console.WriteLine(filename);
                     string filepath = "wwwroot/assets/"+filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
@@ -85,13 +80,14 @@ namespace NBI.API.Controllers
                     driverFilesDto.Photo=filename;
                 }
 
-                var drivertoSave = _mapper.Map<DriverReturnData>(driverDto);
-                var drivertoSave2 = _mapper.Map<Driver>(driverFilesDto);
-                var driverToCreate = _mapper.Map(drivertoSave, drivertoSave2);
-
-                await _context.AddAsync(driverToCreate);
-                await _context.SaveChangesAsync();
-                return Ok(new{message = "Created Successfully"});
+                _mapper.Map(driverFilesDto, dataWithoutFilesAdd);
+                result = await _context.SaveChangesAsync()>0;
+                if(result==false)
+                {
+                    await DeleteDriver(dataWithoutFilesAdd.Id);
+                    return BadRequest("Error in saving files ,Could not add the driver details");
+                }
+                return Ok();
         
         }
 
@@ -144,69 +140,138 @@ namespace NBI.API.Controllers
         public async Task<IActionResult> DeleteDriver(int id)
         {
             var driverToDelete = await _context.Drivers.FirstOrDefaultAsync(x=>x.Id==id);
+            if(driverToDelete.Document!=null)
+            {
+                if(System.IO.File.Exists("wwwroot/assets/"+ driverToDelete.Document))
+                {
+                    System.IO.File.Delete("wwwroot/assets/"+ driverToDelete.Document);
+                    System.Console.WriteLine("Deleted..doc");
+                }
+
+            }
+            if(driverToDelete.OneDayDoc!=null)
+            {
+                if(System.IO.File.Exists("wwwroot/assets/"+ driverToDelete.OneDayDoc))
+                {
+                    System.IO.File.Delete("wwwroot/assets/"+ driverToDelete.OneDayDoc);
+                    System.Console.WriteLine("Deleted..cer");
+                }
+
+            }
+            if(driverToDelete.Photo!=null)
+            {
+                if(System.IO.File.Exists("wwwroot/assets/"+ driverToDelete.Photo))
+                {
+                    System.IO.File.Delete("wwwroot/assets/"+ driverToDelete.Photo);
+                    System.Console.WriteLine("Deleted..img");
+                }
+
+            }
             _context.Drivers.Remove(driverToDelete);
-           await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return Ok(new {message = "Deleted Successfully"});
         }
 
         [HttpPut("UpdateDriver/{id}")]
         public async Task<IActionResult> EditDriver(int id, [FromForm]DriverCreationDto driverDto)
         {
+            bool changes = false;
             var driverFromRepo = await _context.Drivers.FirstOrDefaultAsync(x=>x.Id==id);
             if(driverFromRepo.Status=="Approved")
             {
                 return BadRequest("You cannot edit an approved License");
             }
-
              Driver driverToUpdate = new Driver();
              driverToUpdate.Id = driverFromRepo.Id;
                 if(driverDto.Document!=null)
                 {
                     System.Console.WriteLine("doc");
+                    if(driverFromRepo.Document!=null)
+                    {
+                         if(System.IO.File.Exists("wwwroot/assets/"+ driverFromRepo.Document))
+                        {
+                            System.IO.File.Delete("wwwroot/assets/"+ driverFromRepo.Document);
+                            System.Console.WriteLine("Deleted..");
+                        }
+
+                    }
                     string ext = System.IO.Path.GetExtension(driverDto.Document.FileName);
                     string filename = "doc"+driverFromRepo.Id.ToString() + ext;
                     string filepath = "wwwroot/assets/"+ filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
-                    await driverDto.Document.CopyToAsync(fileStream);
+                        await driverDto.Document.CopyToAsync(fileStream);
+                        changes = true;
                     }
                     driverToUpdate.Document=filename;
+                    System.Console.WriteLine(filename);
                 }
                 
                 if(driverDto.OneDayDoc!=null)
                 {
-                    System.Console.WriteLine("cer");
+                     System.Console.WriteLine("cer");
+                    if(driverFromRepo.OneDayDoc != null)
+                    {
+                        if(System.IO.File.Exists("wwwroot/assets/"+ driverFromRepo.OneDayDoc))
+                        {
+                            System.IO.File.Delete("wwwroot/assets/"+ driverFromRepo.OneDayDoc);
+                            System.Console.WriteLine("Deleted..");
+                        }
+
+                    }
                     string ext = System.IO.Path.GetExtension(driverDto.OneDayDoc.FileName);
                     string filename = "cer"+driverFromRepo.Id.ToString() + ext;
                     string filepath = "wwwroot/assets/"+ filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
                     await driverDto.OneDayDoc.CopyToAsync(fileStream);
+                    changes = true;
                     }
                     driverToUpdate.OneDayDoc=filename;
+                    System.Console.WriteLine(filename);
                 }
 
                 if(driverDto.Photo!=null)
                 {
                     System.Console.WriteLine("img");
+                    if(driverFromRepo.Photo!=null)
+                    {
+                         if(System.IO.File.Exists("wwwroot/assets/"+ driverFromRepo.Photo))
+                        {
+                            System.IO.File.Delete("wwwroot/assets/"+ driverFromRepo.Photo);
+                            System.Console.WriteLine("Deleted..");
+                        }
+
+                    }
                     string ext = System.IO.Path.GetExtension(driverDto.Photo.FileName);
                     string filename = "img"+driverFromRepo.Id.ToString() + ext;
                     string filepath = "wwwroot/assets/"+ filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
                     await driverDto.Photo.CopyToAsync(fileStream);
+                    changes = true;
                     }
                     driverToUpdate.Photo=filename;
+                    System.Console.WriteLine(filename);
                 }
+                if(driverToUpdate.Document==null)
+                {
+                    driverToUpdate.Document = driverFromRepo.Document;
 
-               
-                
-                
+                }
+                 if(driverToUpdate.OneDayDoc==null)
+                {
+                    driverToUpdate.OneDayDoc = driverFromRepo.OneDayDoc;
+
+                }
+                 if(driverToUpdate.Photo==null)
+                {
+                    driverToUpdate.Photo = driverFromRepo.Photo;
+                }
                 var driverNormalData = _mapper.Map<DriverDataWithoutFiles>(driverDto);
-                
                 _mapper.Map(driverToUpdate, driverFromRepo);
                 var a = _mapper.Map(driverNormalData, driverFromRepo);
-                if(await _context.SaveChangesAsync()>0)
+                if(await _context.SaveChangesAsync()>0 || changes )
                 {
                     return Ok(await _context.Drivers.FirstOrDefaultAsync(x=>x.Id==id));
                 }

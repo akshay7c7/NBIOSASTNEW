@@ -32,25 +32,8 @@ namespace NBI.API.Data
                 foreach (var user in users)
                 {
                     userManager.CreateAsync(user, "password").Wait();
-                    userManager.AddToRoleAsync(user, "DriverAdmin").Wait();
+                    userManager.AddToRolesAsync(user, new[] {"DriverAdmin","AccountAdmin","BranchAdmin","SuperAdmin"}).Wait();
                 }
-
-                var SuperAdminUser = new User
-                {
-                    UserName = "Super1"
-                };
-               
-                IdentityResult result1 = userManager.CreateAsync(SuperAdminUser, "password").Result;
-               
-                
-
-                if (result1.Succeeded)
-                {
-                    var admin = userManager.FindByNameAsync("Super1").Result;
-                    userManager.AddToRolesAsync(admin, new[] {"DriverAdmin","AccountAdmin","BranchAdmin","SuperAdmin"}).Wait();
-                }
-               
-
             }
         }
     }

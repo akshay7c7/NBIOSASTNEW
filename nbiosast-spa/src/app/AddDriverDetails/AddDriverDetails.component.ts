@@ -136,6 +136,7 @@ export class AddDriverDetailsComponent implements OnInit {
       formData.append('TrainingEndDate', this.datepipe.transform(this.createDriverForm.get('TrainingEndDate').value, 'dd/MM/yyyy'));
       formData.append('TrainingPeriod', this.createDriverForm.get('TrainingPeriod').value);
       formData.append('BranchVisited', this.user.city);
+      formData.append('Validity', this.diffDays.toString());
 
 
       this.driverService.SaveDriver(formData)
