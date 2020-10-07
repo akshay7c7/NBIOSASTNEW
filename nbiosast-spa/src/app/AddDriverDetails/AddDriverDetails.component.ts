@@ -1,14 +1,11 @@
-import { HttpHeaders } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Driver } from '../_models/Driver';
 import { User } from '../_models/user';
 import { AuthService } from '../_services/auth.service';
 import { DriverService } from '../_services/driver.service';
 import { UserService } from '../_services/user.service';
-import {map} from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -28,7 +25,6 @@ export class AddDriverDetailsComponent implements OnInit {
     private router : Router,
     private snackbar : MatSnackBar,
     private driverService : DriverService,
-    private route : ActivatedRoute,
     private userService : UserService,
     public datepipe: DatePipe) { }
 
@@ -42,6 +38,8 @@ export class AddDriverDetailsComponent implements OnInit {
         this.user = data;
       }
     )
+    this.doc = false
+    this.invalid = false
   }
 
   CreateDriver()
@@ -57,20 +55,59 @@ export class AddDriverDetailsComponent implements OnInit {
         TransPortAddress :['',Validators.required],
         Address :['',Validators.required],
         Amount :['',Validators.required],
-        PaymentType :['',Validators.required],
+        PaymentType :['Cash',Validators.required],
         DOB :['',Validators.required],
         TrainingStartDate :['',Validators.required],
         TrainingEndDate :['',Validators.required],
-        TrainingPeriod :['',Validators.required],
+        TrainingPeriod :['3',Validators.required],
         Document : ['', Validators.required],    
-        Photo :['', Validators.required],             
+        Photo :['', Validators.required],
+        TransPortPhoneNo :['',Validators.required],             
         OneDayDoc: [''],
         Validity: [''],
-        TransPortPhoneNo :[''] 
+         
 
       }
+      // {
+      //   validators : [this.OneDayDocConditionallyRequired]
+      // }
 
     )
+  }
+
+//   OneDayDocConditionallyRequired(formGroup : FormGroup )
+//  {
+//    if(formGroup.get('TrainingPeriod').value == 3)
+//    {
+//      return null
+//    }
+//    else if(formGroup.get('TrainingPeriod').value == 3 && this.selectedOneDayDoc!=null)
+//    {
+//     return null
+//    }
+//     return {fileNotUploaded:true}
+//  }
+
+  test1 = true
+  invalid = true
+  doc:boolean=true;
+  hideDoc(event)
+  {
+    if(event.target.value==3)
+    {
+      this.doc = false
+      this.invalid = false
+      
+    }
+    else
+    {
+      this.createDriverForm.get('OneDayDoc').reset()
+      this.selectedOneDayDoc=null
+      this.onedaydocname ="cerificate"
+      this.doc = true
+      this.invalid = true
+      
+    }
   }
 
 
@@ -85,14 +122,15 @@ export class AddDriverDetailsComponent implements OnInit {
     this.selectedDocument = <File>event.target.files[0];
   }
 
-  onedaydocname = "Certificate"
+  onedaydocname ="cerificate"
   onFileChangeOneDayDoc(event) {
 
     this.onedaydocname= this.getFileDetails(event)
     this.selectedOneDayDoc = <File>event.target.files[0];
+    this.invalid = false
   }
 
-  photoname = "Photo"
+  photoname = "your photo"
   onFileChangePhoto(event) {
 
     this.photoname = this.getFileDetails(event)
@@ -167,9 +205,5 @@ export class AddDriverDetailsComponent implements OnInit {
     this.router.navigate['/driverdetails'];
   }
 
-  doc=true;
-  hideDoc(data)
-  {
-    this.doc = data;
-  }
+ 
 }

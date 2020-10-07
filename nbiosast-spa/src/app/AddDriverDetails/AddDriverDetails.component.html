@@ -10,30 +10,36 @@
         <div class="form-row">
           <div class="form-group col-md-4">
             <label for="inputEmail4"> Name </label>
-            <input type="text" formControlName="Name" class="form-control" placeholder="Enter Name here" maxlength="50">
+            <input type="text" formControlName="Name" class="form-control" placeholder="Enter Name here" maxlength="50"
+            [ngClass]="{'is-invalid': createDriverForm.get('Name').errors && createDriverForm.get('Name').touched}">
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Certificate No.</label>
-            <input type="text" pattern="\d*" formControlName="CertificateNo" class="form-control" placeholder="Enter Certificate No. here" maxlength="20">
+            <input type="text" pattern="\d*" formControlName="CertificateNo" class="form-control" placeholder="Enter Certificate No. here" maxlength="20"
+            [ngClass]="{'is-invalid': createDriverForm.get('CertificateNo').errors && createDriverForm.get('CertificateNo').touched}">
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">License No.</label>
-            <input type="text" pattern="\d*" formControlName="LicenseNo" class="form-control" placeholder="Enter License No. here" maxlength="20">
+            <input type="text" pattern="\d*" formControlName="LicenseNo" class="form-control" placeholder="Enter License No. here" maxlength="20"
+            [ngClass]="{'is-invalid': createDriverForm.get('LicenseNo').errors && createDriverForm.get('LicenseNo').touched}">
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group col-md-4">
             <label for="inputEmail4"> Transport Name </label>
-            <input type="text" formControlName="TransPortName" class="form-control" placeholder="Enter Transport Name here" maxlength="50">
+            <input type="text" formControlName="TransPortName" class="form-control" placeholder="Enter Transport Name here" maxlength="50"
+            [ngClass]="{'is-invalid': createDriverForm.get('TransPortName').errors && createDriverForm.get('TransPortName').touched}">
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Transport Address</label>
-            <input type="text" formControlName="TransPortAddress" class="form-control"  placeholder="Enter Transport Address here" maxlength="300">
+            <input type="text" formControlName="TransPortAddress" class="form-control"  placeholder="Enter Transport Address here" maxlength="300"
+            [ngClass]="{'is-invalid': createDriverForm.get('TransPortAddress').errors && createDriverForm.get('TransPortAddress').touched}">
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Transport Phone No.</label>
-            <input type="text" pattern="\d*" formControlName="TransPortPhoneNo" class="form-control"  placeholder="Enter Transport phoneNo. here" maxlength="12">
+            <input type="text" pattern="\d*" formControlName="TransPortPhoneNo" class="form-control"  placeholder="Enter Transport phoneNo. here" maxlength="12"
+            [ngClass]="{'is-invalid': createDriverForm.get('TransPortPhoneNo').errors && createDriverForm.get('TransPortPhoneNo').touched}">
           </div>
         </div>
 
@@ -42,7 +48,8 @@
             <label for="inputEmail4"> Date of Birth </label>
             <mat-form-field color="accent" appearance="fill">
               <mat-label>Date Of Birth</mat-label>
-              <input matInput [matDatepicker]="picker2" formControlName="DOB">
+              <input matInput [matDatepicker]="picker2" formControlName="DOB"
+              [ngClass]="{'is-invalid': createDriverForm.get('DOB').errors && createDriverForm.get('DOB').touched}">
               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
@@ -50,10 +57,10 @@
           <div class="form-group col-md-4">
             <label for="inputPassword4">Training Period</label> <br>
             <div class="form-check form-check-inline mt-2">
-              <input formControlName="TrainingPeriod" class="form-check-input" type="radio" name="TrainingPeriod" (click) ="hideDoc(true)"  value="1">
+              <input formControlName="TrainingPeriod" class="form-check-input" type="radio" name="TrainingPeriod" (click) ="hideDoc($event)"  value="1">
               <label class="form-check-label" for="inlineRadio1">1 days</label> 
               &nbsp; &nbsp; &nbsp;
-              <input formControlName="TrainingPeriod" class="form-check-input" type="radio" name="TrainingPeriod" (click) ="hideDoc(false)"  value="3">
+              <input formControlName="TrainingPeriod" class="form-check-input" type="radio" name="TrainingPeriod" (click) ="hideDoc($event)"  value="3">
               <label class="form-check-label" for="inlineRadio1">3 days</label>
             </div>
           </div>
@@ -65,10 +72,12 @@
               </div>
               <div class="custom-file">
                 <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="onFileChangeOneDayDoc($event)" formControlName="OneDayDoc"
-                  aria-describedby="inputGroupFileAddon01">
+                  aria-describedby="inputGroupFileAddon01"
+                  [ngClass]="{'is-invalid': invalid && createDriverForm.get('OneDayDoc').touched}">
                 <label class="custom-file-label" for="inputGroupFile01">{{onedaydocname}}</label>
               </div>
             </div>
+            
           </div>
         </div>
 
@@ -97,19 +106,20 @@
           </div>
           <div class="form-group col-md-12">
             <label for="inputPassword4">Address (license)</label>
-            <input type="text" formControlName="Address" class="form-control"  placeholder="Enter address here" maxlength="200">
+            <input type="text" formControlName="Address" class="form-control"  placeholder="Enter address here" maxlength="200"
+            [ngClass]="{'is-invalid': createDriverForm.get('Address').errors && createDriverForm.get('Address').touched}">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-4">
             <label for="inputEmail4"> Payment amount </label>
-            <input type="text" pattern="\d*" formControlName="Amount" class="form-control" id="inputEmail4" placeholder="Enter amount here" maxlength="8">
+            <input type="text" pattern="\d*" formControlName="Amount" class="form-control" id="inputEmail4" placeholder="Enter amount here" maxlength="8"
+            [ngClass]="{'is-invalid': createDriverForm.get('Amount').errors && createDriverForm.get('Amount').touched}">
           </div>
           <div class="form-group col-md-4">
             <label for="inputState">Select payment option</label>
             <select id="inputState" class="form-control" formControlName="PaymentType">
-            <option selected value="">Choose...</option>
-            <option value="Cash">Cash</option>
+            <option selected value="Cash">Cash</option>
             <option value="Check">Check</option>
             <option value="Online">Online</option>
             </select>
@@ -122,7 +132,8 @@
               </div>
               <div class="custom-file">
                 <input type="file" class="custom-file-input" id="inputGroupFile03" (change)="onFileChangeDocument($event)" formControlName="Document"
-                  aria-describedby="inputGroupFileAddon03">
+                  aria-describedby="inputGroupFileAddon03"
+                  [ngClass]="{'is-invalid': createDriverForm.get('Document').errors && createDriverForm.get('Document').touched}">
                 <label class="custom-file-label" for="inputGroupFile03">{{Docname}}</label>
               </div>
             </div>
@@ -137,12 +148,13 @@
             </div>
             <div class="custom-file">
               <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="onFileChangePhoto($event)" formControlName="Photo"
-                aria-describedby="inputGroupFileAddon01">
+                aria-describedby="inputGroupFileAddon01"
+                [ngClass]="{'is-invalid': createDriverForm.get('Photo').errors && createDriverForm.get('Photo').touched}">
               <label class="custom-file-label" for="inputGroupFile01">{{photoname}}</label>
             </div>
           </div>
         </div>
-        <button type="submit" [disabled]="createDriverForm.invalid" class="btn btn-primary">Submit</button>
+        <button type="submit" [disabled]="createDriverForm.invalid || invalid" class="btn btn-primary">Submit</button>
         <button type="reset" class="btn btn-danger ml-2" (click)="Cancel()">Cancel</button>
       </form>
     </div>

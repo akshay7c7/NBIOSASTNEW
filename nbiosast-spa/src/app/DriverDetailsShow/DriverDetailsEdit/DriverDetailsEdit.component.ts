@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,9 +17,11 @@ import { UserService } from 'src/app/_services/user.service';
 })
 export class DriverDetailsEditComponent implements OnInit {
 
+  @ViewChild('editForm') editForm : FormGroup
  
   one:any =""
   three:any=""
+  threeCame = false;
 
   constructor(
     private fb : FormBuilder, 
@@ -44,6 +46,8 @@ export class DriverDetailsEditComponent implements OnInit {
         {
           this.three=true
           this.doc = false
+          this.invalid = false
+          this.threeCame = true;
         }
         else{
           this.one=true
@@ -77,6 +81,7 @@ export class DriverDetailsEditComponent implements OnInit {
 
     this.onedaydocname= this.getFileDetails(event)
     this.selectedOneDayDoc = <File>event.target.files[0];
+    this.invalid = false
   }
 
   photoname = "Photo"
@@ -104,12 +109,7 @@ export class DriverDetailsEditComponent implements OnInit {
   SaveDriver()
   {
     this.driver.validity = this.diffDays
-    // this.driver.oneDayDoc = null
-    // this.driver.photo = null
-    // this.driver.document = null
-
-    console.log(this.driver)
-
+    
     var formData = new FormData();
     formData.append('Document', this.selectedDocument);
     formData.append('OnedayDoc', this.selectedOneDayDoc);
@@ -128,9 +128,6 @@ export class DriverDetailsEditComponent implements OnInit {
     formData.append('TrainingEndDate', this.datepipe.transform(this.driver.trainingEndDate, 'dd/MM/yyyy'));
     formData.append('TrainingPeriod', this.driver.trainingPeriod.toString());
     formData.append('Validity', this.driver.validity.toString());
-    //formData.append('BranchVisited', this.user.city);
-
-    console.log(...formData)
       this.driverService.UpdateDriver(formData, this.driver.id)
       .subscribe(
         ()=>{
@@ -150,6 +147,7 @@ export class DriverDetailsEditComponent implements OnInit {
     this.router.navigate(['/driverdetails']);
   }
 
+  invalid = true
   doc=true;
   hideDoc(event)
   {
@@ -158,9 +156,15 @@ export class DriverDetailsEditComponent implements OnInit {
     if(event.target.value==3)
     {
       this.doc=false;
+      this.invalid = false
     }
     else{
+
+      this.selectedOneDayDoc = null
+      this.onedaydocname = "Certificate"
       this.doc=true;
+      this.invalid = true
+      
     }
   }
 
