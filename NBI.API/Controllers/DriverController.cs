@@ -316,31 +316,52 @@ namespace NBI.API.Controllers
             return Ok(new {message = "Status changed to "+driverToPrint.PrintTime+" for "+driverToPrint.Name});
         }
 
-        [HttpGet("TodayData")]
-        public async Task<IActionResult> GetTodaysData()
+        [HttpGet("GetDashData/{branch}")]
+        public async Task<IActionResult> GetDashData(string branch)
         {
             Dashboard dash = new Dashboard();
-            dash.TodayDrivers = await _context.Drivers.Where(x=>x.Created == DateTime.Today).CountAsync();
-            var TotalAmount = await _context.Drivers.Where(x=>x.Created == DateTime.Today)
-                                    .Select(x=>x.Amount).ToListAsync();
+            var drivers =  _context.Drivers.AsQueryable();
+            if(branch=="ALL")
+            {
+               drivers =  _context.Drivers.AsQueryable();
+            }
+            else{
+                drivers =  _context.Drivers.Where(x=>x.BranchVisited==branch).AsQueryable();
+            }
+            dash.TodayDrivers = await drivers.Where(x=>x.Created == DateTime.Today).CountAsync();
+            var TotalAmount = await drivers.Where(x=>x.Created == DateTime.Today).Select(x=>x.Amount).ToListAsync();
             dash.TodayAmount = TotalAmount.Sum(x=>x);
-            dash.TodayPrints = await _context.Drivers.Where(x=>x.PrintTime == DateTime.Today).CountAsync();
+            dash.TodayPrints = await drivers.Where(x=>x.PrintTime == DateTime.Today).CountAsync();
 
             var weekdate = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
-
-            var WeekDrivers = await  _context.Drivers.Where(x=> x.Created >= weekdate)
-                                    .ToListAsync();
+            var WeekDrivers = await  drivers.Where(x=> x.Created >= weekdate).ToListAsync();
             dash.WeekDrivers = WeekDrivers.Count();
-            var WeekAmount = await _context.Drivers.Where(x=> x.Created >= weekdate).Select(x=>x.Amount).ToListAsync();
+            var WeekAmount = await drivers.Where(x=> x.Created >= weekdate).Select(x=>x.Amount).ToListAsync();
             dash.WeekAmount = WeekAmount.Sum(x=>x);
-            dash.WeekPrints = await _context.Drivers.Where(x=> x.PrintTime >= weekdate)
-                                    .CountAsync();
-            dash.AnnualDrivers = await _context.Drivers.CountAsync();
-            var AnnualAmount = await _context.Drivers.Select(x=>x.Amount).ToListAsync();
+            dash.WeekPrints = await drivers.Where(x=> x.PrintTime >= weekdate).CountAsync();
+
+            dash.AnnualDrivers = await drivers.CountAsync();
+            var AnnualAmount = await drivers.Select(x=>x.Amount).ToListAsync();
             dash.AnnualAmount = AnnualAmount.Sum(x=>x);
-            dash.AnnualPrints = await _context.Drivers.Where(x=>x.PrintTime != new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)).CountAsync();
+            dash.AnnualPrints = await drivers.Where(x=>x.PrintTime != new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)).CountAsync();
             
             return Ok(dash);
+        }
+
+
+
+        
+        [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
+        [HttpGet("getDrivercitylist")]    
+        public async Task<IActionResult> GetCitiesOfDriver(int id)
+        {
+            var listOfCities = await _context.Drivers.Select(x=>x.BranchVisited).ToListAsync();
+            if(listOfCities!=null)
+            {
+                return Ok(listOfCities);
+            }
+            return NotFound();
+            
         }
 
 

@@ -25,6 +25,7 @@ export class ShowAdminDetailsComponent implements OnInit, AfterViewInit {
   EmptyData=false;
   fff:any
   BranchCity : string[];
+  currentUser : User = {} as User
 
   AdminDetails:any={};
   
@@ -47,9 +48,18 @@ export class ShowAdminDetailsComponent implements OnInit, AfterViewInit {
       }
     )
     this.EmptyData=false;
+    if(this.authService.decodedToken?.role.length<4)
+    {
+      this.currentUser =JSON.parse(localStorage.getItem('user'))
+      this.AdminDetails.Branch = this.currentUser.city
+      this.AdminDetails.type =1
+    }
+    else{
       this.AdminDetails.type = "All"
       this.AdminDetails.Branch = "ALL"
-      this.loadUsers();
+      
+    }
+    this.loadUsers();
     }
   
     

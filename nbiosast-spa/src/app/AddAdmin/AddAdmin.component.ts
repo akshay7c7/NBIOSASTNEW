@@ -20,7 +20,7 @@ export class AddAdminComponent implements OnInit , AfterViewInit{
   city = this.cityService.cities;
   options : string[] =[];
   filteredOptions: Observable<string[]>;
-
+  currentUser:User = {} as User
   constructor(private fb : FormBuilder, 
               public authService : AuthService,
               private snackbar : MatSnackBar,
@@ -30,12 +30,23 @@ export class AddAdminComponent implements OnInit , AfterViewInit{
   
   ngOnInit() {
 
-
-    for (var product of this.city) {
-      this.options.push(product.name);
-      }
-
     
+    if(this.authService.decodedToken?.role.length==4)
+    {
+      
+      this.currentCity = ""
+    }
+    else
+    {
+      this.currentUser =JSON.parse(localStorage.getItem('user'))
+      console.log(this.currentUser)
+      this.currentCity = this.currentUser.city
+    }
+
+    for (var product of this.city)
+    {
+      this.options.push(product.name);
+    }
 
     this.CreateAdmin();
 
@@ -47,27 +58,13 @@ export class AddAdminComponent implements OnInit , AfterViewInit{
 
   ngAfterViewInit()
   {
-    this.userService.GetUserDetail(this.authService.decodedToken.nameid)
-    .subscribe(
-      data=>
-      {
-        console.log(data);
-        if(this.authService.decodedToken?.role.length==4)
-        {
-          this.currentCity = "";
-        }
-        else
-        {
-          this.currentCity = data['city']
-        }
-        
-      }
-    )
+    
+      
   }
 
   createAdminForm : FormGroup; 
-  currentCity
-  currentBranch
+ 
+  currentCity: string
   
   user : User ={} as User;
 

@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Dashboard } from '../_models/Dashboard';
+import { AuthService } from '../_services/auth.service';
 import { DashboardService } from '../_services/dashboard.service';
+import { UserService } from '../_services/user.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,18 +12,43 @@ import { DashboardService } from '../_services/dashboard.service';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private dashService : DashboardService,
+  constructor(private dashService : DashboardService, 
+    public authService : AuthService,
+     private userService : UserService,
     private snackbar : MatSnackBar) { }
 
+
+  Branch
+  BranchCity
+  currentUser
   ngOnInit() {
-    this.GetTodaysData();
+    
+    this.userService.GetCityList().
+      subscribe(
+        data=> {this.BranchCity = data},
+        error=>{
+          console.log(error);
+        }
+      )
+    
+    if(this.authService.decodedToken?.role.length<4)
+    {
+      this.currentUser =JSON.parse(localStorage.getItem('user'))
+      this.Branch = this.currentUser.city
+    }
+    else
+    {
+      this.Branch = "ALL"
+    }
+
+    this.GetTodaysData()
+   
   }
 
   DashData :Dashboard={} as Dashboard;
   GetTodaysData()
   {
-    
-    this.dashService.GetTodaysDetails()
+    this.dashService.GetTodaysDetails(this.Branch)
     .subscribe(
       data=>
       {
@@ -35,6 +62,4 @@ export class DashboardComponent implements OnInit {
       }
     )
   }
-  
-
 }

@@ -10,9 +10,10 @@ export class DashboardService {
 
 constructor(private http: HttpClient) { }
 baseUrl = environment.apiUrl + 'driver/'; //http://localhost:5000/api/driver/
-  GetTodaysDetails()
+  GetTodaysDetails(branch:string)
   {
-    return this.http.get<Dashboard>(this.baseUrl+'TodayData')
+    console.log(branch)
+    return this.http.get<Dashboard>(this.baseUrl+'GetDashData/'+branch)
   }
 
 }

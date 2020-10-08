@@ -30,5 +30,8 @@
         "snacker",
         "tabindex",
         "topbar"
+    ],
+    "cSpell.ignoreWords": [
+        "selectpicker"
     ]
 }

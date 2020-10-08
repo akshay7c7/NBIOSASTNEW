@@ -86,6 +86,11 @@ baseUrl = environment.apiUrl + 'driver/'; //http://localhost:5000/api/driver/
     return this.http.delete(this.baseUrl + 'DeleteDriver/'+id);
   }
 
+  GetDriverCityList()
+  {
+    return this.http.get(this.baseUrl + 'getDrivercitylist')
+  }
+
   
  
 }

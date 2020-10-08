@@ -35,9 +35,10 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 20];
 
-  user : User[];
+  driver : any;
 
   driverParams : any ={};
+  currentUser : User = {} as User;
 
   
   
@@ -57,16 +58,34 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
   
   fff:any
   ngOnInit() {
-    this.userService.GetBranchAdminsDetails()
+    this.driverService.GetDriverCityList()
     .subscribe(
       data=>
       { this.fff = data
-        this.user = this.fff;
+        this.driver = this.fff;
+      },
+      error=>
+      {
+        console.log(error)
       }
     )
+
     this.EmptyData=false;
-    this.driverParams.status="BOTH";
-    this.driverParams.branch="ALL";
+
+    if(this.authService.decodedToken?.role.length<4)
+    {
+      console.log('here')
+        this.currentUser = JSON.parse(localStorage.getItem('user'))
+        console.log(this.currentUser)
+        this.driverParams.branch= this.currentUser.city
+        this.driverParams.status= "BOTH";
+    }
+    else
+    {
+        this.driverParams.status="BOTH";
+        this.driverParams.branch="ALL";
+    }
+   
   }
 
   ngAfterViewInit(): void {

@@ -95,6 +95,7 @@ namespace NBI.API.Controllers
             
         }
 
+
         [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
         [HttpGet("getAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] UserParams userParams)

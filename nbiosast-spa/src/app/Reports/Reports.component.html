@@ -19,9 +19,9 @@
     </div>
     <div class="form-group col-md-3 ml-4 mt-4">
       <label for="inputState">Select Branch</label>
-      <select [(ngModel)]="driverParams.branch" class="selectpicker ml-4 btn-primary" (change)="loadUsers()" data-style="btn-primary">
+      <select [(ngModel)]="driverParams.branch" class="selectpicker ml-4 btn-primary" [disabled]="this.authService.decodedToken?.role.length<4" (change)="loadUsers()" data-style="btn-primary">
         <option selected value="ALL">All Branch</option>
-        <option *ngFor="let item of user"  [value]="item.city">{{item.city}}</option>
+        <option *ngFor="let item of driver"  [value]="item.city">{{item}}</option>
       </select>
     </div>
   </div>
