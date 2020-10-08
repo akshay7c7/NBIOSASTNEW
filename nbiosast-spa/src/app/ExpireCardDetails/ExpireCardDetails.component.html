@@ -1,16 +1,18 @@
 <div  class="container-fluid">
-<div class="mat-elevation-z8">
-  <div>
-  <div class="form-row">
-    <div class="form-group col-md-3">
+  <div class="mat-elevation-z8">
+    <div>
       <mat-form-field class="d-none d-sm-inline-block search-form-field ml-5" floatLabel="never">
         <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
         <button mat-button matSuffix mat-icon-button area-label="Clear">
         <mat-icon *ngIf="searchKey" (click)="ClearIt()">close</mat-icon></button>
       </mat-form-field>
+     
+        <select [(ngModel)]="driverParams.branch" class="selectpicker ml-4 btn-primary" [disabled]="this.authService.decodedToken?.role.length<4" (change)="loadUsers()" data-style="btn-primary">
+          <option selected value="ALL">All Branch</option>
+          <option *ngFor="let item of cityList"  [value]="item">{{item}}</option>
+        </select>
+
     </div>
-  </div>
-  </div>
   <mat-table [dataSource] = "Driver">
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef>Driver Id</mat-header-cell>

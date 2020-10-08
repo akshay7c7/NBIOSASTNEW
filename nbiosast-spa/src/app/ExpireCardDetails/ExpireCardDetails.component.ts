@@ -28,21 +28,10 @@ export class ExpireCardDetailsComponent implements OnInit  , AfterViewInit {
   imageSrc;
   searchKey;
   MatAny:any;
-
   length = 0;
   pageIndex=0;
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 20];
-
-  addDriverMode = false;
-
-  user : User[];
-
-  driverParams : any ={};
-
-  
-  
-
   paginateData : Pagination ={} as Pagination;
 
   constructor(private userService : UserService,
@@ -55,16 +44,46 @@ export class ExpireCardDetailsComponent implements OnInit  , AfterViewInit {
               private dialog : MatDialog,
               private driverService : DriverService
               ) { }
-  
+
+
+
+  driverParams : any ={};
+  currentUser:User ={} as User
+  cityList: string[] = []
   fff:any
+  ffff:any
+
+
   ngOnInit() {
-    this.userService.GetBranchAdminsDetails()
+    this.driverService.GetDriverCityList()
     .subscribe(
       data=>
-      { this.fff = data
-        this.user = this.fff;
+      { 
+        this.ffff = data
+        this.cityList = this.ffff
+        console.log(this.cityList)
+      },
+      error=>
+      {
+        console.log(error)
       }
     )
+
+    if(this.authService.decodedToken?.role.length<4)
+    {
+        this.currentUser = JSON.parse(localStorage.getItem('user'))
+        console.log(this.currentUser)
+        this.driverParams.branch= this.currentUser.city
+        console.log(this.driverParams.branch)
+        this.driverParams.status= "Approved";
+    }
+    else
+    {
+        this.driverParams.status="Approved";
+        this.driverParams.branch="ALL";
+    }
+
+    
     this.EmptyData=false;
     
 
@@ -75,9 +94,13 @@ export class ExpireCardDetailsComponent implements OnInit  , AfterViewInit {
     this.loadUsers();
   }
 
+
+
+
+
   loadUsers()
   {
-    this.driverService.getDrivers(this.paginateData.currentPage,this.paginateData.itemsPerPage, null, "YES")
+    this.driverService.getDrivers(this.paginateData.currentPage,this.paginateData.itemsPerPage, this.driverParams, "YES")
     .subscribe
     (
       data=>{
@@ -105,7 +128,6 @@ export class ExpireCardDetailsComponent implements OnInit  , AfterViewInit {
 
   pageChanged(event: number):void
   {
-    //console.log(event);
     this.paginateData.currentPage = event['pageIndex']+1;
     this.paginateData.itemsPerPage = event['pageSize'];
     this.loadUsers();

@@ -14,6 +14,7 @@ import { ReportsComponent } from 'src/app/Reports/Reports.component';
 import { AddAdminComponent } from 'src/app/AddAdmin/AddAdmin.component';
 import { EditDriverResolver } from 'src/app/_resolvers/EditDriverResolver';
 import { ShowAdminDetailsComponent } from 'src/app/ShowAdminDetails/ShowAdminDetails.component';
+import { BranchDetailsResolver } from 'src/app/_resolvers/BranchDetailsResolver';
 
 export const appRoutes : Routes = [
 
@@ -29,7 +30,7 @@ export const appRoutes : Routes = [
             {path : 'dashboard' , component : DashboardComponent},
             {path : 'addadmin' , component : AddAdminComponent ,data: {roles: ['SuperAdmin','BranchAdmin']}},
             {path : 'showadmins', component: ShowAdminDetailsComponent},
-            {path : 'branchdetails' , component : BranchDetailsShowComponent } ,
+            {path : 'branchdetails' , component : BranchDetailsShowComponent, resolve:{branchDetails : BranchDetailsResolver },data: {roles: ['SuperAdmin']}},
             {path : 'driverdetails' , component : DriverDetailsShowComponent } ,
             {path : 'adddriverdetails' , component : AddDriverDetailsComponent},
             {path : 'expirecards' , component : ExpireCardDetailsComponent},
