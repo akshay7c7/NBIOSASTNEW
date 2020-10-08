@@ -35,8 +35,6 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 20];
 
-  addDriverMode = false;
-
   user : User[];
 
   driverParams : any ={};
@@ -106,7 +104,6 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
 
   pageChanged(event: number):void
   {
-    //console.log(event);
     this.paginateData.currentPage = event['pageIndex']+1;
     this.paginateData.itemsPerPage = event['pageSize'];
     this.loadUsers();

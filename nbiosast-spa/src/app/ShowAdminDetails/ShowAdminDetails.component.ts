@@ -4,28 +4,32 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { City } from 'src/app/_services/cities';
+import { User } from '../_models/user';
+import { AuthService } from '../_services/auth.service';
 import { DialogService } from '../_services/dialog.service';
 import { UserService } from '../_services/user.service';
 
 
 @Component({
-  selector: 'app-ShowAccountAdmin',
-  templateUrl: './ShowAccountAdmin.component.html',
-  styleUrls: ['../app.component.css']
+  selector: 'app-ShowAdminDetails',
+  templateUrl: './ShowAdminDetails.component.html',
+  styleUrls: ['./ShowAdminDetails.component.scss']
 })
-export class ShowAccountAdminComponent implements OnInit, AfterViewInit {
+export class ShowAdminDetailsComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator : MatPaginator;
-  
   DisplayedColumns =["id","nameAdmin", "userName", "email", "action"];
   showLoading = true;
   UserAdmin : MatTableDataSource<any>
   searchKey;
-  userParams : any ={}
-
   EmptyData=false;
+  fff:any
+  BranchCity : string[];
+
+  AdminDetails:any={};
   
     constructor(private userService : UserService,
+                public authService : AuthService,
                 private snacker : MatSnackBar, 
                 private route : ActivatedRoute, 
                 private router : Router,
@@ -35,20 +39,29 @@ export class ShowAccountAdminComponent implements OnInit, AfterViewInit {
                 ) { }
   
     ngOnInit() {
-      this.userParams.userType = "Branch";
+      this.userService.GetCityList()
+    .subscribe(
+      data=>
+      { this.fff = data
+        this.BranchCity = this.fff;
+      }
+    )
+    this.EmptyData=false;
+      this.AdminDetails.type = "All"
+      this.AdminDetails.Branch = "ALL"
       this.loadUsers();
     }
   
     
   
     ngAfterViewInit(): void {
-      //this.UserAdmin.paginator = this.paginator;
+      
       
     }
  
     loadUsers()
     {
-      this.userService.GetAllUsers(this.userParams.userType)
+      this.userService.GetAllUsers(this.AdminDetails)
       .subscribe(
         data =>{
               if(data.body.length == 0)
@@ -76,9 +89,9 @@ export class ShowAccountAdminComponent implements OnInit, AfterViewInit {
     
 
   
-    AddAccountAdmin()
+    AddAdmin()
     {
-      this.router.navigate(['/addaccount'])
+      this.router.navigate(['/addadmin'])
     }
 
   
@@ -119,3 +132,4 @@ export class ShowAccountAdminComponent implements OnInit, AfterViewInit {
     }
   }
   
+

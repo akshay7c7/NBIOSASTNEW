@@ -83,45 +83,75 @@ namespace NBI.API.Controllers
         }
 
         [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
+        [HttpGet("getcitylist", Name = "GetCity")]    
+        public async Task<IActionResult> GetCities(int id)
+        {
+            var listOfCities = await _context.Users.Select(x=>x.City).ToListAsync();
+            if(listOfCities!=null)
+            {
+                return Ok(listOfCities);
+            }
+            return NotFound();
+            
+        }
+
+        [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
         [HttpGet("getAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] UserParams userParams)
         {
          
-         var userList = await (from user in _context.Users
-                                  orderby user.UserName
-                                  select new  
-                                  {
-                                      Id = user.Id,
-                                      UserName = user.UserName,
-                                      Email = user.Email,
-                                      Name = user.Name,
-                                      Roles = (from userRole in user.UserRoles
-                                               join role in _context.Roles
-                                               on userRole.RoleId
-                                               equals role.Id
-                                               select role.Name).Count()
-                                  }).ToListAsync();
+            var userList = await (from user in _context.Users
+                                    orderby user.UserName
+                                    select new  
+                                    {
+                                        Id = user.Id,
+                                        UserName = user.UserName,
+                                        Email = user.Email,
+                                        Name = user.Name,
+                                        City = user.City,
+                                        Roles = (from userRole in user.UserRoles
+                                                join role in _context.Roles
+                                                on userRole.RoleId
+                                                equals role.Id
+                                                select role.Name).Count()
+                                    }).ToListAsync();
 
-                                  
-        if(userParams.UserType=="Account")
-        {
-            var users = userList.Where(x=>x.Roles==3).ToList(); 
-            return Ok(users);
-        }
-        
-        if(userParams.UserType=="Branch")
-        {
-            var users = userList.Where(x=>x.Roles==2).ToList(); 
-            return Ok(users);
-        }
 
-        if(userParams.UserType=="Driver")
-        {
-            var users = userList.Where(x=>x.Roles==1).ToList(); 
+
+            var users = userList.ToList();
+            if(userParams.UserType=="ALL")
+            {
+                users = userList.ToList();
+            }
+            if(userParams.Branch=="ALL")
+            {
+                users = userList.ToList();
+            }      
+            if(userParams.Branch !=null && userParams.Branch!="ALL") 
+            {
+                users = users.Where(x=>x.City==userParams.Branch).ToList();
+            }            
+            if(userParams.UserType=="4")
+            {
+                users = userList.Where(x=>x.Roles==4).ToList(); 
+            }
+
+            if(userParams.UserType=="3")
+            {
+                users = userList.Where(x=>x.Roles==3).ToList(); 
+            }
+            
+            if(userParams.UserType=="2")
+            {
+                users = userList.Where(x=>x.Roles==2).ToList(); 
+            }
+
+            if(userParams.UserType=="1")
+            {
+                users = userList.Where(x=>x.Roles==1).ToList(); 
+            }
+            
             return Ok(users);
-        }
-        
-         return BadRequest("Error Occurred");
         }
 
         [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]

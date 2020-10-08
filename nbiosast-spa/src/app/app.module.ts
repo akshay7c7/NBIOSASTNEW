@@ -35,11 +35,11 @@ import { DriverDetailsEditComponent } from './DriverDetailsShow/DriverDetailsEdi
 import { SpinnerComponent } from './Spinner/Spinner.component';
 import { SpinnerOverlayComponent } from './SpinnerOverlay/SpinnerOverlay.component';
 import { ReportsComponent } from './Reports/Reports.component';
-import { ShowAccountAdminComponent } from './ShowAccountAdmin/ShowAccountAdmin.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { AddAdminComponent } from './AddAdmin/AddAdmin.component';
 import { EditDriverResolver } from './_resolvers/EditDriverResolver';
+import { ShowAdminDetailsComponent } from './ShowAdminDetails/ShowAdminDetails.component';
 
 
 export function tokenGetter() {
@@ -47,7 +47,7 @@ export function tokenGetter() {
 }
 
 @NgModule({
-  declarations: [																							
+  declarations: [																								
     AppComponent,
       DashboardComponent,
       SidebarComponent,
@@ -68,8 +68,8 @@ export function tokenGetter() {
       SpinnerComponent,
       SpinnerOverlayComponent,
       ReportsComponent,
-      ShowAccountAdminComponent,
-      AddAdminComponent
+      AddAdminComponent,
+      ShowAdminDetailsComponent
    ],
   imports: [
     BrowserModule,

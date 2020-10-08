@@ -2,7 +2,7 @@
   <div class="mat-elevation-z8">
     <div>
       <div class="form-row">
-        <div><a class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mt-3 ml-1" (click)="AddAccountAdmin()"><i class="fas fa-download fa-sm text-white-50"></i>Assign a Branch</a></div>
+        <div><a class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mt-3 ml-1" (click)="AddAdmin()"><i class="fas fa-download fa-sm text-white-50"></i>Create a Admin</a></div>
         <div class="form-group col-md-3">
           <mat-form-field class="d-none d-sm-inline-block search-form-field ml-5" floatLabel="never">
             <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
@@ -10,13 +10,24 @@
             <mat-icon *ngIf="searchKey" (click)="ClearIt()">close</mat-icon></button>
           </mat-form-field>
         </div>
-        <div class="form-group col-md-3 ml-5 mt-1">
-          <label for="inputState">Select Admin Type</label>
-          <select id="inputState" name= "status" [(ngModel)]="userParams.userType" (change)="loadUsers()" class="form-control">
-            <option selected value="BOTH" >ALL</option>
-            <option value="Account">Account Admin</option>
-            <option value="Branch">Branch Admin</option>
-            <option value="Driver">Driver Admin</option>
+        <div class="form-group col-md-3 ml-4 mt-4">
+          <select *ngIf="this.authService.decodedToken?.role.length==4" (change)="loadUsers()" [(ngModel)]="AdminDetails.type" class="selectpicker ml-4 btn-primary" data-style="btn-primary">
+            <option value=All>All Admins</option>
+            <option value=3>Branch Admin</option>
+            <option value=2>Account Admin</option>
+            <option value=1>Driver Admin</option>
+            <option value=4>Super Admin</option>
+          </select>
+          <select *ngIf="this.authService.decodedToken?.role.length==3" (change)="loadUsers()" [(ngModel)]="AdminDetails.type"  class="selectpicker ml-4 btn-primary" data-style="btn-primary">
+            <option value=3>Branch Admin</option>
+            <option value=2>Account Admin</option>
+            <option value=1>Driver Admin</option>
+          </select>
+        </div>  
+        <div class="form-group col-md-3 ml-3 mt-4">
+          <select (change)="loadUsers()" [(ngModel)]="AdminDetails.Branch" class="selectpicker ml-4 btn-primary"  data-style="btn-primary">
+            <option selected value="ALL">All Branch</option>
+            <option *ngFor="let item of BranchCity"  [value]="item">{{item}}</option>
           </select>
         </div>
       </div>
@@ -30,7 +41,7 @@
         <mat-header-cell *matHeaderCellDef>Full Name</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
       </ng-container>
-      <ng-container matColumnDef="email">
+      <ng-container class="mr-2" matColumnDef="email">
         <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
       </ng-container>
@@ -38,7 +49,7 @@
         <mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.userName}}</mat-cell>
       </ng-container>
-      <ng-container matColumnDef="action">
+      <ng-container class="ml-4" matColumnDef="action">
         <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
         <mat-cell *matCellDef="let element">
           <button mat-icon-button color="warn" (click)="DeleteUser(element)"><mat-icon>delete_outline</mat-icon></button>

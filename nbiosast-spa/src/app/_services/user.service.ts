@@ -22,10 +22,17 @@ baseUrl = environment.apiUrl + 'users/';
       return this.http.get<User>(this.baseUrl+id);
     }
 
-    GetAllUsers(userType)
+    GetCityList()
+    {
+      return this.http.get(this.baseUrl+"getcitylist")
+    }
+
+    GetAllUsers(AdminDetails)
     {
       let params= new HttpParams();
-      params = params.append('userType',userType)
+      params = params.append('userType',AdminDetails.type)
+      params = params.append('branch',AdminDetails.Branch)
+      console.log(params)
       return this.http.get<User[]>(this.baseUrl+"getAllUsers", {observe:'response',params})
       .pipe(
         map( response =>{

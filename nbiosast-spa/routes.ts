@@ -11,9 +11,9 @@ import { EditResolver } from 'src/app/_resolvers/EditResolver';
 import { DriverDetailsShowComponent } from 'src/app/DriverDetailsShow/DriverDetailsShow.component';
 import { DriverDetailsEditComponent } from 'src/app/DriverDetailsShow/DriverDetailsEdit/DriverDetailsEdit.component';
 import { ReportsComponent } from 'src/app/Reports/Reports.component';
-import { ShowAccountAdminComponent } from 'src/app/ShowAccountAdmin/ShowAccountAdmin.component';
 import { AddAdminComponent } from 'src/app/AddAdmin/AddAdmin.component';
 import { EditDriverResolver } from 'src/app/_resolvers/EditDriverResolver';
+import { ShowAdminDetailsComponent } from 'src/app/ShowAdminDetails/ShowAdminDetails.component';
 
 export const appRoutes : Routes = [
 
@@ -28,7 +28,7 @@ export const appRoutes : Routes = [
            
             {path : 'dashboard' , component : DashboardComponent},
             {path : 'addadmin' , component : AddAdminComponent ,data: {roles: ['SuperAdmin','BranchAdmin']}},
-            {path : 'showAdmin', component: ShowAccountAdminComponent},
+            {path : 'showadmins', component: ShowAdminDetailsComponent},
             {path : 'branchdetails' , component : BranchDetailsShowComponent } ,
             {path : 'driverdetails' , component : DriverDetailsShowComponent } ,
             {path : 'adddriverdetails' , component : AddDriverDetailsComponent},
