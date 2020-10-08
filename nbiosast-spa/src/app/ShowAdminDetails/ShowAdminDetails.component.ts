@@ -45,6 +45,7 @@ export class ShowAdminDetailsComponent implements OnInit, AfterViewInit {
       data=>
       { this.fff = data
         this.BranchCity = this.fff;
+        console.log(this.BranchCity)
       }
     )
     this.EmptyData=false;

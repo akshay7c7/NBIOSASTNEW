@@ -352,9 +352,10 @@ namespace NBI.API.Controllers
 
         
         [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
-        [HttpGet("getDrivercitylist")]    
-        public async Task<IActionResult> GetCitiesOfDriver(int id)
+        [HttpGet("GetDrivercitylist")]    
+        public async Task<IActionResult> GetDrivercitylist()
         {
+            System.Console.WriteLine("AAYA");
             var listOfCities = await _context.Drivers.Select(x=>x.BranchVisited).ToListAsync();
             if(listOfCities!=null)
             {

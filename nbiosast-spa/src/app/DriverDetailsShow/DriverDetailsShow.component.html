@@ -7,6 +7,12 @@
         <button mat-button matSuffix mat-icon-button area-label="Clear">
         <mat-icon *ngIf="searchKey" (click)="ClearIt()">close</mat-icon></button>
       </mat-form-field>
+     
+        <select [(ngModel)]="driverParams.branch" class="selectpicker ml-4 btn-primary" [disabled]="this.authService.decodedToken?.role.length<4" (change)="loadUsers()" data-style="btn-primary">
+          <option selected value="ALL">All Branch</option>
+          <option *ngFor="let item of cityList"  [value]="item">{{item}}</option>
+        </select>
+
     </div>
     <mat-table [dataSource] = "Driver" >
       <ng-container matColumnDef="id">

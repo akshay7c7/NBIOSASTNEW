@@ -84,7 +84,7 @@ namespace NBI.API.Controllers
 
         [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
         [HttpGet("getcitylist", Name = "GetCity")]    
-        public async Task<IActionResult> GetCities(int id)
+        public async Task<IActionResult> GetCities()
         {
             var listOfCities = await _context.Users.Select(x=>x.City).ToListAsync();
             if(listOfCities!=null)

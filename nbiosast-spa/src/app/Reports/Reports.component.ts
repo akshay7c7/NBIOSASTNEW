@@ -35,10 +35,11 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 20];
 
-  driver : any;
+  cityList : string[];
 
   driverParams : any ={};
-  currentUser : User = {} as User;
+  currentUser
+  fff:any
 
   
   
@@ -56,13 +57,15 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
               private driverService : DriverService
               ) { }
   
-  fff:any
+ 
   ngOnInit() {
     this.driverService.GetDriverCityList()
     .subscribe(
       data=>
-      { this.fff = data
-        this.driver = this.fff;
+      { 
+        this.fff = data
+        this.cityList = this.fff
+        
       },
       error=>
       {
@@ -74,7 +77,6 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
 
     if(this.authService.decodedToken?.role.length<4)
     {
-      console.log('here')
         this.currentUser = JSON.parse(localStorage.getItem('user'))
         console.log(this.currentUser)
         this.driverParams.branch= this.currentUser.city

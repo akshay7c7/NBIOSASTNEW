@@ -12,6 +12,7 @@ import { LicenseComponentComponent } from '../LicenseComponent/LicenseComponent.
 import { AuthService } from '../_services/auth.service';
 import { DriverService } from '../_services/driver.service';
 import { Pagination } from '../_models/Pagination';
+import { User } from '../_models/user';
 
 @Component({
   selector: 'app-DriverDetailsShow',
@@ -51,7 +52,37 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
               private driverService : DriverService
               ) { }
   
+
+  currentUser : User = {} as User
+  branch
+  fff
+  cityList: string[] = []
+  driverParams:any = {}
   ngOnInit() {
+    this.driverService.GetDriverCityList()
+    .subscribe(
+      data=>
+      { 
+        this.fff = data
+        this.cityList = this.fff
+      },
+      error=>
+      {
+        console.log(error)
+      }
+    )
+    if(this.authService.decodedToken?.role.length<4)
+    {
+        this.currentUser = JSON.parse(localStorage.getItem('user'))
+        console.log(this.currentUser)
+        this.driverParams.branch= this.currentUser.city
+        this.driverParams.status= "BOTH";
+    }
+    else
+    {
+        this.driverParams.status="BOTH";
+        this.driverParams.branch="ALL";
+    }
   }
 
   ngAfterViewInit(): void {
@@ -61,7 +92,8 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
   
   loadUsers()
   {
-    this.driverService.getDrivers(this.paginateData.currentPage,this.paginateData.itemsPerPage)
+    this.driverParams.status="BOTH";
+    this.driverService.getDrivers(this.paginateData.currentPage,this.paginateData.itemsPerPage, this.driverParams)
     .subscribe
     (
       data=>{
@@ -74,11 +106,9 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
           this.EmptyData=false;
         }
         this.pageIndex = data.pagination.currentPage -1;
-        //console.log(data.result);
         this.MatAny =  data.result;
         this.Driver = new MatTableDataSource<any>(this.MatAny);
         this.showLoading = false;
-        //this.Driver.paginator = this.paginator;
       }
     )
 

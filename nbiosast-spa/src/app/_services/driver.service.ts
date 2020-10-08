@@ -88,8 +88,10 @@ baseUrl = environment.apiUrl + 'driver/'; //http://localhost:5000/api/driver/
 
   GetDriverCityList()
   {
-    return this.http.get(this.baseUrl + 'getDrivercitylist')
+    console.log("sent")
+    return this.http.get(this.baseUrl+"GetDrivercitylist")
   }
+
 
   
  
