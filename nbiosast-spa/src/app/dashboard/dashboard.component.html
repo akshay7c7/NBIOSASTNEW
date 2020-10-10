@@ -2,7 +2,7 @@
   <div class="col-xl-3 col-md-4 mb-4">
     <div class="row">
       <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-    <select (change)="GetTodaysData()" style="position: inherit;" [(ngModel)]="Branch" [disabled]="this.authService.decodedToken?.role.length<4" class="selectpicker btn-primary ml-5" data-style="btn-primary">
+    <select (change)="GetTodaysData()" style="position: inherit;" [(ngModel)]="Branch" [disabled]="this.authService.decodedToken?.role.length<4 || authService.decodedToken?.role=='DriverAdmin'" class="selectpicker btn-primary ml-5" data-style="btn-primary">
       <option selected value="ALL">All Branch</option>
       <option *ngFor="let item of BranchCity"  [value]="item">{{item}}</option>
     </select>

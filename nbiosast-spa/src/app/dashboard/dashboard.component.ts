@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
         }
       )
     
-    if(this.authService.decodedToken?.role.length<4)
+    if(this.authService.decodedToken?.role.length<4 || this.authService.decodedToken?.role=='DriverAdmin')
     {
       this.currentUser =JSON.parse(localStorage.getItem('user'))
       this.Branch = this.currentUser.city

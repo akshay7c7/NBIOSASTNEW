@@ -117,7 +117,7 @@ export class AddAdminComponent implements OnInit , AfterViewInit{
         this.user = Object.assign({},this.createAdminForm.value)
         this.authService.registerAdmin(this.AdminValue,this.user)
         .subscribe(
-          ()=>{this.snackbar.open('Account Admin Created Successfully','',{duration : 1000});
+          ()=>{this.snackbar.open(this.AdminValue + ' created Successfully','',{duration : 1000});
                 this.createAdminForm.reset();
               this.ngAfterViewInit()},
           error =>{

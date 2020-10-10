@@ -54,45 +54,51 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
   
 
   currentUser : User = {} as User
-  branch
   fff
   cityList: string[] = []
   driverParams:any = {}
+
+  
   ngOnInit() {
-    this.driverService.GetDriverCityList()
-    .subscribe(
-      data=>
-      { 
-        this.fff = data
-        this.cityList = this.fff
-      },
-      error=>
-      {
-        console.log(error)
-      }
-    )
+   
     if(this.authService.decodedToken?.role.length<4)
     {
+        console.log("BranchAdmin")
         this.currentUser = JSON.parse(localStorage.getItem('user'))
-        console.log(this.currentUser)
         this.driverParams.branch= this.currentUser.city
-        this.driverParams.status= "BOTH";
+        console.log(this.driverParams.branch)
     }
     else
     {
-        this.driverParams.status="BOTH";
+      this.driverService.GetDriverCityList()
+      .subscribe(
+        data=>
+        { 
+          this.fff = data
+          this.cityList = this.fff
+        },
+        error=>
+        {
+          console.log(error)
+        }
+      )
+      console.log("SuperAdmin")
+        //this.driverParams.status="BOTH";
         this.driverParams.branch="ALL";
     }
+
+    this.loadUsers();
   }
 
   ngAfterViewInit(): void {
-    this.loadUsers();
+    
   }
 
   
   loadUsers()
   {
     this.driverParams.status="BOTH";
+    console.log(this.driverParams)
     this.driverService.getDrivers(this.paginateData.currentPage,this.paginateData.itemsPerPage, this.driverParams)
     .subscribe
     (

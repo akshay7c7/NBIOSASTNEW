@@ -75,7 +75,7 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
 
     this.EmptyData=false;
 
-    if(this.authService.decodedToken?.role.length<4)
+    if(this.authService.decodedToken?.role.length<4 || this.authService.decodedToken?.role=='DriverAdmin')
     {
         this.currentUser = JSON.parse(localStorage.getItem('user'))
         console.log(this.currentUser)

@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MoreLinq;
 using NBI.API.Data;
 using NBI.API.Dtos;
 using NBI.API.Models;
@@ -355,12 +356,18 @@ namespace NBI.API.Controllers
         [HttpGet("GetDrivercitylist")]    
         public async Task<IActionResult> GetDrivercitylist()
         {
-            System.Console.WriteLine("AAYA");
-            var listOfCities = await _context.Drivers.Select(x=>x.BranchVisited).ToListAsync();
-            if(listOfCities!=null)
+            
+            var drivers = await _context.Drivers.ToListAsync();
+            if(drivers!=null)
             {
-                return Ok(listOfCities);
+                var listOfCities =drivers.Select(x=>x.BranchVisited).Distinct();
+                 if(listOfCities!=null)
+                {
+                    return Ok(listOfCities);
+                }
             }
+            
+           
             return NotFound();
             
         }

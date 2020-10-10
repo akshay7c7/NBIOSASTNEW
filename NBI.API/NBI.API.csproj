@@ -15,5 +15,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.4"/>
     <PackageReference Include="twilio" Version="5.46.2"/>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.4"/>
+    <PackageReference Include="morelinq" Version="3.1.1"/>
   </ItemGroup>
 </Project>

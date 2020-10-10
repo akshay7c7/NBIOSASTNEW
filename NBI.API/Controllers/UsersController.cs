@@ -86,11 +86,16 @@ namespace NBI.API.Controllers
         [HttpGet("getcitylist", Name = "GetCity")]    
         public async Task<IActionResult> GetCities()
         {
-            var listOfCities = await _context.Users.Select(x=>x.City).ToListAsync();
-            if(listOfCities!=null)
+            var users = await _context.Users.ToListAsync();
+            if(users!=null)
             {
-                return Ok(listOfCities);
+                var listOfCities = users.Select(x=>x.City).Distinct();
+                if(listOfCities!=null)
+                {
+                    return Ok(listOfCities);
+                }
             }
+            
             return NotFound();
             
         }

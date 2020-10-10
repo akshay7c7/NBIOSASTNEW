@@ -8,9 +8,8 @@
         <mat-icon *ngIf="searchKey" (click)="ClearIt()">close</mat-icon></button>
       </mat-form-field>
      
-        <select [(ngModel)]="driverParams.branch" class="selectpicker ml-4 btn-primary" [disabled]="this.authService.decodedToken?.role.length<4" (change)="loadUsers()" data-style="btn-primary">
-          <option selected value="ALL">All Branch</option>
-          <option *ngFor="let item of cityList"  [value]="item">{{item}}</option>
+        <select [value]="driverParams.branch"  class="selectpicker ml-4 btn-primary"  (change)="loadUsers()" data-style="btn-primary">
+          <option value="ALL">All Branch</option>
         </select>
 
     </div>
