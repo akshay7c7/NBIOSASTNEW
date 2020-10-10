@@ -15,12 +15,12 @@
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">Certificate No.</label>
-            <input type="text" pattern="\d*" formControlName="CertificateNo" class="form-control" placeholder="Enter Certificate No. here" maxlength="20"
+            <input type="text" pattern="\d*" formControlName="CertificateNo" class="form-control" placeholder="Enter Certificate No. here" maxlength="15"
             [ngClass]="{'is-invalid': createDriverForm.get('CertificateNo').errors && createDriverForm.get('CertificateNo').touched}">
           </div>
           <div class="form-group col-md-4">
             <label for="inputPassword4">License No.</label>
-            <input type="text" pattern="\d*" formControlName="LicenseNo" class="form-control" placeholder="Enter License No. here" maxlength="20"
+            <input type="text" pattern="\d*" formControlName="LicenseNo" class="form-control" placeholder="Enter License No. here" maxlength="18"
             [ngClass]="{'is-invalid': createDriverForm.get('LicenseNo').errors && createDriverForm.get('LicenseNo').touched}">
           </div>
         </div>
@@ -106,7 +106,7 @@
           </div>
           <div class="form-group col-md-12">
             <label for="inputPassword4">Address (license)</label>
-            <input type="text" formControlName="Address" class="form-control"  placeholder="Enter address here" maxlength="200"
+            <input type="text" formControlName="Address" class="form-control"  placeholder="Enter address here" maxlength="150"
             [ngClass]="{'is-invalid': createDriverForm.get('Address').errors && createDriverForm.get('Address').touched}">
             </div>
           </div>

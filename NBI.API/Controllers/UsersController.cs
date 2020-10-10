@@ -105,6 +105,9 @@ namespace NBI.API.Controllers
         [HttpGet("getAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] UserParams userParams)
         {
+            System.Console.WriteLine("##################################################");
+            System.Console.WriteLine(userParams.Branch);
+            System.Console.WriteLine(userParams.UserType);
          
             var userList = await (from user in _context.Users
                                     orderby user.UserName
@@ -126,39 +129,54 @@ namespace NBI.API.Controllers
 
             var users = userList.ToList();
             if(userParams.UserType=="ALL")
-            {
+            { 
                 users = userList.ToList();
             }
             if(userParams.Branch=="ALL")
             {
+               
                 users = userList.ToList();
             }      
             if(userParams.Branch !=null && userParams.Branch!="ALL") 
             {
+               
                 users = users.Where(x=>x.City==userParams.Branch).ToList();
             }            
             if(userParams.UserType=="4")
             {
-                users = userList.Where(x=>x.Roles==4).ToList(); 
+                users = users.Where(x=>x.Roles==4).ToList(); 
             }
 
             if(userParams.UserType=="3")
             {
-                users = userList.Where(x=>x.Roles==3).ToList(); 
+                users = users.Where(x=>x.Roles==3).ToList(); 
             }
             
             if(userParams.UserType=="2")
             {
-                users = userList.Where(x=>x.Roles==2).ToList(); 
+               
+                users = users.Where(x=>x.City==userParams.Branch).ToList();
+               
+                users = users.Where(x=>x.Roles==2).ToList(); 
+                
+                users = users.Where(x=>x.City==userParams.Branch).ToList();
+              
             }
 
             if(userParams.UserType=="1")
             {
-                users = userList.Where(x=>x.Roles==1).ToList(); 
+                System.Console.WriteLine("g");
+                users = users.Where(x=>x.Roles==1).ToList(); 
             }
             
             return Ok(users);
         }
+
+
+
+
+
+
 
         [Authorize(Roles="DriverAdmin,BranchAdmin,AccountAdmin,SuperAdmin")]
         [HttpPut("{id}")]    

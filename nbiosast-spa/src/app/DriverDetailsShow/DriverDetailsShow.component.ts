@@ -61,7 +61,7 @@ export class DriverDetailsShowComponent implements OnInit, AfterViewInit {
   
   ngOnInit() {
    
-    if(this.authService.decodedToken?.role.length<4)
+    if(this.authService.decodedToken?.role.length<4 || this.authService.decodedToken?.role=='DriverAdmin')
     {
         console.log("BranchAdmin")
         this.currentUser = JSON.parse(localStorage.getItem('user'))

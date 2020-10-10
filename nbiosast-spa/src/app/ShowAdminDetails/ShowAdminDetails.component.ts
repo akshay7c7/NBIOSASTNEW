@@ -53,7 +53,7 @@ export class ShowAdminDetailsComponent implements OnInit, AfterViewInit {
     {
       this.currentUser =JSON.parse(localStorage.getItem('user'))
       this.AdminDetails.Branch = this.currentUser.city
-      this.AdminDetails.type =1
+      this.AdminDetails.type = 2
     }
     else{
       this.AdminDetails.type = "All"
