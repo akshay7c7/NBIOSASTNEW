@@ -1,8 +1,10 @@
+
+  
 <div *ngIf="loggedIn()">
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
   <!-- Sidebar - Brand -->
-  <a class="sidebar-brand d-flex align-items-center justify-content-center" [routerLink]="['/dashboard']" routerLinkActive="active" >
+  <a style="padding-top: 0px; padding-bottom: 0px;" class="sidebar-brand d-flex align-items-center justify-content-center" [routerLink]="['/dashboard']" routerLinkActive="active" >
     <div class="sidebar-brand-icon rotate-n-15">
       <i class="fas fa-laugh-wink"></i>
     </div>
@@ -11,44 +13,60 @@
 
   <hr class="sidebar-divider my-0">
 
-  <li class="nav-item active">
-    <a class="nav-link" [routerLink]="['/dashboard']">
+  <li  class="nav-item">
+    <a style="padding-top: 4px; padding-bottom: 4px;" class="nav-link" [routerLink]="['/dashboard']">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span></a>
   </li>
 
-  <hr class="sidebar-divider">
+  
 
   <li *appHasRole = "['SuperAdmin']" class="nav-item">
-    <a class="nav-link" [routerLink]="['/branchdetails']" >
+    <a style="padding-top: 4px; padding-bottom: 4px;" class="nav-link" [routerLink]="['/branchdetails']" >
       <i class="fas fa-fw fa-chart-area"></i>
       <span>Branch Details</span></a>
   </li>
-
-
+ 
   <li *appHasRole = "['SuperAdmin','BranchAdmin']" class="nav-item">
-    <a class="nav-link" [routerLink]="['/showadmins']" >
+    <a  style="padding-top: 4px; padding-bottom: 4px;" class="nav-link" [routerLink]="['/showadmins']" >
       <i class="fas fa-fw fa-chart-area"></i>
       <span>Admin Details</span></a>
   </li>
-
+  
   <li  class="nav-item">
-    <a class="nav-link" [routerLink]="['/driverdetails']" >
+    <a style="padding-top: 4px; padding-bottom: 4px;" class="nav-link" [routerLink]="['/driverdetails']" >
       <i class="fas fa-fw fa-table"></i>
       <span>Driver Details</span></a>
   </li>
-
+  
   <li class="nav-item">
-    <a class="nav-link" [routerLink]="['/expirecards']">
+    <a style="padding-top: 4px; padding-bottom: 4px;" class="nav-link" [routerLink]="['/expirecards']">
       <i class="fas fa-fw fa-table"></i>
       <span>Expire Card Details</span></a>
   </li>
-
+  
  <li class="nav-item">
-  <a class="nav-link" [routerLink]="['/reports']">
+  <a  style="padding-top: 4px; padding-bottom: 4px;" class="nav-link" [routerLink]="['/reports']">
       <i class="fas fa-fw fa-chart-area"></i>
       <span>Reports</span></a>
   </li>
+  
+  <li class="nav-item">
+    <a style="padding-top: 4px; padding-bottom: 4px;"  class="nav-link dropdown-toggle" href="#" id="userDropdown" (click)="showDrop()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-fw fa-user"></i>
+        <span>Profile</span></a>
+    </li>
+    
+  <div *ngIf="showing">
+    <li class="nav-item"> <a [routerLink]="['/editprofile']"  style="padding-top: 2px; padding-bottom: 4px;" class="nav-link ml-2 mb-1" ><i class="fas fa-user fa-sm fa-fw "></i>
+      <span>Edit Profile</span></a></li>
+      
+      <li class="nav-item"> <a [routerLink]="['/editpassword']" style="padding-top: 2px; padding-bottom: 4px;" class="nav-link ml-2 mb-1"><i class="fas fa-edit fa-sm fa-fw "></i>
+        <span>Edit Password</span></a></li>
+        
+        <li class="nav-item"> <a (click)="logout()" style="padding-top: 2px; padding-bottom: 4px;"  class="nav-link ml-2 mb-1" ><i class="fas fa-sign-out-alt fa-sm fa-fw"></i>
+          <span>Logout</span></a></li>
+  </div>
   <hr class="sidebar-divider d-none d-md-block">
 </ul>
 </div>

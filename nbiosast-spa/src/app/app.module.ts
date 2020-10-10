@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
-import { TopbarComponent } from './topbar/topbar.component';
 import { AddDriverDetailsComponent } from './AddDriverDetails/AddDriverDetails.component';
 import { ExpireCardDetailsComponent } from './ExpireCardDetails/ExpireCardDetails.component';
 import { BranchDetailsShowComponent } from './BranchDetailsShow/BranchDetailsShow.component';
@@ -52,7 +51,6 @@ export function tokenGetter() {
       DashboardComponent,
       SidebarComponent,
       FooterComponent,
-      TopbarComponent,
       AddDriverDetailsComponent,
       ExpireCardDetailsComponent,
       BranchDetailsShowComponent,
