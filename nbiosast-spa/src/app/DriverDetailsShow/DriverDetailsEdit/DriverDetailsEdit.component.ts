@@ -136,6 +136,7 @@ export class DriverDetailsEditComponent implements OnInit {
         ()=>{
           this.snackbar.open('Driver details updated Successfully','',{duration : 1000});
           this.ngOnInit();
+          this.router.navigate(['/driverdetails']);
             },
             
         error =>{

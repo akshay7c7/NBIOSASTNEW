@@ -171,7 +171,7 @@ export class AddDriverDetailsComponent implements OnInit {
       .subscribe(
         ()=>{
           this.snackbar.open('Driver details added Successfully','',{duration : 1000});
-         // this.createDriverForm.reset();
+         this.createDriverForm.reset();
             },
             
         error =>{
