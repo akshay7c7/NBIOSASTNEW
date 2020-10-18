@@ -14,21 +14,25 @@ baseUrl = environment.apiUrl + 'users/';
 
     GetBranchAdminsDetails()
     {
+      console.log(this.baseUrl)
     return this.http.get(this.baseUrl +'branchDetails');
     }
 
     GetUserDetail(id):Observable<User>
     {
+      console.log(this.baseUrl)
       return this.http.get<User>(this.baseUrl+id);
     }
 
     GetCityList()
     {
+      console.log(this.baseUrl)
       return this.http.get(this.baseUrl+"getcitylist")
     }
 
     GetAllUsers(AdminDetails)
     {
+      console.log(this.baseUrl)
       let params= new HttpParams();
       params = params.append('userType',AdminDetails.type)
       params = params.append('branch',AdminDetails.Branch)

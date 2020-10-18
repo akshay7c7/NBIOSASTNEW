@@ -13,7 +13,7 @@ import { UserService } from '../_services/user.service';
   styleUrls: ['../app.component.css']
 })
 export class BranchDetailsShowComponent implements OnInit, AfterViewInit {
-
+EmptyData:boolean
 @ViewChild(MatPaginator) paginator : MatPaginator;
 
 DisplayedColumns =["city","count", "nameAdmin", "userName", "email", "action"];
@@ -29,7 +29,7 @@ searchKey;
               private cityService : City,
               private dialog : DialogService
               ) { }
-
+    length = 0;
   ngOnInit() {
     this.route.data
     .subscribe(
@@ -37,6 +37,14 @@ searchKey;
         let array = data['branchDetails'];
         this.branchAdmin = new MatTableDataSource(array);
         this.showLoading = false;
+        this.length = array.length
+        if(this.length==0){
+          this.EmptyData=true;
+        }
+        else
+        {
+          this.EmptyData=false;
+        }
       },
       error=>{
         this.snacker.open(error.error,'',{duration:1000})

@@ -58,35 +58,17 @@ export class AddDriverDetailsComponent implements OnInit {
         PaymentType :['Cash',Validators.required],
         DOB :['',Validators.required],
         TrainingStartDate :['',Validators.required],
-        TrainingEndDate :['',Validators.required],
         TrainingPeriod :['3',Validators.required],
         Document : ['', Validators.required],    
         Photo :['', Validators.required],
         TransPortPhoneNo :['',Validators.required],             
         OneDayDoc: [''],
-        Validity: [''],
-         
-
+        Validity: ['3'],
       }
-      // {
-      //   validators : [this.OneDayDocConditionallyRequired]
-      // }
 
     )
   }
 
-//   OneDayDocConditionallyRequired(formGroup : FormGroup )
-//  {
-//    if(formGroup.get('TrainingPeriod').value == 3)
-//    {
-//      return null
-//    }
-//    else if(formGroup.get('TrainingPeriod').value == 3 && this.selectedOneDayDoc!=null)
-//    {
-//     return null
-//    }
-//     return {fileNotUploaded:true}
-//  }
 
   test1 = true
   invalid = true
@@ -110,6 +92,16 @@ export class AddDriverDetailsComponent implements OnInit {
     }
   }
 
+  trainingEndDate
+  AddYears()
+  {
+    var d = new Date(this.createDriverForm.get('TrainingStartDate').value);
+    var year = d.getFullYear();
+    var month = d.getMonth();
+    var day = d.getDate();
+    this.trainingEndDate = new Date(year + parseInt(this.createDriverForm.get('Validity').value), month, day);
+    console.log(this.datepipe.transform(this.trainingEndDate, 'dd/MM/yyyy'))
+  }
 
   selectedDocument:File;
   selectedOneDayDoc: File;
@@ -138,12 +130,6 @@ export class AddDriverDetailsComponent implements OnInit {
   }
 
 
-  diffDays
-  GetValidity()
-  {
-    var time = new Date(this.createDriverForm.get('TrainingEndDate').value).getTime() - new Date(this.createDriverForm.get('TrainingStartDate').value).getTime();
-    this.diffDays = Math.ceil(time / (365 * 1000 * 3600 * 24)); 
-  }
 
   
   getFileDetails(event)
@@ -152,8 +138,12 @@ export class AddDriverDetailsComponent implements OnInit {
     return filename;
   }
 
+  
+
   SaveDriver()
   {   
+    this.AddYears()
+
       if(this.createDriverForm.valid)
       {
       var formData = new FormData();
@@ -171,17 +161,17 @@ export class AddDriverDetailsComponent implements OnInit {
       formData.append('PaymentType', this.createDriverForm.get('PaymentType').value);
       formData.append('DOB', this.datepipe.transform(this.createDriverForm.get('DOB').value, 'dd/MM/yyyy'));
       formData.append('TrainingStartDate', this.datepipe.transform(this.createDriverForm.get('TrainingStartDate').value, 'dd/MM/yyyy'));
-      formData.append('TrainingEndDate', this.datepipe.transform(this.createDriverForm.get('TrainingEndDate').value, 'dd/MM/yyyy'));
+      formData.append('TrainingEndDate',this.datepipe.transform(this.trainingEndDate, 'dd/MM/yyyy'));
       formData.append('TrainingPeriod', this.createDriverForm.get('TrainingPeriod').value);
       formData.append('BranchVisited', this.user.city);
-      formData.append('Validity', this.diffDays.toString());
+      formData.append('Validity', this.createDriverForm.get('Validity').value);
 
-
+      console.log(...formData)
       this.driverService.SaveDriver(formData)
       .subscribe(
         ()=>{
           this.snackbar.open('Driver details added Successfully','',{duration : 1000});
-          //this.createDriverForm.reset();
+         // this.createDriverForm.reset();
             },
             
         error =>{
@@ -202,7 +192,7 @@ export class AddDriverDetailsComponent implements OnInit {
   Cancel()
   {
     this.createDriverForm.reset();
-    this.router.navigate['/driverdetails'];
+    this.router.navigate(['/driverdetails']);
   }
 
  

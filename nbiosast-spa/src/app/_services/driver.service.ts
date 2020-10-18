@@ -12,7 +12,7 @@ import { PaginatedResult } from '../_models/Pagination';
 export class DriverService {
 
 constructor(private http: HttpClient) { }
-baseUrl = environment.apiUrl + 'driver/'; //http://localhost:5000/api/driver/
+baseUrl = environment.apiUrl + 'driver/'; 
 
 
   SaveDriver(driver : FormData)

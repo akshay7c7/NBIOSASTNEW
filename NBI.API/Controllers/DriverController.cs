@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,6 +32,7 @@ namespace NBI.API.Controllers
         [HttpPost("AddDriver")]
         public async Task<IActionResult> AddDriver([FromForm]DriverCreationDto driverDto)
         {   
+                Console.WriteLine(driverDto.TrainingEndDate);
                 var dataWithoutFiles = _mapper.Map<DriverReturnData>(driverDto);
                 var dataWithoutFilesAdd = _mapper.Map<Driver>(dataWithoutFiles);
                 await _context.AddAsync(dataWithoutFilesAdd);

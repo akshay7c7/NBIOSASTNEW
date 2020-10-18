@@ -1,4 +1,4 @@
-<div class="container-fluid">
+
   <div class="mat-elevation-z8">
     <div>
       <div class="form-row">
@@ -12,7 +12,7 @@
         </div>
         <div class="form-group col-md-3 ml-4 mt-4">
           <select *ngIf="this.authService.decodedToken?.role.length==4" (change)="loadUsers()" [(ngModel)]="AdminDetails.type" class="selectpicker ml-4 btn-primary" data-style="btn-primary">
-            <option value=All>All Admins</option>
+            <option value=ALL>All Admins</option>
             <option value=3>Branch Admin</option>
             <option value=2>Account Admin</option>
             <option value=1>Driver Admin</option>
@@ -72,4 +72,3 @@
     </mat-table>
     <mat-paginator [pageSizeOptions] ="[5, 10, 15, 20]" [pageSize]="5" showFirstLastButtons></mat-paginator>
   </div>
-</div>

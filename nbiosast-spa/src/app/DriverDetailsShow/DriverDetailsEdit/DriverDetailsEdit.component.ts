@@ -54,6 +54,7 @@ export class DriverDetailsEditComponent implements OnInit {
           this.doc = true
         }
         this.GetValidity()
+        this.diffDays = this.driver.validity
       },
       error=>
       {
@@ -108,6 +109,7 @@ export class DriverDetailsEditComponent implements OnInit {
 
   SaveDriver()
   {
+    this.AddYears();
     this.driver.validity = this.diffDays
     
     var formData = new FormData();
@@ -169,11 +171,23 @@ export class DriverDetailsEditComponent implements OnInit {
     }
   }
 
+  trainingEnd
+  AddYears()
+  {
+    var d = new Date(this.driver.trainingStartDate);
+    var year = d.getFullYear();
+    var month = d.getMonth();
+    var day = d.getDate();
+    this.trainingEnd = new Date(year + parseInt(this.diffDays), month, day);
+    this.driver.trainingEndDate = this.trainingEnd
+  }
+
   diffDays
   GetValidity()
   {
     var time = new Date(this.driver.trainingEndDate).getTime() - new Date(this.driver.trainingStartDate).getTime();
     this.diffDays = Math.ceil(time / (365 * 1000 * 3600 * 24)); 
+    console.log(this.diffDays)
   }
 
 }

@@ -13,7 +13,7 @@ import { UserService } from '../_services/user.service';
 @Component({
   selector: 'app-ShowAdminDetails',
   templateUrl: './ShowAdminDetails.component.html',
-  styleUrls: ['./ShowAdminDetails.component.scss']
+  styleUrls: ['../app.component.css']
 })
 export class ShowAdminDetailsComponent implements OnInit, AfterViewInit {
 
@@ -56,7 +56,7 @@ export class ShowAdminDetailsComponent implements OnInit, AfterViewInit {
       this.AdminDetails.type = 2
     }
     else{
-      this.AdminDetails.type = "All"
+      this.AdminDetails.type = "ALL"
       this.AdminDetails.Branch = "ALL"
       
     }

@@ -15,7 +15,7 @@ export class SidebarComponent implements OnInit {
   @ViewChild('drawer') public sidenav: MatDrawer;
   show : any;
   showWhilePrint : any
-  constructor(private authService : AuthService, 
+  constructor(public authService : AuthService, 
     private router : Router, 
               private snackbar : MatSnackBar,
               private sideNav : SideNavService, private dialogService : DialogService) { }

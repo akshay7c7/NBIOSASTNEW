@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { User } from '../_models/user';
 import { AuthService } from '../_services/auth.service';
@@ -14,7 +14,7 @@ import { UserService } from '../_services/user.service';
   templateUrl: './AddAdmin.component.html',
   styleUrls: ['./AddAdmin.component.css']
 })
-export class AddAdminComponent implements OnInit , AfterViewInit{
+export class AddAdminComponent implements OnInit {
 
   myControl = new FormControl();
   city = this.cityService.cities;
@@ -35,12 +35,14 @@ export class AddAdminComponent implements OnInit , AfterViewInit{
     {
       
       this.currentCity = ""
+      this.AdminValue=3;
     }
     else
     {
       this.currentUser =JSON.parse(localStorage.getItem('user'))
       console.log(this.currentUser)
       this.currentCity = this.currentUser.city
+      this.AdminValue=2;
     }
 
     for (var product of this.city)
@@ -56,11 +58,6 @@ export class AddAdminComponent implements OnInit , AfterViewInit{
     );    
   }
 
-  ngAfterViewInit()
-  {
-    
-      
-  }
 
   createAdminForm : FormGroup; 
  
@@ -78,7 +75,7 @@ export class AddAdminComponent implements OnInit , AfterViewInit{
     
   }
 
-  AdminValue=2;
+  AdminValue;
   SelectAdmin(event)
   {
     this.AdminValue = event.target.value;
@@ -114,12 +111,30 @@ export class AddAdminComponent implements OnInit , AfterViewInit{
   {
     if(this.createAdminForm.valid)
     {
+      var admin;
+      if(this.AdminValue == 1)
+      {
+        admin = "Driver"
+      }
+      else if(this.AdminValue == 2)
+      {
+        admin = "Account"
+      }
+      else if(this.AdminValue == 3)
+      {
+        admin = "Branch"
+      }
+      else{
+        admin = "Super"
+      }
+
+      
         this.user = Object.assign({},this.createAdminForm.value)
         this.authService.registerAdmin(this.AdminValue,this.user)
         .subscribe(
-          ()=>{this.snackbar.open(this.AdminValue + ' created Successfully','',{duration : 1000});
+          ()=>{this.snackbar.open(admin + ' admin created Successfully','',{duration : 1000});
                 this.createAdminForm.reset();
-              this.ngAfterViewInit()},
+              },
           error =>{
             console.log(error)
             this.snackbar.open(error.error,'',{duration : 1000})}

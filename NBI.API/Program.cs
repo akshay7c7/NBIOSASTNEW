@@ -38,6 +38,7 @@ namespace NBI.API
             }
 
             host.Run();
+           // CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateWebHostBuilder(string[] args) =>

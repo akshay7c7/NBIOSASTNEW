@@ -1,19 +1,15 @@
 
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../_services/user.service';
-import { Driver } from '../_models/Driver';
-import { MatPaginator } from '@angular/material/paginator';
 import { DialogService } from '../_services/dialog.service';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { LicenseComponentComponent } from '../LicenseComponent/LicenseComponent.component';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../_services/auth.service';
 import { DriverService } from '../_services/driver.service';
 import { Pagination } from '../_models/Pagination';
-import { User } from '../_models/user';
 
 @Component({
   selector: 'app-Reports',
@@ -46,14 +42,7 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
 
   paginateData : Pagination ={} as Pagination;
 
-  constructor(private userService : UserService,
-              private snacker : MatSnackBar, 
-              public authService : AuthService,
-              private route : ActivatedRoute, 
-              private router : Router,
-              private http: HttpClient,
-              private dialogService : DialogService,
-              private dialog : MatDialog,
+  constructor(public authService : AuthService,
               private driverService : DriverService
               ) { }
   
@@ -114,7 +103,7 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
         this.Driver = new MatTableDataSource<any>(this.MatAny);
         this.showLoading = false;
       },
-      error=>
+      ()=>
       {
         this.EmptyData=true;
       }

@@ -1,4 +1,4 @@
-<div  class="container-fluid">
+
   <div class="mat-elevation-z8">
     <div>
       <a class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" (click)="AddDriver()"><i class="fas fa-download fa-sm text-white-50"></i> Add Driver</a>
@@ -10,7 +10,7 @@
      
         <select *ngIf="this.authService.decodedToken?.role.length==4" [(ngModel)]="driverParams.branch"  class="selectpicker ml-4 btn-primary"  (change)="loadUsers()" data-style="btn-primary">
           <option value="ALL">All Branch</option>
-          <option *ngFor="let item of cityList"  value="item">{{item}}</option>
+          <option *ngFor="let item of cityList"  [value]="item">{{item}}</option>
         </select>
         <button *ngIf="this.authService.decodedToken?.role.length<4 || authService.decodedToken?.role=='DriverAdmin'" class="selectpicker ml-4 btn-primary"  (click)="loadUsers()" data-style="btn-primary">{{driverParams.branch}}</button>
 
@@ -63,4 +63,4 @@
     </mat-table>
     <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSizeOptions] ="pageSizeOptions" [pageSize]="pageSize" showFirstLastButtons  (page)="pageChanged($event)"></mat-paginator>
   </div>
-</div>
+

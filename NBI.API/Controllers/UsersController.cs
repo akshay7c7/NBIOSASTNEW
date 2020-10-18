@@ -105,7 +105,7 @@ namespace NBI.API.Controllers
         [HttpGet("getAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] UserParams userParams)
         {
-            System.Console.WriteLine("##################################################");
+            
             System.Console.WriteLine(userParams.Branch);
             System.Console.WriteLine(userParams.UserType);
          
@@ -141,7 +141,11 @@ namespace NBI.API.Controllers
             {
                
                 users = users.Where(x=>x.City==userParams.Branch).ToList();
-            }            
+            }
+            if(userParams.UserType!="ALL") 
+            {
+                users = users.Where(x=>x.Roles==Int32.Parse(userParams.UserType)).ToList();
+            }             
             if(userParams.UserType=="4")
             {
                 users = users.Where(x=>x.Roles==4).ToList(); 
@@ -154,21 +158,14 @@ namespace NBI.API.Controllers
             
             if(userParams.UserType=="2")
             {
-               
-                users = users.Where(x=>x.City==userParams.Branch).ToList();
-               
-                users = users.Where(x=>x.Roles==2).ToList(); 
-                
-                users = users.Where(x=>x.City==userParams.Branch).ToList();
-              
+                users = users.Where(x=>x.Roles==2).ToList();    
             }
 
             if(userParams.UserType=="1")
             {
-                System.Console.WriteLine("g");
                 users = users.Where(x=>x.Roles==1).ToList(); 
             }
-            
+
             return Ok(users);
         }
 

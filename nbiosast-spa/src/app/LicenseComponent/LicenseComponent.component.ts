@@ -3,6 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { Driver } from '../_models/Driver';
+import { DriverService } from '../_services/driver.service';
 
 @Component({
   selector: 'app-LicenseComponent',
@@ -14,6 +15,7 @@ export class LicenseComponentComponent implements OnInit {
   
   constructor(private http : HttpClient, 
     private activatedRoute : ActivatedRoute,
+    private driverServie : DriverService,
     @Inject(MAT_DIALOG_DATA) public data)
      { }
 
@@ -21,8 +23,7 @@ export class LicenseComponentComponent implements OnInit {
   public driver ={};
   public driverClass : Driver = {} as Driver;
   ngOnInit() {
-
-    this.http.get("http://localhost:5000/api/driver/getdriver/"+this.data)
+    this.driverServie.getDriver(this.data)
     .subscribe(
       data=>{
         this.driver = data;

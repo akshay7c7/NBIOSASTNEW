@@ -1,7 +1,5 @@
-<div  class="container-fluid">
 <div class="mat-elevation-z8">
-  <div>
-  <div class="form-row">
+  <div class="form-row" style="height: 50px; position: sticky;">
     <div class="form-group col-md-3">
       <mat-form-field class="d-none d-sm-inline-block search-form-field ml-5" floatLabel="never">
         <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
@@ -9,66 +7,64 @@
         <mat-icon *ngIf="searchKey" (click)="ClearIt()">close</mat-icon></button>
       </mat-form-field>
     </div>
-    <div class="form-group col-md-3 ml-5 mt-4">
-      <label for="inputState">Select Status</label>
+    <div class="form-group col-md-3 mt-4">
       <select [(ngModel)]="driverParams.status" class="selectpicker ml-4 btn-primary" (change)="loadUsers()" data-style="btn-primary">
         <option selected value="BOTH" >All Status</option>
         <option value="Approved">Approved</option>
         <option value="Pending">Pending</option>
       </select>
     </div>
-    <div class="form-group col-md-3 ml-4 mt-4">
-      <label for="inputState">Select Branch</label>
+    <div class="form-group col-md-3 mt-4">
       <select *ngIf="this.authService.decodedToken?.role.length==4" [(ngModel)]="driverParams.branch"  class="selectpicker ml-4 btn-primary"  (change)="loadUsers()" data-style="btn-primary">
         <option value="ALL">All Branch</option>
-        <option *ngFor="let item of cityList"  value="item">{{item}}</option>
+        <option *ngFor="let item of cityList"  [value]="item">{{item}}</option>
       </select>
       <button *ngIf="this.authService.decodedToken?.role.length<4 || authService.decodedToken?.role=='DriverAdmin'" class="selectpicker ml-4 btn-primary"  (click)="loadUsers()" data-style="btn-primary">{{driverParams.branch}}</button>
     </div>
   </div>
+  <div>
+    <mat-table class="table table-responsive-sm" [dataSource] = "Driver">
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>Driver Id</mat-header-cell>
+        <mat-cell  *matCellDef="let element">{{element.id}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="address">
+        <mat-header-cell *matHeaderCellDef>Address</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.address}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="photo">
+        <mat-header-cell *matHeaderCellDef>Photo</mat-header-cell>
+        <mat-cell *matCellDef="let element"><img id="image" src = "{{'../../../../assets/'+element.photo}}" width="60" height="60"></mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+        <mat-cell *matCellDef="let element" >
+          <button [disabled]="true" [ngClass]="element.status=='Pending'? 'btn btn-danger': 'btn btn-success'" type="button" >{{element.status}}</button> 
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="branchVisited">
+        <mat-header-cell *matHeaderCellDef>Branch Visited</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.branchVisited}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="loading">
+        <mat-footer-cell *matFooterCellDef colspan="6" >
+          <app-Spinner></app-Spinner>
+        </mat-footer-cell>
+      </ng-container>
+      <ng-container  matColumnDef="noData">
+        <mat-footer-cell *matFooterCellDef colspan="6" >
+          No Data to display.
+        </mat-footer-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="DisplayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns:DisplayedColumns;"></mat-row>
+      <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':showLoading==false}"></mat-footer-row>
+      <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':EmptyData==false}"></mat-footer-row>
+    </mat-table>
+    <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSizeOptions] ="pageSizeOptions" [pageSize]="pageSize" showFirstLastButtons  (page)="pageChanged($event)"></mat-paginator>
   </div>
-  <mat-table [dataSource] = "Driver">
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef>Driver Id</mat-header-cell>
-      <mat-cell  *matCellDef="let element">{{element.id}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="address">
-      <mat-header-cell *matHeaderCellDef>Address</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.address}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="photo">
-      <mat-header-cell *matHeaderCellDef>Photo</mat-header-cell>
-      <mat-cell *matCellDef="let element"><img id="image" src = "{{'../../../../assets/'+element.photo}}" width="60" height="60"></mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
-      <mat-cell *matCellDef="let element" >
-        <button [disabled]="true" [ngClass]="element.status=='Pending'? 'btn btn-danger': 'btn btn-success'" type="button" >{{element.status}}</button> 
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="branchVisited">
-      <mat-header-cell *matHeaderCellDef>Branch Visited</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.branchVisited}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="loading">
-      <mat-footer-cell *matFooterCellDef colspan="6" >
-        <app-Spinner></app-Spinner>
-      </mat-footer-cell>
-    </ng-container>
-    <ng-container  matColumnDef="noData">
-      <mat-footer-cell *matFooterCellDef colspan="6" >
-        No Data to display.
-      </mat-footer-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="DisplayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns:DisplayedColumns;"></mat-row>
-    <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':showLoading==false}"></mat-footer-row>
-    <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':EmptyData==false}"></mat-footer-row>
-  </mat-table>
-  <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSizeOptions] ="pageSizeOptions" [pageSize]="pageSize" showFirstLastButtons  (page)="pageChanged($event)"></mat-paginator>
-</div>
 </div>

@@ -1,6 +1,6 @@
 
   
-<div *ngIf="loggedIn()">
+<div class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" *ngIf="loggedIn()">
 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
   <!-- Sidebar - Brand -->
@@ -52,11 +52,14 @@
   </li>
   
   <li class="nav-item">
-    <a style="padding-top: 4px; padding-bottom: 4px;"  class="nav-link dropdown-toggle" href="#" id="userDropdown" (click)="showDrop()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <a style="padding-top: 4px; padding-bottom: 4px;"  class="nav-link dropdown-toggle" id="userDropdown" (click)="showDrop()" role="button" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-fw fa-user"></i>
-        <span>Profile</span></a>
+        <span *ngIf="authService.decodedToken?.role=='DriverAdmin'">Driver Admin</span>
+        <span *ngIf="authService.decodedToken?.role.length==2">Account Admin</span>
+        <span *ngIf="authService.decodedToken?.role.length==3">Branch Admin</span>
+        <span *ngIf="authService.decodedToken?.role.length==4">Super Admin</span>
+    </a>
     </li>
-    
   <div *ngIf="showing">
     <li class="nav-item"> <a [routerLink]="['/editprofile']"  style="padding-top: 2px; padding-bottom: 4px;" class="nav-link ml-2 mb-1" ><i class="fas fa-user fa-sm fa-fw "></i>
       <span>Edit Profile</span></a></li>
@@ -64,7 +67,7 @@
       <li class="nav-item"> <a [routerLink]="['/editpassword']" style="padding-top: 2px; padding-bottom: 4px;" class="nav-link ml-2 mb-1"><i class="fas fa-edit fa-sm fa-fw "></i>
         <span>Edit Password</span></a></li>
         
-        <li class="nav-item"> <a (click)="logout()" style="padding-top: 2px; padding-bottom: 4px;"  class="nav-link ml-2 mb-1" ><i class="fas fa-sign-out-alt fa-sm fa-fw"></i>
+        <li class="nav-item"> <a [routerLink]="" (click)="logout()" style="padding-top: 2px; padding-bottom: 4px;"  class="nav-link ml-2 mb-1" ><i class="fas fa-sign-out-alt fa-sm fa-fw"></i>
           <span>Logout</span></a></li>
   </div>
   <hr class="sidebar-divider d-none d-md-block">

@@ -4,7 +4,6 @@
 
 @import "../node_modules/font-awesome/css/font-awesome.min.css";
 
-
 .confirm-dialog-container .mat-dialog-container
 {
     border-radius: .25em .25em .4em .4em;
@@ -36,7 +35,7 @@
 {
     height: 50px;
     width: 195px;
-    background-color: #4ce206;
+    background-color: slategray;
     color: white;
     border-radius: 0px;
 }
@@ -45,7 +44,7 @@
 {
     height: 50px;
     width: 195px;
-    background-color: #fc7169;
+    background-color: slategray;
     color: white;
     border-radius: 0px;
 }
@@ -61,10 +60,13 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
+
+
+
+
 .hide{
     display: none;
 }
-
 
 mat-footer-row, mat-footer-cell{
     justify-content: center;
@@ -230,12 +232,12 @@ mat-footer-row, mat-footer-cell{
   }
 
 
-
+/* 
   .mat-column-branchVisited, .mat-column-trainingEndDate{
    
     justify-content: center;
   
-  }
+  } */
 
 
   .dropdown-container {
@@ -255,6 +257,16 @@ mat-footer-row, mat-footer-cell{
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
   }
+
+
+  .navbar-nav.bg-gradient-dark.sidebar.sidebar-dark.accordion
+  {
+    height: 100%;
+    position: relative;
+  }
+
+
+  
   
 
   

@@ -62,15 +62,11 @@ cursor: pointer;
 } 
 
 
-.mat-column-email {
+/* .mat-column-email {
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 25% !important;
   width: 25% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-
-  word-break: break-word;
   justify-content: center;
   -ms-hyphens: auto;
   -moz-hyphens: auto;
@@ -84,11 +80,6 @@ cursor: pointer;
   white-space: unset !important;
   flex: 0 0 20% !important;
   width: 20% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  
-
-  word-break: break-word;
 
   -ms-hyphens: auto;
   -moz-hyphens: auto;
@@ -101,11 +92,10 @@ cursor: pointer;
   white-space: unset !important;
   flex: 0 0 30% !important;
   width: 30% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+
   
 
-  word-break: break-word;
+ 
   
 
   -ms-hyphens: auto;
@@ -119,10 +109,9 @@ cursor: pointer;
   white-space: unset !important;
   flex: 0 0 10% !important;
   width: 10% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
 
-  word-break: break-word;
+
+ 
   justify-content: center;
 
   -ms-hyphens: auto;
@@ -136,10 +125,9 @@ cursor: pointer;
   white-space: unset !important;
   flex: 0 0 25% !important;
   width: 25% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+
   justify-content: center;
-  word-break: break-word;
+  
 
   -ms-hyphens: auto;
   -moz-hyphens: auto;
@@ -153,8 +141,7 @@ cursor: pointer;
   white-space: unset !important;
   flex: 0 0 10% !important;
   width: 10% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+ 
   justify-content: center;
 
   word-break: break-word;
@@ -170,8 +157,7 @@ cursor: pointer;
   white-space: unset !important;
   flex: 0 0 12% !important;
   width: 12% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+ 
   justify-content: center;
 
   word-break: break-word;
@@ -180,8 +166,52 @@ cursor: pointer;
   -moz-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;
+} .example-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 300px;
+} */
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
 }
 
-    
+.mobile-label {
+  display: none;
+}
+
+@media(max-width: 600px) {
+  .mobile-label {
+    width: 80px;
+    display: inline-block;
+        font-weight: bold;
+  }
+
+  .mat-header-row {
+    display: none;
+  }
+
+  .mat-row { 
+    flex-direction: column;
+    align-items: start;
+    padding: 8px 24px;
+  }
+}
 
 
+.mat-column-address {
+  flex:none;
+  width: 30% !important;
+}
+
+.mat-column-id {
+  flex:none;
+  width: 10% !important;
+}
+
+.mat-column-name {
+  flex:none;
+  width: 20% !important;
+}

@@ -1,8 +1,8 @@
-<div class="container-fluid">
+
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 *ngIf="this.authService.decodedToken?.role.length==3" class="m-0 font-weight-bold text-primary">Assign a Branch</h6>
-      <h6 *ngIf="this.authService.decodedToken?.role.length!=3" class="m-0 font-weight-bold text-primary">Add One More Admin to {{currentCity}}</h6>
+      <h6 *ngIf="this.authService.decodedToken?.role.length==4" class="m-0 font-weight-bold text-primary">Assign a Branch</h6>
+      <h6 *ngIf="this.authService.decodedToken?.role.length==3" class="m-0 font-weight-bold text-primary">Add One More Admin to {{currentCity}}</h6>
     </div>
     <div class="card-body">
       <div class="form-row">
@@ -107,11 +107,10 @@
               Password must match.</div>
             </div>
         </div>
-        <div class="form-group col-md-5 ml-3">
+        <div class="form-group col-md-5">
           <button type="submit" [disabled] = "createAdminForm.invalid" class="btn btn-primary mr-1">Submit</button>
           <button type= "reset" class= "btn btn-danger ml-2" (click)="Cancel()" >Cancel</button>
         </div>
       </form>
     </div>
   </div>
-</div>

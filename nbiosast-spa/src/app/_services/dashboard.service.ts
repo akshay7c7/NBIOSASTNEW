@@ -9,7 +9,7 @@ import { Dashboard } from '../_models/Dashboard';
 export class DashboardService {
 
 constructor(private http: HttpClient) { }
-baseUrl = environment.apiUrl + 'driver/'; //http://localhost:5000/api/driver/
+baseUrl = environment.apiUrl + 'driver/'; 
   GetTodaysDetails(branch:string)
   {
     console.log(branch)

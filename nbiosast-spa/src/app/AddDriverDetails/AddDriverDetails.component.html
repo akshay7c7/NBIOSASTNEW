@@ -1,4 +1,4 @@
-<div class="container-fluid">
+
   <div class="card shadow mb-4">
     <div class="card-header py-3">
       <h6 class="m-0 font-weight-bold text-primary">Add Driver Details</h6>
@@ -43,48 +43,21 @@
           </div>
         </div>
 
+        
         <div class="form-row">
+          
           <div class="form-group col-md-4">
-            <label for="inputEmail4"> Date of Birth </label>
-            <mat-form-field color="accent" appearance="fill">
-              <mat-label>Date Of Birth</mat-label>
-              <input matInput [matDatepicker]="picker2" formControlName="DOB"
-              [ngClass]="{'is-invalid': createDriverForm.get('DOB').errors && createDriverForm.get('DOB').touched}">
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-datepicker #picker2></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div class="form-group col-md-4">
-            <label for="inputPassword4">Training Period</label> <br>
-            <div class="form-check form-check-inline mt-2">
-              <input formControlName="TrainingPeriod" class="form-check-input" type="radio" name="TrainingPeriod" (click) ="hideDoc($event)"  value="1">
+            <label for="inputPassword4">Training Period</label><br>
+            <div class="form-check form-check-inline">
+              <input formControlName="TrainingPeriod" class="form-check-input " type="radio" name="TrainingPeriod" (click) ="hideDoc($event)"  value="1">
               <label class="form-check-label" for="inlineRadio1">1 days</label> 
               &nbsp; &nbsp; &nbsp;
               <input formControlName="TrainingPeriod" class="form-check-input" type="radio" name="TrainingPeriod" (click) ="hideDoc($event)"  value="3">
               <label class="form-check-label" for="inlineRadio1">3 days</label>
             </div>
           </div>
-          <div *ngIf="doc"class="form-group col-md-4">
-            <label for="inputPassword4">One Day Certificate</label>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-              </div>
-              <div class="custom-file">
-                <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="onFileChangeOneDayDoc($event)" formControlName="OneDayDoc"
-                  aria-describedby="inputGroupFileAddon01"
-                  [ngClass]="{'is-invalid': invalid && createDriverForm.get('OneDayDoc').touched}">
-                <label class="custom-file-label" for="inputGroupFile01">{{onedaydocname}}</label>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <label for="inputEmail4"> Training start date </label>
-            <mat-form-field color="accent" appearance="fill">
+          <div class="form-group col-md-4 mt-3">
+            <mat-form-field color="accent" >
               <mat-label>Training Start</mat-label>
               <input matInput [matDatepicker]="picker" formControlName="TrainingStartDate">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -92,26 +65,34 @@
             </mat-form-field>
           </div>
           <div class="form-group col-md-4">
-            <label for="inputPassword4">Training Expiry date</label>
-            <mat-form-field color="accent" appearance="fill">
-              <mat-label>Training End</mat-label>
-              <input matInput [matDatepicker]="picker1" (dateChange)="GetValidity()" formControlName="TrainingEndDate">
-              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-              <mat-datepicker #picker1></mat-datepicker>
-            </mat-form-field>
+            <label >Select Card Validity</label>
+            <select (change)="AddYears()" class="form-control" formControlName="Validity">
+            <option selected value="3">3 Years</option>
+            <option value="1">1 Year</option>
+            </select>
           </div>
-          <div class="form-group col-md-4">
-            <label for="inputPassword4">Validity</label>
-            <input type="text" readonly formControlName="Validity" [value]="diffDays" class="form-control"  placeholder="Validity will be calculated">
-          </div>
-          <div class="form-group col-md-12">
+        </div>  
+
+        <div class="form-row">
+          <div class="form-group col-md-8">
             <label for="inputPassword4">Address (license)</label>
             <input type="text" formControlName="Address" class="form-control"  placeholder="Enter address here" maxlength="150"
-            [ngClass]="{'is-invalid': createDriverForm.get('Address').errors && createDriverForm.get('Address').touched}">
-            </div>
+            [ngClass]="{'is-invalid': createDriverForm.get('Address').errors && createDriverForm.get('Address').touched}">  
           </div>
-          <div class="form-row">
-            <div class="form-group col-md-4">
+          <div class="form-group col-md-4" *ngIf="doc">
+            <label for="inputPassword4">One Day Certificate</label>
+            <div class="input-group">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="onFileChangeOneDayDoc($event)" formControlName="OneDayDoc"
+                  aria-describedby="inputGroupFileAddon01"
+                  [ngClass]="{'is-invalid': invalid && createDriverForm.get('OneDayDoc').touched}">
+                <label class="custom-file-label" for="inputGroupFile01">{{onedaydocname}}</label>
+              </div>
+            </div>  
+          </div>
+        </div>  
+        <div class="form-row">
+          <div class="form-group col-md-4">
             <label for="inputEmail4"> Payment amount </label>
             <input type="text" pattern="\d*" formControlName="Amount" class="form-control" id="inputEmail4" placeholder="Enter amount here" maxlength="8"
             [ngClass]="{'is-invalid': createDriverForm.get('Amount').errors && createDriverForm.get('Amount').touched}">
@@ -127,9 +108,6 @@
           <div class="form-group col-md-4">
             <label for="inputPassword4">Documents</label>
             <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-              </div>
               <div class="custom-file">
                 <input type="file" class="custom-file-input" id="inputGroupFile03" (change)="onFileChangeDocument($event)" formControlName="Document"
                   aria-describedby="inputGroupFileAddon03"
@@ -140,17 +118,25 @@
           </div>
         </div>
 
-        <div class="form-group col-md-4">
-          <label for="inputPassword4">Photo</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-            </div>
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="onFileChangePhoto($event)" formControlName="Photo"
-                aria-describedby="inputGroupFileAddon01"
-                [ngClass]="{'is-invalid': createDriverForm.get('Photo').errors && createDriverForm.get('Photo').touched}">
-              <label class="custom-file-label" for="inputGroupFile01">{{photoname}}</label>
+        <div class="form-row">
+          <div class="form-group col-md-4 mt-4" >
+            <mat-form-field color="accent">
+              <mat-label>Date Of Birth</mat-label>
+              <input matInput [matDatepicker]="picker2" formControlName="DOB"
+              [ngClass]="{'is-invalid': createDriverForm.get('DOB').errors && createDriverForm.get('DOB').touched}">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputPassword4">Photo</label>
+            <div class="input-group">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="onFileChangePhoto($event)" formControlName="Photo"
+                  aria-describedby="inputGroupFileAddon01"
+                  [ngClass]="{'is-invalid': createDriverForm.get('Photo').errors && createDriverForm.get('Photo').touched}">
+                <label class="custom-file-label" for="inputGroupFile01">{{photoname}}</label>
+              </div>
             </div>
           </div>
         </div>
@@ -159,4 +145,3 @@
       </form>
     </div>
   </div>
-</div>
