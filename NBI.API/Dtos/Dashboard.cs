@@ -8,7 +8,6 @@ namespace NBI.API.Dtos
         public int WeekDrivers { get; set; }
         public int WeekAmount { get; set; }
         public int WeekPrints { get; set; }
-
         public int AnnualDrivers { get; set; }
         public int AnnualAmount { get; set; }
         public int AnnualPrints { get; set; }

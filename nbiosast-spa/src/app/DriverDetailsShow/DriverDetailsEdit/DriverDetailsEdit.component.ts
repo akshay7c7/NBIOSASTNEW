@@ -1,12 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ImageViewerComponent } from 'src/app/ImageViewer/ImageViewer.component';
 import { Driver } from 'src/app/_models/Driver';
 import { User } from 'src/app/_models/user';
 import { AuthService } from 'src/app/_services/auth.service';
+import { DialogService } from 'src/app/_services/dialog.service';
 import { DriverService } from 'src/app/_services/driver.service';
 import { UserService } from 'src/app/_services/user.service';
 
@@ -31,6 +34,8 @@ export class DriverDetailsEditComponent implements OnInit {
     private driverService : DriverService,
     private route : ActivatedRoute,
     private userService : UserService,
+    private dialogService : DialogService,
+    private dialog : MatDialog,
     private datepipe : DatePipe) { }
 
     public driver: Driver = {} as Driver;
@@ -189,6 +194,22 @@ export class DriverDetailsEditComponent implements OnInit {
     var time = new Date(this.driver.trainingEndDate).getTime() - new Date(this.driver.trainingStartDate).getTime();
     this.diffDays = Math.ceil(time / (365 * 1000 * 3600 * 24)); 
     console.log(this.diffDays)
+  }
+
+  element : any ={}
+
+  ViewDocument(type)
+  {
+    
+    this.element.id = this.driver.id
+    this.element.type = type
+    const dialogCongif = new MatDialogConfig();
+    dialogCongif.autoFocus = true;
+    dialogCongif.width = "700px";
+    dialogCongif.height = "700px";
+    dialogCongif.data = this.element;
+    this.dialog.open(ImageViewerComponent, dialogCongif);
+    
   }
 
 }

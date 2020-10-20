@@ -13,10 +13,13 @@ namespace NBI.API.Data
             public DataContext(DbContextOptions<DataContext> options): base(options){}
 
             public DbSet<Driver> Drivers { get; set; }
-
+            public DbSet<Payment> Payments{ get; set; }
+ 
             protected override void OnModelCreating(ModelBuilder builder)
             {
                 base.OnModelCreating(builder);
+
+                builder.Entity<Payment>();
                 
                 builder.Entity<UserRole>( userRole =>
                 {

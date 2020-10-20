@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NBI.API.Data;
 
 namespace NBI.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201020151452_PaymentModel")]
+    partial class PaymentModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,6 +144,9 @@ namespace NBI.API.Migrations
                     b.Property<string>("OneDayDoc")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PaymentDriverPaymentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PaymentType")
                         .HasColumnType("nvarchar(max)");
 
@@ -177,6 +182,8 @@ namespace NBI.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PaymentDriverPaymentId");
+
                     b.ToTable("Drivers");
                 });
 
@@ -186,9 +193,6 @@ namespace NBI.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("DriverId")
-                        .HasColumnType("int");
 
                     b.Property<int>("PaymentAmount")
                         .HasColumnType("int");
@@ -352,6 +356,13 @@ namespace NBI.API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("NBI.API.Models.Driver", b =>
+                {
+                    b.HasOne("NBI.API.Models.Payment", "PaymentDriver")
+                        .WithMany()
+                        .HasForeignKey("PaymentDriverPaymentId");
                 });
 
             modelBuilder.Entity("NBI.API.Models.UserRole", b =>

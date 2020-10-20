@@ -39,6 +39,7 @@ import { DatePipe } from '@angular/common';
 import { AddAdminComponent } from './AddAdmin/AddAdmin.component';
 import { EditDriverResolver } from './_resolvers/EditDriverResolver';
 import { ShowAdminDetailsComponent } from './ShowAdminDetails/ShowAdminDetails.component';
+import { ImageViewerComponent } from './ImageViewer/ImageViewer.component';
 
 
 export function tokenGetter() {
@@ -46,7 +47,7 @@ export function tokenGetter() {
 }
 
 @NgModule({
-  declarations: [																								
+  declarations: [																									
     AppComponent,
       DashboardComponent,
       SidebarComponent,
@@ -67,7 +68,8 @@ export function tokenGetter() {
       SpinnerOverlayComponent,
       ReportsComponent,
       AddAdminComponent,
-      ShowAdminDetailsComponent
+      ShowAdminDetailsComponent,
+      ImageViewerComponent
    ],
   imports: [
     BrowserModule,
@@ -89,6 +91,6 @@ export function tokenGetter() {
   providers: [AuthGuard,EditResolver,UserService,AuthService,BranchDetailsResolver,DriverDetailsResolver, EditDriverResolver,
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, DatePipe],
   bootstrap: [AppComponent],
-  entryComponents : [ConfirmDialogueComponent, LicenseComponentComponent]
+  entryComponents : [ConfirmDialogueComponent, LicenseComponentComponent, ImageViewerComponent]
 })
 export class AppModule { }

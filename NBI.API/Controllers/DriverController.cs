@@ -82,7 +82,7 @@ namespace NBI.API.Controllers
                     }
                     driverFilesDto.Photo=filename;
                 }
-
+                //System.Console.WriteLine(dataWithoutFiles.Id);
                 _mapper.Map(driverFilesDto, dataWithoutFilesAdd);
                 result = await _context.SaveChangesAsync()>0;
                 if(result==false)
@@ -90,7 +90,13 @@ namespace NBI.API.Controllers
                     await DeleteDriver(dataWithoutFilesAdd.Id);
                     return BadRequest("Error in saving files ,Could not add the driver details");
                 }
-                return Ok();
+                //System.Console.WriteLine(dataWithoutFiles.Id);
+                var r = DoPayment(dataWithoutFilesAdd.Id, dataWithoutFiles.Created , dataWithoutFiles.Amount);
+                if(await r)
+                {
+                    return Ok();
+                }
+                return BadRequest("Error saving Data");
         
         }
 
@@ -228,7 +234,7 @@ namespace NBI.API.Controllers
                         if(System.IO.File.Exists("wwwroot/assets/"+ driverFromRepo.OneDayDoc))
                         {
                             System.IO.File.Delete("wwwroot/assets/"+ driverFromRepo.OneDayDoc);
-                            System.Console.WriteLine("Deleted..");
+                           // System.Console.WriteLine("Deleted..");
                         }
 
                     }
@@ -241,7 +247,8 @@ namespace NBI.API.Controllers
                     changes = true;
                     }
                     driverToUpdate.OneDayDoc=filename;
-                    System.Console.WriteLine(filename);
+                    //System.Console.WriteLine(filename);
+                    
                 }
 
                 if(driverDto.Photo!=null)
@@ -286,10 +293,14 @@ namespace NBI.API.Controllers
                 var a = _mapper.Map(driverNormalData, driverFromRepo);
                 if(await _context.SaveChangesAsync()>0 || changes )
                 {
+                    var r = (from p in _context.Payments where p.DriverId == id select p).SingleOrDefault();
+                    r.PaymentAmount = driverDto.Amount;
+                    await _context.SaveChangesAsync();
                     return Ok(await _context.Drivers.FirstOrDefaultAsync(x=>x.Id==id));
                 }
-                return BadRequest("Changes Not Made");
                 
+                return BadRequest("Changes Not Made");
+
         }
 
         [HttpPut("Approve/{id}")]
@@ -332,19 +343,19 @@ namespace NBI.API.Controllers
                 drivers =  _context.Drivers.Where(x=>x.BranchVisited==branch).AsQueryable();
             }
             dash.TodayDrivers = await drivers.Where(x=>x.Created == DateTime.Today).CountAsync();
-            var TotalAmount = await drivers.Where(x=>x.Created == DateTime.Today).Select(x=>x.Amount).ToListAsync();
+            var TotalAmount = await _context.Payments.Where(x=>x.PaymentTime == DateTime.Today).Select(x=>x.PaymentAmount).ToListAsync();
             dash.TodayAmount = TotalAmount.Sum(x=>x);
             dash.TodayPrints = await drivers.Where(x=>x.PrintTime == DateTime.Today).CountAsync();
 
             var weekdate = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
             var WeekDrivers = await  drivers.Where(x=> x.Created >= weekdate).ToListAsync();
             dash.WeekDrivers = WeekDrivers.Count();
-            var WeekAmount = await drivers.Where(x=> x.Created >= weekdate).Select(x=>x.Amount).ToListAsync();
+            var WeekAmount = await _context.Payments.Where(x=> x.PaymentTime>= weekdate).Select(x=>x.PaymentAmount).ToListAsync();
             dash.WeekAmount = WeekAmount.Sum(x=>x);
             dash.WeekPrints = await drivers.Where(x=> x.PrintTime >= weekdate).CountAsync();
 
             dash.AnnualDrivers = await drivers.CountAsync();
-            var AnnualAmount = await drivers.Select(x=>x.Amount).ToListAsync();
+            var AnnualAmount = await _context.Payments.Select(x=>x.PaymentAmount).ToListAsync();
             dash.AnnualAmount = AnnualAmount.Sum(x=>x);
             dash.AnnualPrints = await drivers.Where(x=>x.PrintTime != new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)).CountAsync();
             
@@ -372,6 +383,22 @@ namespace NBI.API.Controllers
            
             return NotFound();
             
+        }
+
+        private async Task<bool> DoPayment(int driverId, DateTime paymentTime, int paymentAmount)
+        {
+            
+            Payment p = new Payment();
+            p.DriverId= driverId;
+            p.PaymentTime = paymentTime;
+            p.PaymentAmount = paymentAmount;
+            await _context.Payments.AddAsync(p);
+            var result =  await _context.SaveChangesAsync() >0;
+            if(result)
+            {
+                return true;
+            }
+            return false;
         }
 
 

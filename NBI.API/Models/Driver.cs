@@ -28,5 +28,6 @@ namespace NBI.API.Models
         public string OneDayDoc {get;set;}
         public string Document { get; set; }
         public string Photo { get; set; }
+        
     }
 }
