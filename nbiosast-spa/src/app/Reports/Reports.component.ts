@@ -1,15 +1,10 @@
 
-import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../_services/user.service';
-import { DialogService } from '../_services/dialog.service';
-import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../_services/auth.service';
 import { DriverService } from '../_services/driver.service';
 import { Pagination } from '../_models/Pagination';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-Reports',
@@ -36,10 +31,6 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
   driverParams : any ={};
   currentUser
   fff:any
-
-  
-  
-
   paginateData : Pagination ={} as Pagination;
 
   constructor(public authService : AuthService,
@@ -111,7 +102,6 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
 
   }
 
-
   pageChanged(event: number):void
   {
     this.paginateData.currentPage = event['pageIndex']+1;
@@ -129,5 +119,15 @@ export class ReportsComponent implements OnInit  , AfterViewInit {
     this.Driver.filter = this.searchKey.trim().toLowerCase();
   }
 
+  GenerateReport()
+  {
+    this.driverService.getReport().subscribe(
+      blob => {
+        saveAs(blob, 'Reports.xls');
+      },
+      () => {
+        console.log("Something went wrong");
+      });
+  }
 
 }

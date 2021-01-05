@@ -167,7 +167,7 @@ namespace DatingApp.API.Controllers
         {
             if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
             {
-                System.Console.WriteLine("UA");
+                
                 return Unauthorized("Not authorized");
             }
                 
@@ -177,12 +177,12 @@ namespace DatingApp.API.Controllers
             var result = await _userManager.UpdateAsync(userFromRepo);
             if(!result.Succeeded)
             {
-                System.Console.WriteLine("UR");
+                
                 return BadRequest("Could Not Change Password");
                 
             }
             await _repo.SaveAll();
-            System.Console.WriteLine("Success");
+            
             return Ok(new{message = "Updated Successfully"}); //imp
         }
 

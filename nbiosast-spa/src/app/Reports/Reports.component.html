@@ -21,6 +21,9 @@
       </select>
       <button *ngIf="this.authService.decodedToken?.role.length<4 || authService.decodedToken?.role=='DriverAdmin'" class="selectpicker ml-4 btn-primary"  (click)="loadUsers()" data-style="btn-primary">{{driverParams.branch}}</button>
     </div>
+    <div class="form-group col-md-3 mt-4">
+      <button class="selectpicker ml-4 btn-primary" (click)="GenerateReport()"  data-style="btn-primary">Generate Report</button>
+    </div>
   </div>
   <div>
     <mat-table class="table table-responsive-sm" [dataSource] = "Driver">

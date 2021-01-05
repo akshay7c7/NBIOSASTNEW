@@ -106,8 +106,7 @@ namespace NBI.API.Controllers
         public async Task<IActionResult> GetAllUsers([FromQuery] UserParams userParams)
         {
             
-            System.Console.WriteLine(userParams.Branch);
-            System.Console.WriteLine(userParams.UserType);
+           
          
             var userList = await (from user in _context.Users
                                     orderby user.UserName
@@ -224,7 +223,7 @@ namespace NBI.API.Controllers
                 return BadRequest("You cannot delete your own profile");
             }
             var userFromRepo = await _repo.GetUser(id);
-            System.Console.WriteLine(userFromRepo);
+            
             if(userFromRepo!=null)
             {
             var users = await _userManager.DeleteAsync(userFromRepo);

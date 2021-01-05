@@ -88,8 +88,13 @@ baseUrl = environment.apiUrl + 'driver/';
 
   GetDriverCityList()
   {
-    console.log("sent")
     return this.http.get(this.baseUrl+"GetDrivercitylist")
+  }
+
+
+  getReport(): Observable<Blob>
+  {
+    return this.http.post<Blob>(this.baseUrl+"GetReports",'',{ responseType: 'blob' as 'json' });
   }
 
 

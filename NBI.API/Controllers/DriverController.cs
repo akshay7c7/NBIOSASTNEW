@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ClosedXML.Excel;
 using MoreLinq;
 using NBI.API.Data;
 using NBI.API.Dtos;
@@ -32,7 +32,7 @@ namespace NBI.API.Controllers
         [HttpPost("AddDriver")]
         public async Task<IActionResult> AddDriver([FromForm]DriverCreationDto driverDto)
         {   
-                Console.WriteLine(driverDto.TrainingEndDate);
+                
                 var dataWithoutFiles = _mapper.Map<DriverReturnData>(driverDto);
                 var dataWithoutFilesAdd = _mapper.Map<Driver>(dataWithoutFiles);
                 await _context.AddAsync(dataWithoutFilesAdd);
@@ -42,17 +42,17 @@ namespace NBI.API.Controllers
                     return BadRequest("Could not add the driver details");
                 }
                 var id = dataWithoutFilesAdd.Id;
-                System.Console.WriteLine(id);
+                
                 DriverReturnFiles driverFilesDto = new DriverReturnFiles();
                 if(driverDto.Document!=null)
                 {
                     string ext = System.IO.Path.GetExtension(driverDto.Document.FileName);
                     string filename = "doc"+ id.ToString() + ext;
-                    System.Console.WriteLine(filename);
+                    
                     string filepath = "wwwroot/assets/"+ filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
-                    await driverDto.Document.CopyToAsync(fileStream);
+                        await driverDto.Document.CopyToAsync(fileStream);
                     }
                     driverFilesDto.Document=filename;
                 }
@@ -61,7 +61,7 @@ namespace NBI.API.Controllers
                 {
                     string ext = System.IO.Path.GetExtension(driverDto.OneDayDoc.FileName);
                     string filename = "cer"+ id.ToString() + ext;
-                    System.Console.WriteLine(filename);
+                    
                     string filepath = "wwwroot/assets/"+ filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
@@ -74,15 +74,15 @@ namespace NBI.API.Controllers
                 {
                     string ext = System.IO.Path.GetExtension(driverDto.Photo.FileName);
                     string filename = "img"+ id.ToString() + ext;
-                    System.Console.WriteLine(filename);
+                    
                     string filepath = "wwwroot/assets/"+filename;
                     using (var fileStream = new FileStream(filepath, FileMode.Create))
                     {
-                    await driverDto.Photo.CopyToAsync(fileStream);      
+                        await driverDto.Photo.CopyToAsync(fileStream);      
                     }
                     driverFilesDto.Photo=filename;
                 }
-                //System.Console.WriteLine(dataWithoutFiles.Id);
+                
                 _mapper.Map(driverFilesDto, dataWithoutFilesAdd);
                 result = await _context.SaveChangesAsync()>0;
                 if(result==false)
@@ -90,7 +90,7 @@ namespace NBI.API.Controllers
                     await DeleteDriver(dataWithoutFilesAdd.Id);
                     return BadRequest("Error in saving files ,Could not add the driver details");
                 }
-                //System.Console.WriteLine(dataWithoutFiles.Id);
+                
                 var r = DoPayment(dataWithoutFilesAdd.Id, dataWithoutFiles.Created , dataWithoutFiles.Amount);
                 if(await r)
                 {
@@ -142,6 +142,7 @@ namespace NBI.API.Controllers
             var pLDrivers =  await PagedList<Driver>.CreateAsync(drivers, driverParams.PageNumber, driverParams.PageSize);
             var driverListToReturn = _mapper.Map<IEnumerable<DriverReturnDto>>(pLDrivers);
             Response.AddPagination(pLDrivers.CurrentPage, pLDrivers.PageSize, pLDrivers.TotalCount, pLDrivers.TotalPages);
+            //DownloadExcelDocument(driverListToReturn.ToList());
             return Ok(driverListToReturn); 
   
         }
@@ -154,7 +155,7 @@ namespace NBI.API.Controllers
                 if(System.IO.File.Exists("wwwroot/assets/"+ driverToDelete.Document))
                 {
                     System.IO.File.Delete("wwwroot/assets/"+ driverToDelete.Document);
-                    System.Console.WriteLine("Deleted..doc");
+                    
                 }
 
             }
@@ -163,7 +164,7 @@ namespace NBI.API.Controllers
                 if(System.IO.File.Exists("wwwroot/assets/"+ driverToDelete.OneDayDoc))
                 {
                     System.IO.File.Delete("wwwroot/assets/"+ driverToDelete.OneDayDoc);
-                    System.Console.WriteLine("Deleted..cer");
+                    
                 }
 
             }
@@ -172,7 +173,7 @@ namespace NBI.API.Controllers
                 if(System.IO.File.Exists("wwwroot/assets/"+ driverToDelete.Photo))
                 {
                     System.IO.File.Delete("wwwroot/assets/"+ driverToDelete.Photo);
-                    System.Console.WriteLine("Deleted..img");
+                    
                 }
 
             }
@@ -196,7 +197,7 @@ namespace NBI.API.Controllers
                 if(System.IO.File.Exists("wwwroot/assets/"+ driverFromRepo.OneDayDoc))
                 {
                     System.IO.File.Delete("wwwroot/assets/"+ driverFromRepo.OneDayDoc);
-                    System.Console.WriteLine("Deleted..");
+                    
                 }
             }
             
@@ -204,13 +205,13 @@ namespace NBI.API.Controllers
              driverToUpdate.Id = driverFromRepo.Id;
                 if(driverDto.Document!=null)
                 {
-                    System.Console.WriteLine("doc");
+                    
                     if(driverFromRepo.Document!=null)
                     {
                          if(System.IO.File.Exists("wwwroot/assets/"+ driverFromRepo.Document))
                         {
                             System.IO.File.Delete("wwwroot/assets/"+ driverFromRepo.Document);
-                            System.Console.WriteLine("Deleted..");
+                            
                         }
 
                     }
@@ -223,18 +224,18 @@ namespace NBI.API.Controllers
                         changes = true;
                     }
                     driverToUpdate.Document=filename;
-                    System.Console.WriteLine(filename);
+                    
                 }
                 
                 if(driverDto.OneDayDoc!=null)
                 {
-                     System.Console.WriteLine("cer");
+                    
                     if(driverFromRepo.OneDayDoc != null)
                     {
                         if(System.IO.File.Exists("wwwroot/assets/"+ driverFromRepo.OneDayDoc))
                         {
                             System.IO.File.Delete("wwwroot/assets/"+ driverFromRepo.OneDayDoc);
-                           // System.Console.WriteLine("Deleted..");
+                           
                         }
 
                     }
@@ -247,19 +248,19 @@ namespace NBI.API.Controllers
                     changes = true;
                     }
                     driverToUpdate.OneDayDoc=filename;
-                    //System.Console.WriteLine(filename);
+                    
                     
                 }
 
                 if(driverDto.Photo!=null)
                 {
-                    System.Console.WriteLine("img");
+                    
                     if(driverFromRepo.Photo!=null)
                     {
                          if(System.IO.File.Exists("wwwroot/assets/"+ driverFromRepo.Photo))
                         {
                             System.IO.File.Delete("wwwroot/assets/"+ driverFromRepo.Photo);
-                            System.Console.WriteLine("Deleted..");
+                            
                         }
 
                     }
@@ -272,7 +273,7 @@ namespace NBI.API.Controllers
                     changes = true;
                     }
                     driverToUpdate.Photo=filename;
-                    System.Console.WriteLine(filename);
+                    
                 }
                 if(driverToUpdate.Document==null)
                 {
@@ -399,6 +400,43 @@ namespace NBI.API.Controllers
                 return true;
             }
             return false;
+        }
+
+
+        [HttpPost("GetReports")]
+        public IActionResult DownloadExcelDocument()
+        {
+            List<Driver> authors = _context.Drivers.ToList();
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "reports.xlsx";
+            try
+            {
+                using (var workbook = new XLWorkbook())
+                {
+                    IXLWorksheet worksheet = workbook.Worksheets.Add("Reports");
+                    worksheet.Cell(1, 1).Value = "Id";
+                    worksheet.Cell(1, 2).Value = "Name";
+                    worksheet.Cell(1, 3).Value = "Phone_Number";
+                    for (int index = 1; index <= authors.Count; index++)
+                    {
+                        worksheet.Cell(index + 1, 1).Value = authors[index - 1].Id;
+                        worksheet.Cell(index + 1, 2).Value = authors[index - 1].Name;
+                        worksheet.Cell(index + 1, 3).Value = authors[index - 1].TransPortPhoneNo;
+                    }
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        System.Console.WriteLine("aa");
+                        return File(content, contentType, fileName);
+                        
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
